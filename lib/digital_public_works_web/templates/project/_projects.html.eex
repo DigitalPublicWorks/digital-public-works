@@ -1,0 +1,3 @@
+<%= for project <- @projects do %>
+<%= render "_project.html", project: project, conn: @conn %>
+<% end %>
