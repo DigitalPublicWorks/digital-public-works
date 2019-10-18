@@ -1,35 +1,33 @@
-<section class="phx-hero">
-  <h1><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h1>
-  <p>A productive web framework that<br/>does not compromise speed or maintainability.</p>
-</section>
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <h2 class="tagline text-center m-4">
+      Work together to make Milwaukee better
+    </h2>
 
-<section class="row">
-  <article class="column">
-    <h2>Resources</h2>
-    <ul>
-      <li>
-        <a href="https://hexdocs.pm/phoenix/overview.html">Guides &amp; Docs</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix">Source</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix/blob/v1.4/CHANGELOG.md">v1.4 Changelog</a>
-      </li>
-    </ul>
-  </article>
-  <article class="column">
-    <h2>Help</h2>
-    <ul>
-      <li>
-        <a href="https://elixirforum.com/c/phoenix-forum">Forum</a>
-      </li>
-      <li>
-        <a href="https://webchat.freenode.net/?channels=elixir-lang">#elixir-lang on Freenode IRC</a>
-      </li>
-      <li>
-        <a href="https://twitter.com/elixirphoenix">Twitter @elixirphoenix</a>
-      </li>
-    </ul>
-  </article>
-</section>
+    <div class="explainer">
+      <p class="lead">
+        The Milwaukee Digital Public Works project is a non-governmental community which
+        connects people with problems to people who can help them solve those problems.
+        Citizens can suggest problems to be fixed, ways they can help, things
+        they are concerned about, money to help solve problems, or expertise
+        to help solve problems.
+        <a href="/about">Learn more...</a>
+      </p>
+    </div>
+
+    <h4 class="cta text-center m-4">
+      These problems need solving
+    </h4>
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Milwaukee lacks safe infrastructure for active forms of transportation</h5>
+        <p class="card-text">Milwaukee lacks safe infrastructure for active forms of transportation, and city leaders continue to prioritize
+            automobile traffic over the safety of pedestrians, bicyclists and scooter users. Building better infrastructure
+            like protected lanes and wider sidewalks will make for a greener and safer Milwaukee.</p>
+            <a class="btn btn-primary" href="/problem/3#help">I can help</a>
+        <a class="btn btn-default" href="/problem/3">Learn more</a>
+      </div>
+    </div>
+  </div>
+ </div> 
