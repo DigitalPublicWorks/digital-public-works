@@ -42,6 +42,7 @@ defmodule DigitalPublicWorksWeb do
       import DigitalPublicWorksWeb.ErrorHelpers
       import DigitalPublicWorksWeb.Gettext
       alias DigitalPublicWorksWeb.Router.Helpers, as: Routes
+      alias PhoenixBootstrapForm, as: PBF
     end
   end
 

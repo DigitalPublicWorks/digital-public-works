@@ -12,7 +12,7 @@
    
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/">
           <img width="30" height="30" class="d-inline-block align-top" alt="" src="<%= Routes.static_path(@conn, "/images/logo.png") %>">
           MKE Digital Public Works
         </a>
@@ -23,11 +23,11 @@
         
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">View Projects <span class="sr-only">(current)</span></a>
+            <li class="nav-item">
+              <a class="nav-link" href="<%= Routes.project_path(@conn, :index) %>">View Projects <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Submit a Project</a>
+              <a class="nav-link" href="<%= Routes.project_path(@conn, :new) %>">Submit a Project</a>
             </li>
           </ul>
 
@@ -39,9 +39,12 @@
     <main role="main" class="container">
       <div class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></div>
       <div class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></div>
-      <%= render @view_module, @view_template, assigns %>
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <%= render @view_module, @view_template, assigns %>
+        </div>
+      </div>
     </main>
-
     
     <ul class="nav justify-content-center mt-5">
       <li class="nav-item"><a class="nav-link" href="/about">About</a></li>

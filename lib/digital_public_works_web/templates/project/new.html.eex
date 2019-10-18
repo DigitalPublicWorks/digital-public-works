@@ -1,5 +1,5 @@
-<h1>New Project</h1>
+<h2 class="m-4 text-center">Submit a problem or project</h2>
+
+<p>Please describe the problem you are experiencing or observing in as much detail as possible. Tell us who is affected by it, and where it is happening. If we need more information, we will get in touch with you to ask questions. We usually decide whether to feature a problem within one week of its submission. If you run into any trouble, send us an email.</p>
 
 <%= render "form.html", Map.put(assigns, :action, Routes.project_path(@conn, :create)) %>
-
-<span><%= link "Back", to: Routes.project_path(@conn, :index) %></span>
