@@ -10,7 +10,8 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :digital_public_works, DigitalPublicWorksWeb.Endpoint,
-  url: [host: "example.com", port: 80],
+  url: [scheme: "https", host: "digital-public-works", port: 443],
+  force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production
