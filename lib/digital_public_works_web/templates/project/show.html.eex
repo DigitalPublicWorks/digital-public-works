@@ -1,18 +1,22 @@
-<h1>Show Project</h1>
+<div class="row">
+  <div class="col">
+    <%= link "< Back", to: Routes.project_path(@conn, :index) %>
+  </div>
+  <div class="col text-right">
+    <%= link "Edit", to: Routes.project_path(@conn, :edit, @project) %>
+  </div>
+</div>
 
-<ul>
+<h6 class="text-muted mt-4">PROBLEM</h6>
+<h2><%= @project.title %></h2>
 
-  <li>
-    <strong>Title:</strong>
-    <%= @project.title %>
-  </li>
+<h6 class="text-muted mt-4">DETAILS</h6>
+<p><%= @project.body %></p>
 
-  <li>
-    <strong>Body:</strong>
-    <%= @project.body %>
-  </li>
+<h6 class="text-muted mt-4">NEEDS</h6>
+<p>There have not been any needs defined for this project.</p>
+<a href="#" class="btn btn-primary">Pledge to help</a>
 
-</ul>
-
-<span><%= link "Edit", to: Routes.project_path(@conn, :edit, @project) %></span>
-<span><%= link "Back", to: Routes.project_path(@conn, :index) %></span>
+<h6 class="text-muted mt-4">UPDATES</h6>
+<p>There have not been any updates on this project.</p>
+<a href="#" class="btn btn-primary">Subscribe to updates</a>
