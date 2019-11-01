@@ -1,0 +1,6 @@
+<h1>Sign in</h1>
+<%= form_for @conn, Routes.session_path(@conn, :create), [as: :session], fn f -> %>
+  <%= PBF.text_input f, :email, [input: [autofocus: true]] %>
+  <%= PBF.password_input f, :password %>
+  <%= PBF.submit f, "Sign in", class: "btn btn-primary" %>
+<% end %>

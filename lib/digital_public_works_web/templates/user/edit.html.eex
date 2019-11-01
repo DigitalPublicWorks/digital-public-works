@@ -1,3 +1,3 @@
 <h1>Edit User</h1>
 
-<%= render "form.html", Map.put(assigns, :action, Routes.user_path(@conn, :update, @user)) %>
+<%= render "form.html", Map.put(assigns, :action, Routes.user_path(@conn, :update)) %>

@@ -101,4 +101,15 @@ defmodule DigitalPublicWorks.Accounts do
   def change_user(%User{} = user) do
     User.changeset(user, %{})
   end
+
+  def get_user_by(%{"email" => email} = params) do
+    User
+    |> Repo.get_by(email: email)
+  end
+
+  def verify_user(%{"password" => password} = params) do
+    params
+    |> get_user_by()
+    |> Argon2.check_pass(password)
+  end
 end

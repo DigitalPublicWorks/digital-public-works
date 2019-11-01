@@ -30,8 +30,11 @@
               <a class="nav-link" href="<%= Routes.project_path(@conn, :new) %>">Submit a Project</a>
             </li>
           </ul>
-
-          <a class="btn btn-outline-primary" href="#">Sign In</a>
+          <%= if @current_user do %>
+            <%= link "Sign Out", to: Routes.session_path(@conn, :delete), method: "delete", class: "btn btn-outline-primary" %>
+          <% else %>
+            <%= link "Sign In", to: Routes.session_path(@conn, :new), class: "btn btn-outline-primary" %>
+          <% end %>
         </div>
       </div>
     </nav>

@@ -4,6 +4,19 @@ defmodule DigitalPublicWorksWeb.ProjectController do
   alias DigitalPublicWorks.Projects
   alias DigitalPublicWorks.Projects.Project
 
+  plug :check_auth when action in [:new, :create, :edit, :update, :delete]
+
+  defp check_auth(conn, _args) do
+    if conn.assigns[:current_user] do
+      conn
+    else
+      conn
+      |> put_flash(:error, "You need to be signed in to access that page.")
+      |> redirect(to: Routes.session_path(conn, :new))
+      |> halt()
+    end
+  end
+
   def index(conn, _params) do
     projects = Projects.list_projects()
     render(conn, "index.html", projects: projects)

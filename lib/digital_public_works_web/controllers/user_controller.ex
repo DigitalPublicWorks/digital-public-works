@@ -4,14 +4,11 @@ defmodule DigitalPublicWorksWeb.UserController do
   alias DigitalPublicWorks.Accounts
   alias DigitalPublicWorks.Accounts.User
 
-  plug :check_auth when action in [:show, :edit, :update, :delete]
+  plug :check_auth when action in [:show, :edit, :update]
 
   defp check_auth(conn, _args) do
-    if user_id = get_session(conn, :current_user_id) do
-      current_user = Accounts.get_user!(user_id)
-    
+    if conn.assigns[:current_user] do
       conn
-        |> assign(:current_user, current_user)
     else
       conn
       |> put_flash(:error, "You need to be signed in to access that page.")
@@ -29,6 +26,7 @@ defmodule DigitalPublicWorksWeb.UserController do
     case Accounts.create_user(user_params) do
       {:ok, user} ->
         conn
+        |> put_session(:current_user_id, user.id)
         |> put_flash(:info, "User created successfully.")
         |> redirect(to: Routes.user_path(conn, :show))
 
@@ -55,19 +53,10 @@ defmodule DigitalPublicWorksWeb.UserController do
       {:ok, user} ->
         conn
         |> put_flash(:info, "User updated successfully.")
-        |> redirect(to: Routes.user_path(conn, :show, user))
+        |> redirect(to: Routes.user_path(conn, :show))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", user: user, changeset: changeset)
     end
-  end
-
-  def delete(conn, _params) do
-    user = conn.assigns[:current_user]
-    {:ok, _user} = Accounts.delete_user(user)
-
-    conn
-    |> put_flash(:info, "User deleted successfully.")
-    |> redirect(to: Routes.projects_path(conn, :index))
   end
 end
