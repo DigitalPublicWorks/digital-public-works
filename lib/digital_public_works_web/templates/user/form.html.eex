@@ -1,0 +1,7 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= PBF.text_input f, :email %>
+
+  <%= PBF.password_input f, :password %>
+
+  <%= PBF.submit f, "Save", class: "btn btn-primary" %>
+<% end %>

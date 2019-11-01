@@ -18,6 +18,7 @@ defmodule DigitalPublicWorksWeb.Router do
 
     get "/", PageController, :index
     resources "/projects", ProjectController
+    resources "/user", UserController, singleton: true
   end
 
   # Other scopes may use custom stacks.
