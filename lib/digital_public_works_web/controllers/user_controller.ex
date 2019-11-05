@@ -52,6 +52,7 @@ defmodule DigitalPublicWorksWeb.UserController do
     case Accounts.update_user(user, user_params) do
       {:ok, user} ->
         conn
+        # TODO: Remove, figure out why its need for controller test
         |> put_session(:current_user_id, user.id)
         |> put_flash(:info, "User updated successfully.")
         |> redirect(to: Routes.user_path(conn, :show))
