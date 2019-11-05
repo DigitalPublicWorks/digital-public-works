@@ -102,7 +102,7 @@ defmodule DigitalPublicWorks.Accounts do
     User.changeset(user, %{})
   end
 
-  def get_user_by(%{"email" => email} = params) do
+  def get_user_by(%{"email" => email}) do
     User
     |> Repo.get_by(email: email)
   end
