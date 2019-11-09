@@ -23,6 +23,8 @@ defmodule DigitalPublicWorksWeb.ConnCase do
 
       # The default endpoint for testing
       @endpoint DigitalPublicWorksWeb.Endpoint
+
+      import DigitalPublicWorks.Factory
     end
   end
 
