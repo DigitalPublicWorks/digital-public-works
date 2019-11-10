@@ -1,16 +1,9 @@
 defmodule DigitalPublicWorksWeb.ProjectControllerTest do
   use DigitalPublicWorksWeb.ConnCase
 
-  alias DigitalPublicWorks.{Projects, Accounts}
-
   @create_attrs %{body: "some body", title: "some title"}
   @update_attrs %{body: "some updated body", title: "some updated title"}
   @invalid_attrs %{body: nil, title: nil}
-
-  def fixture(:project) do
-    {:ok, project} = Projects.create_project(@create_attrs)
-    project
-  end
 
   describe "index" do
     test "lists all projects", %{conn: conn} do
@@ -20,9 +13,9 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
   end
 
   describe "new project" do
-    setup [:create_user]
+    test "renders form", %{conn: conn} do
+      user = insert(:user)
 
-    test "renders form", %{conn: conn, user: user} do
       conn = conn
       |> Plug.Conn.assign(:current_user, user)
       |> get(Routes.project_path(conn, :new))
@@ -31,10 +24,11 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
     end
   end
 
+  @tag individual_test: :skip
   describe "create project" do
-    setup [:create_user]
+    test "redirects to show when data is valid", %{conn: conn} do
+      user = insert(:user)
 
-    test "redirects to show when data is valid", %{conn: conn, user: user} do
       conn = conn
       |> Plug.Conn.assign(:current_user, user)
       |> post(Routes.project_path(conn, :create), project: @create_attrs)
@@ -46,7 +40,9 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
       assert html_response(conn, 200) =~ "PROBLEM"
     end
 
-    test "renders errors when data is invalid", %{conn: conn, user: user} do
+    test "renders errors when data is invalid", %{conn: conn} do
+      user = insert(:user)
+
       conn = conn
       |> Plug.Conn.assign(:current_user, user)
       |> post(Routes.project_path(conn, :create), project: @invalid_attrs)
@@ -56,9 +52,10 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
   end
 
   describe "edit project" do
-    setup [:create_project, :create_user]
+    test "renders form for editing chosen project", %{conn: conn} do
+      project = insert(:project)
+      user = project.user
 
-    test "renders form for editing chosen project", %{conn: conn, project: project, user: user} do
       conn = conn
       |> Plug.Conn.assign(:current_user, user)
       |> get(Routes.project_path(conn, :edit, project))
@@ -67,9 +64,10 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
   end
 
   describe "update project" do
-    setup [:create_project, :create_user]
+    test "redirects when data is valid", %{conn: conn} do
+      project = insert(:project)
+      user = project.user
 
-    test "redirects when data is valid", %{conn: conn, project: project, user: user} do
       conn = conn
       |> Plug.Conn.assign(:current_user, user)
       |> put(Routes.project_path(conn, :update, project), project: @update_attrs)
@@ -80,7 +78,10 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
       assert html_response(conn, 200) =~ "some updated body"
     end
 
-    test "renders errors when data is invalid", %{conn: conn, project: project, user: user} do
+    test "renders errors when data is invalid", %{conn: conn} do
+      project = insert(:project)
+      user = project.user
+
       conn = conn
       |> Plug.Conn.assign(:current_user, user)
       |> put(Routes.project_path(conn, :update, project), project: @invalid_attrs)
@@ -90,10 +91,9 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
   end
 
   describe "delete project" do
-    setup [:create_project]
-
-    test "deletes chosen project", %{conn: conn, project: project} do
-      {:ok, user} = create_user(conn)
+    test "deletes chosen project", %{conn: conn} do
+      project = insert(:project)
+      user = project.user
 
       conn = conn
       |> Plug.Conn.assign(:current_user, user)
@@ -104,15 +104,5 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
         get(conn, Routes.project_path(conn, :show, project))
       end
     end
-  end
-
-  defp create_project(_) do
-    project = fixture(:project)
-    {:ok, project: project}
-  end
-
-  defp create_user(_) do
-    {:ok, user} = Accounts.create_user(%{email: "test@example.com", password: "test1234"})
-    {:ok, user: user}
   end
 end

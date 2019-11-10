@@ -7,6 +7,7 @@ defmodule DigitalPublicWorks.Projects do
   alias DigitalPublicWorks.Repo
 
   alias DigitalPublicWorks.Projects.Project
+  alias DigitalPublicWorks.Accounts.User
 
   @doc """
   Returns the list of projects.
@@ -49,9 +50,10 @@ defmodule DigitalPublicWorks.Projects do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_project(attrs \\ %{}) do
+  def create_project(%User{} = user, attrs \\ %{}) do
     %Project{}
     |> Project.changeset(attrs)
+    |> Ecto.Changeset.put_change(:user_id, user.id)
     |> Repo.insert()
   end
 

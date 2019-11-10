@@ -2,12 +2,16 @@ defmodule DigitalPublicWorks.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias DigitalPublicWorks.Projects.Project
+
   @primary_key {:id, :binary_id, autogenerate: true}
+  @foreign_key_type :binary_id
   
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true
     field :password_hash, :string
+    has_many :projects, Project
 
     timestamps()
   end
