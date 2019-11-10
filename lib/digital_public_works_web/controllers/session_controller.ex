@@ -12,6 +12,7 @@ defmodule DigitalPublicWorksWeb.SessionController do
     {:ok, user} ->
       conn
       |> put_session(:current_user_id, user.id)
+      |> configure_session(renew: true)
       |> put_flash(:info, "Signed in successfully.")
       |> redirect(to: Routes.project_path(conn, :index))
     {:error, _} ->
@@ -23,7 +24,7 @@ defmodule DigitalPublicWorksWeb.SessionController do
 
   def delete(conn, _params) do
     conn
-    |> delete_session(:current_user_id)
+    |> configure_session(drop: true)
     |> put_flash(:info, "Signed out successfully.")
     |> redirect(to: Routes.project_path(conn, :index))
   end
