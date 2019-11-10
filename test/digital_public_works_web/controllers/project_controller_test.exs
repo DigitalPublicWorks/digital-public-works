@@ -24,7 +24,6 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
     end
   end
 
-  @tag individual_test: :skip
   describe "create project" do
     test "redirects to show when data is valid", %{conn: conn} do
       user = insert(:user)

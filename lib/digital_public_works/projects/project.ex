@@ -18,8 +18,8 @@ defmodule DigitalPublicWorks.Projects.Project do
   @doc false
   def changeset(project, attrs) do
     project
-    |> cast(attrs, [:title, :body, :user_id])
-    |> validate_required([:title, :body, :user_id])
+    |> cast(attrs, [:title, :body])
+    |> validate_required([:title, :body])
     |> unique_constraint(:title)
   end
 end

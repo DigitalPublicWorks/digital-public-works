@@ -21,7 +21,6 @@ defmodule DigitalPublicWorks.ProjectsTest do
       assert Projects.get_project!(project.id) == project
     end
 
-    @tag individual_test: :skip
     test "create_project/1 with valid data creates a project" do
       user = insert(:user)
       assert {:ok, %Project{} = project} = Projects.create_project(user, @valid_attrs)
