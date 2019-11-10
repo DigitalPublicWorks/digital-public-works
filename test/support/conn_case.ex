@@ -35,6 +35,14 @@ defmodule DigitalPublicWorksWeb.ConnCase do
       Ecto.Adapters.SQL.Sandbox.mode(DigitalPublicWorks.Repo, {:shared, self()})
     end
 
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+    user = cond do
+      tags[:as_user] -> DigitalPublicWorks.Factory.insert(:user)
+      true -> nil
+    end
+
+    conn = Phoenix.ConnTest.build_conn()
+      |> Plug.Conn.assign(:current_user, user)
+
+    {:ok, conn: conn, user: user}
   end
 end

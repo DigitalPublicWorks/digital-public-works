@@ -25,39 +25,31 @@ defmodule DigitalPublicWorksWeb.UserControllerTest do
   end
 
   describe "edit user" do
+    @tag :as_user
     test "renders form for editing chosen user", %{conn: conn} do
-      user = insert(:user)
-
-      conn = conn
-      |> Plug.Conn.assign(:current_user, user)
-      |> get(Routes.user_path(conn, :edit))
+      conn = get(conn, Routes.user_path(conn, :edit))
 
       assert html_response(conn, 200) =~ "Edit User"
     end
   end
 
   describe "update user" do
+    @tag :as_user
     test "redirects when data is valid", %{conn: conn} do
-      user = insert(:user)
-
       new_email = "newemail@example.com"
 
-      conn = conn
-      |> Plug.Conn.assign(:current_user, user)
-      |> put(Routes.user_path(conn, :update), user: %{email: new_email})
+      conn = put(conn, Routes.user_path(conn, :update), user: %{email: new_email})
 
       assert redirected_to(conn) == Routes.user_path(conn, :show)
 
       conn = get(conn, Routes.user_path(conn, :show))
+
       assert html_response(conn, 200) =~ new_email
     end
 
+    @tag :as_user
     test "renders errors when data is invalid", %{conn: conn} do
-      user = insert(:user)
-
-      conn = conn
-      |> Plug.Conn.assign(:current_user, user)
-      |> put(Routes.user_path(conn, :update), user: %{email: nil})
+      conn = put(conn, Routes.user_path(conn, :update), user: %{email: nil})
 
       assert html_response(conn, 200) =~ "Edit User"
     end
