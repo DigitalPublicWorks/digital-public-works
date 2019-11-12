@@ -24,6 +24,8 @@ defmodule DigitalPublicWorksWeb do
       import Plug.Conn
       import DigitalPublicWorksWeb.Gettext
       alias DigitalPublicWorksWeb.Router.Helpers, as: Routes
+
+      import DigitalPublicWorksWeb.Permission
     end
   end
 
@@ -42,7 +44,9 @@ defmodule DigitalPublicWorksWeb do
       import DigitalPublicWorksWeb.ErrorHelpers
       import DigitalPublicWorksWeb.Gettext
       alias DigitalPublicWorksWeb.Router.Helpers, as: Routes
+
       alias PhoenixBootstrapForm, as: PBF
+      import DigitalPublicWorksWeb.Permission
     end
   end
 

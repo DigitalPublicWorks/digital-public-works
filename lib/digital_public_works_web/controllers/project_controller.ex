@@ -4,15 +4,24 @@ defmodule DigitalPublicWorksWeb.ProjectController do
   alias DigitalPublicWorks.Projects
   alias DigitalPublicWorks.Projects.Project
 
-  plug :check_auth when action in [:new, :create, :edit, :update, :delete]
+  plug :get_project
+  plug :check_auth
+
+  defp get_project(%{params: %{"id" => id}} = conn, _args) do
+    conn |> assign(:project, Projects.get_project!(id))
+  end
+
+  defp get_project(conn, _args) do
+    conn |> assign(:project, %Project{})
+  end
 
   defp check_auth(conn, _args) do
-    if conn.assigns[:current_user] do
+    if can? conn.assigns[:current_user], action_name(conn), conn.assigns[:project] do
       conn
     else
       conn
-      |> put_flash(:error, "You need to be signed in to access that page.")
-      |> redirect(to: Routes.session_path(conn, :new))
+      |> put_flash(:error, "You don't have access to that")
+      |> redirect(to: Routes.page_path(conn, :index))
       |> halt()
     end
   end
@@ -39,19 +48,19 @@ defmodule DigitalPublicWorksWeb.ProjectController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    project = Projects.get_project!(id)
+  def show(conn, _params) do
+    project = conn.assigns.project
     render(conn, "show.html", project: project)
   end
 
-  def edit(conn, %{"id" => id}) do
-    project = Projects.get_project!(id)
+  def edit(conn, _params) do
+    project = conn.assigns.project
     changeset = Projects.change_project(project)
     render(conn, "edit.html", project: project, changeset: changeset)
   end
 
-  def update(conn, %{"id" => id, "project" => project_params}) do
-    project = Projects.get_project!(id)
+  def update(conn, %{"project" => project_params}) do
+    project = conn.assigns.project
 
     case Projects.update_project(project, project_params) do
       {:ok, project} ->
@@ -64,8 +73,9 @@ defmodule DigitalPublicWorksWeb.ProjectController do
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    project = Projects.get_project!(id)
+  def delete(conn, _params) do
+    project = conn.assigns.project
+
     {:ok, _project} = Projects.delete_project(project)
 
     conn
