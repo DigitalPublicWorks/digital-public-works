@@ -32,8 +32,8 @@ defmodule DigitalPublicWorksWeb.ProjectController do
     end
   end
 
-  def index(conn, _params) do
-    projects = Projects.list_projects()
+  def index(conn, params) do
+    projects = Projects.list_projects(params["project"]["q"])
     render(conn, "index.html", projects: projects)
   end
 

@@ -18,8 +18,12 @@ defmodule DigitalPublicWorks.Projects do
       [%Project{}, ...]
 
   """
-  def list_projects do
-    Repo.all(Project)
+  def list_projects(q \\ "") do
+    query =
+      from p in Project,
+      where: like(p.title, ^"%#{q}%")
+
+    Repo.all(query)
   end
 
   @doc """

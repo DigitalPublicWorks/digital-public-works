@@ -10,8 +10,21 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
       conn = get(conn, Routes.project_path(conn, :index))
       assert html_response(conn, 200) =~ ""
     end
-  end
 
+    test "filters projects not specified by search", %{conn: conn} do
+      project_title = "Milwaukee"
+      insert(:project, title: project_title)
+      conn = get(conn, Routes.project_path(conn, :index), project: %{q: project_title})
+      assert html_response(conn, 200) =~ project_title
+    end
+
+    test "lists projects specified by search", %{conn: conn} do
+      project_title = "Milwaukee"
+      insert(:project, title: project_title)
+      conn = get(conn, Routes.project_path(conn, :index), project: %{q: "Chicago"})
+      refute html_response(conn, 200) =~ project_title
+    end
+  end
 
   describe "new project" do
     @tag :as_user
@@ -96,7 +109,7 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
 
       conn = get(conn, Routes.project_path(conn, :show, project))
 
-      assert !(html_response(conn, 200) =~ "Edit")
+      refute html_response(conn, 200) =~ "Edit"
     end
 
     @tag :as_user
