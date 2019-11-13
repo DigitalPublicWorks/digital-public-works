@@ -21,7 +21,7 @@ defmodule DigitalPublicWorks.Projects do
   def list_projects(q \\ "") do
     query =
       from p in Project,
-      where: like(p.title, ^"%#{q}%")
+      where: ilike(p.title, ^"%#{q}%")
 
     Repo.all(query)
   end
