@@ -14,7 +14,7 @@
       <div class="container">
         <a class="navbar-brand" href="/">
           <img width="30" height="30" class="d-inline-block align-top" alt="" src="<%= Routes.static_path(@conn, "/images/logo.png") %>">
-          MKE Digital Public Works
+          Digital Public Works
         </a>
         
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,19 +31,19 @@
             </li>
           </ul>
           <%= if @current_user do %>
-            <%= link "Sign Out", to: Routes.session_path(@conn, :delete), method: "delete", class: "btn btn-outline-primary" %>
+            <%= link "Log Out", to: Routes.session_path(@conn, :delete), method: "delete", class: "btn btn-outline-primary" %>
           <% else %>
-            <%= link "Sign In", to: Routes.session_path(@conn, :new), class: "btn btn-outline-primary" %>
+            <%= link "Log In", to: Routes.session_path(@conn, :new), class: "btn btn-outline-primary" %>
           <% end %>
         </div>
       </div>
     </nav>
 
     <main role="main" class="container mt-3">
-      <div class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></div>
-      <div class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></div>
       <div class="row justify-content-center">
         <div class="col-lg-8">
+          <div class="alert alert-info text-center" role="alert"><%= get_flash(@conn, :info) %></div>
+          <div class="alert alert-danger text-center" role="alert"><%= get_flash(@conn, :error) %></div>
           <%= render @view_module, @view_template, assigns %>
         </div>
       </div>

@@ -1,6 +1,15 @@
-<h1>Sign in</h1>
-<%= form_for @conn, Routes.session_path(@conn, :create), [as: :session], fn f -> %>
-  <%= PBF.text_input f, :email, [input: [autofocus: true]] %>
-  <%= PBF.password_input f, :password %>
-  <%= PBF.submit f, "Sign in", class: "btn btn-primary" %>
-<% end %>
+<div class="row justify-content-center">
+  <div class="col-sm-6 col-md-offset-3">
+    <div class="card my-4">
+      <div class="card-body">
+        <h3 class="card-title">Log In</h3>
+        <%= form_for @conn, Routes.session_path(@conn, :create), [as: :session], fn f -> %>
+          <%= PBF.text_input f, :email, [input: [autofocus: true]] %>
+          <%= PBF.password_input f, :password %>
+          <%= PBF.submit f, "Log in", class: "btn btn-primary" %>
+        <% end %>
+      </div>
+    </div>
+    <p class="text-center">New to Digital Public Works? <%= link "Sign Up", to: Routes.user_path(@conn, :new) %></p>
+  </div>
+</div>
