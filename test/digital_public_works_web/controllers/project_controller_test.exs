@@ -88,4 +88,24 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
       end
     end
   end
+
+  describe "show project" do
+    @tag :as_user
+    test "shouldn't see edit button for someone else's project", %{conn: conn} do
+      project = insert(:project)
+
+      conn = get(conn, Routes.project_path(conn, :show, project))
+
+      assert !(html_response(conn, 200) =~ "Edit")
+    end
+
+    @tag :as_user
+    test "should see edit button for own project", %{conn: conn, user: user} do
+      project = insert(:project, user: user)
+
+      conn = get(conn, Routes.project_path(conn, :show, project))
+
+      assert html_response(conn, 200) =~ "Edit"
+    end
+  end
 end

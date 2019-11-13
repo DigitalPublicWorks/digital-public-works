@@ -2,9 +2,11 @@
   <div class="col">
     <%= link "< Back", to: Routes.project_path(@conn, :index) %>
   </div>
-  <div class="col text-right">
-    <%= link "Edit", to: Routes.project_path(@conn, :edit, @project) %>
-  </div>
+  <%= if can? @current_user, :edit, @project do %>
+    <div class="col text-right">
+      <%= link "Edit", to: Routes.project_path(@conn, :edit, @project) %>
+    </div>
+  <% end %>
 </div>
 
 <h6 class="text-muted mt-4">PROBLEM</h6>
