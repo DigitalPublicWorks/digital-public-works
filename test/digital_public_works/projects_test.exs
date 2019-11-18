@@ -4,8 +4,6 @@ defmodule DigitalPublicWorks.ProjectsTest do
   alias DigitalPublicWorks.Projects
   alias DigitalPublicWorks.Projects.Project
 
-  import DigitalPublicWorks.Factory
-
   describe "projects" do
     @valid_attrs %{body: "some body", title: "some title"}
     @update_attrs %{body: "some updated body", title: "some updated title"}

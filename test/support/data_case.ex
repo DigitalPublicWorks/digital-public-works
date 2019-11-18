@@ -22,6 +22,8 @@ defmodule DigitalPublicWorks.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import DigitalPublicWorks.DataCase
+
+      import DigitalPublicWorks.Factory
     end
   end
 
