@@ -21,4 +21,9 @@
 
 <h6 class="text-muted mt-4">UPDATES</h6>
 <p>There have not been any updates on this project.</p>
+
+<%= if can? @current_user, :create, new_post(@project) do %>
+<%= link "Add Update", to: Routes.project_post_path(@conn, :new, @project), class: "btn btn-success" %>
+<% end %>
+
 <a href="#" class="btn btn-primary">Subscribe to updates</a>

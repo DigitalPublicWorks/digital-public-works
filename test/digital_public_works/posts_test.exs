@@ -10,7 +10,7 @@ defmodule DigitalPublicWorks.PostsTest do
     @update_attrs %{body: "some updated body"}
     @invalid_attrs %{body: nil}
 
-    def post_fixture(attrs \\ %{}) do
+    def post_fixture() do
       Posts.get_post!(insert(:post).id)
     end
 

@@ -3,6 +3,7 @@ defmodule DigitalPublicWorks.Projects.Project do
   import Ecto.Changeset
 
   alias DigitalPublicWorks.Accounts.User
+  alias DigitalPublicWorks.Posts.Post
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -11,6 +12,7 @@ defmodule DigitalPublicWorks.Projects.Project do
     field :body, :string
     field :title, :string
     belongs_to :user, User
+    has_many :posts, Post
 
     timestamps()
   end

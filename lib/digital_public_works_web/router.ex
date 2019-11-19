@@ -18,7 +18,9 @@ defmodule DigitalPublicWorksWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    resources "/projects", ProjectController
+    resources "/projects", ProjectController do
+      resources "/posts", PostController
+    end
     resources "/user", UserController, singleton: true
     resources "/session", SessionController, singleton: true
   end
