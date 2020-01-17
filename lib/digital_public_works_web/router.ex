@@ -18,6 +18,9 @@ defmodule DigitalPublicWorksWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/terms", PageController, :terms
+    get "/privacy", PageController, :privacy
+
     resources "/projects", ProjectController do
       resources "/posts", PostController
     end
