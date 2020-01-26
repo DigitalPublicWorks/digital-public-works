@@ -7,7 +7,8 @@ defmodule DigitalPublicWorksWeb.Permission do
     cond do
       action in [:show, :index] -> true
       action in [:new, :create] -> user
-      action in [:edit, :update, :delete] -> user && user.id == project.user_id
+      action in [:edit, :update, :delete] ->
+        user && user.id == project.user_id || user.is_admin
       true -> false
     end
   end

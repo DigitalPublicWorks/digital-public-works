@@ -12,6 +12,7 @@ defmodule DigitalPublicWorks.Projects.Project do
     field :body, :string
     field :title, :string
     field :is_featured, :boolean
+    field :is_public, :boolean, default: :false
     belongs_to :user, User
     has_many :posts, Post
 
@@ -21,7 +22,7 @@ defmodule DigitalPublicWorks.Projects.Project do
   @doc false
   def changeset(project, attrs) do
     project
-    |> cast(attrs, [:title, :body])
+    |> cast(attrs, [:title, :body, :is_public])
     |> validate_required([:title, :body])
     |> unique_constraint(:title)
   end

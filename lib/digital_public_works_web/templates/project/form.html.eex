@@ -1,7 +1,13 @@
+<% is_admin = (@conn.assigns[:current_user] != nil) and @conn.assigns[:current_user].is_admin %>
+
 <%= form_for @changeset, @action, [autocomplete: "off"], fn f -> %>
   <%= PBF.text_input f, :title %>
 
   <%= PBF.textarea f, :body, [input: [rows: 10]] %>
+
+  <%= if is_admin do %>
+    <%= PBF.checkbox f, :is_public, label: [text: "Is Public"] %>
+  <%= end %>
 
   <%= PBF.submit f, "Submit project for consideration", class: "btn btn-primary float-right" %>
 <% end %>
