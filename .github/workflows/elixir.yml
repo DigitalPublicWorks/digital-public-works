@@ -16,8 +16,13 @@ jobs:
     container:
       image: elixir:1.9.1
 
+
+
     steps:
     - uses: actions/checkout@v1
+    - name: Install PostgreSQL 11 client
+      run: |
+        sudo apt-get -yqq install libpq-dev
     - name: Install Dependencies
       run: |
         mix local.rebar --force
