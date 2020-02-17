@@ -1,8 +1,11 @@
 defmodule DigitalPublicWorksWeb.PageController do
   use DigitalPublicWorksWeb, :controller
+  alias DigitalPublicWorks.Projects
 
   def index(conn, _params) do
-    render(conn, "index.html")
+    conn
+    |> assign(:projects, Projects.list_featured_projects)
+    |> render("index.html")
   end
 
   def terms(conn, _params) do
