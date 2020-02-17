@@ -22,9 +22,9 @@ jobs:
         with:
           otp-version: 22.0.7
           elixir-version: 1.9.1
-      - run: |
-          mix local.rebar --force
-          mix local.hex --force
-          mix deps.get
-          mix ecto.setup
-          mix test
+      - name: Install Dependencies
+        run: mix deps.get
+      - name: Setup Database
+        run: mix ecto.setup
+      - name : Run Tests
+        run: mix test
