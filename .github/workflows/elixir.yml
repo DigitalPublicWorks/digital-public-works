@@ -17,15 +17,14 @@ jobs:
           --health-retries 5
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-elixir@v1
-      with:
-        otp-version: 22.0.7
-        elixir-version: 1.9.1
-    - name: Install Dependencies
-    - run: |
-        mix local.rebar --force
-        mix local.hex --force
-        mix deps.get
-        mix ecto.setup
-        mix test
+      - uses: actions/checkout@v2
+      - uses: actions/setup-elixir@v1
+        with:
+          otp-version: 22.0.7
+          elixir-version: 1.9.1
+      - run: |
+          mix local.rebar --force
+          mix local.hex --force
+          mix deps.get
+          mix ecto.setup
+          mix test
