@@ -3,32 +3,29 @@ name: Elixir CI
 on: push
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
 
     services:
-      postgres:
+      db:
         image: postgres:11.5
-        ports: ["5432:5432"]
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
-    container:
-      image: elixir:1.9.1
-
-
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Install PostgreSQL 11 client
-      run: |
-        sudo apt-get -yqq install libpq-dev
+    - uses: actions/checkout@v2
+    - uses: actions/setup-elixir@v1
+      with:
+        otp-version: 22.0.7
+        elixir-version: 1.9.1
     - name: Install Dependencies
-      run: |
+    - run: |
         mix local.rebar --force
         mix local.hex --force
         mix deps.get
-    - name: Run Tests
-      run: |
         mix ecto.setup
         mix test
