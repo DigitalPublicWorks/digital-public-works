@@ -7,6 +7,12 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:11.5
+        ports: ["5432:5432"]
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     container:
       image: elixir:1.9.1
 
@@ -17,6 +23,7 @@ jobs:
         mix local.rebar --force
         mix local.hex --force
         mix deps.get
-        mix ecto.setup
     - name: Run Tests
-      run: mix test
+      run: |
+        mix ecto.setup
+        mix test
