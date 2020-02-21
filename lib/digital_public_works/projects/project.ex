@@ -11,6 +11,7 @@ defmodule DigitalPublicWorks.Projects.Project do
   schema "projects" do
     field :body, :string
     field :title, :string
+    field :is_featured, :boolean
     belongs_to :user, User
     has_many :posts, Post
 

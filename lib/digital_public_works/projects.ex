@@ -26,6 +26,25 @@ defmodule DigitalPublicWorks.Projects do
     Repo.all(query)
   end
 
+
+  @doc """
+  Returns the list of featured projects
+
+  ## Examples
+
+      iex> list_featured_projects()
+      [%Project{}, ...]
+
+  """
+  def list_featured_projects do
+    query =
+      from p in Project,
+      where: [is_featured: true]
+
+    Repo.all(query)
+  end
+
+
   @doc """
   Gets a single project.
 
