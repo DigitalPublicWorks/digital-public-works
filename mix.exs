@@ -46,8 +46,7 @@ defmodule DigitalPublicWorks.MixProject do
       {:phoenix_bootstrap_form, "~> 0.1.0"},
       {:argon2_elixir, "~> 2.0"},
       {:ex_machina, "~> 2.3", only: :test},
-      {:bamboo, "~> 0.7"},
-      {:bamboo_smtp, "~> 1.2.1"}
+      {:bamboo, "~> 1.4"}
     ]
   end
 
