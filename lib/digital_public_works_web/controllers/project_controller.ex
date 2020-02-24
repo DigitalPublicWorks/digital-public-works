@@ -3,6 +3,7 @@ defmodule DigitalPublicWorksWeb.ProjectController do
 
   alias DigitalPublicWorks.Projects
   alias DigitalPublicWorks.Projects.Project
+  alias DigitalPublicWorks.Posts
 
   plug :get_project
   plug :check_auth
@@ -55,8 +56,9 @@ defmodule DigitalPublicWorksWeb.ProjectController do
   end
 
   def show(conn, _params) do
-    project = conn.assigns.project
-    render(conn, "show.html", project: project)
+    conn
+    |> assign(:posts, Posts.list_posts(conn.assigns.project))
+    |> render("show.html")
   end
 
   def edit(conn, _params) do

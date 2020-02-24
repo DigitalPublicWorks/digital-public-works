@@ -2,7 +2,6 @@
   <div class="card-body">
     <h5 class="card-title"><%= @project.title %></h5>
     <p class="card-text"><%= @project.body %></p>
-    <a class="btn btn-primary" href="<%= Routes.project_path(@conn, :show, @project) %>">I can help</a>
-    <a class="btn btn-default" href="<%= Routes.project_path(@conn, :show, @project) %>">Learn more</a>
+    <a class="btn btn-primary" href="<%= Routes.project_path(@conn, :show, @project) %>">Learn More</a>
   </div>
 </div>
