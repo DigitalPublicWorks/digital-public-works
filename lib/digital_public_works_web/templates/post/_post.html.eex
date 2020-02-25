@@ -1,5 +1,6 @@
 <div class="card my-4">
   <div class="card-body">
+    <%= link "Edit", to: Routes.project_post_path(@conn, :edit, @post.project, @post), class: "float-right" %>
     <h5 class="card-title"><%= @post.title %></h5>
     <h6 class="card-subtitle font-weight-normal text-muted"><%= format_date @post.inserted_at %></h6>
     <hr>

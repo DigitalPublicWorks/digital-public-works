@@ -22,7 +22,7 @@ defmodule DigitalPublicWorksWeb.Router do
     get "/privacy", PageController, :privacy
 
     resources "/projects", ProjectController do
-      resources "/posts", PostController, only: [:new, :create]
+      resources "/posts", PostController, only: [:new, :create, :edit, :update, :delete]
     end
     resources "/user", UserController, singleton: true
     resources "/session", SessionController, singleton: true

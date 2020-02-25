@@ -26,7 +26,7 @@
 <h6 class="text-muted mt-4">UPDATES</h6>
 
 <%= for post <- @posts do %>
-  <%= render DigitalPublicWorksWeb.PostView, "_post.html", post: post %>
+  <%= render DigitalPublicWorksWeb.PostView, "_post.html", post: post, conn: @conn %>
 <% end %>
 <%= if Enum.empty?(@posts) do %>
   <p>There have not been any updates on this project.</p>
