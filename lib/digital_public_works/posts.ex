@@ -57,11 +57,9 @@ defmodule DigitalPublicWorks.Posts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_post(%{"project" => project, "user" => user} = attrs \\ %{}) do
+  def create_post(attrs \\ %{}) do
     %Post{}
     |> Post.changeset(attrs)
-    |> Ecto.Changeset.put_change(:project_id, project.id)
-    |> Ecto.Changeset.put_change(:user_id, user.id)
     |> Repo.insert()
   end
 

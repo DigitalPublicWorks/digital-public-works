@@ -37,7 +37,6 @@ defmodule DigitalPublicWorksWeb.PostController do
   def new(conn, _params) do
     conn
     |> assign(:changeset, Posts.change_post(%Post{}))
-    |> assign(:action, Routes.project_post_path(conn, :create, conn.assigns.project))
     |> render("new.html")
   end
 
@@ -45,7 +44,9 @@ defmodule DigitalPublicWorksWeb.PostController do
     project = conn.assigns.project
     current_user = conn.assigns.current_user
 
-    case Posts.create_post(Map.merge(post_params, %{"user" => current_user, "project" => project})) do
+    post_params = Map.merge(post_params, %{"user_id" => current_user.id, "project_id" => project.id})
+
+    case Posts.create_post(post_params) do
       {:ok, _post} ->
         conn
         |> put_flash(:info, "Post created successfully.")

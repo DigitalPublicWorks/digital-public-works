@@ -4,7 +4,7 @@ defmodule DigitalPublicWorks.Factory do
   alias DigitalPublicWorks.Accounts.User
   alias DigitalPublicWorks.Projects.Project
   alias DigitalPublicWorks.Posts.Post
-  
+
   def user_factory do
     %User{
       email: sequence(:email, &"email-#{&1}@example.com"),
@@ -23,7 +23,8 @@ defmodule DigitalPublicWorks.Factory do
   def post_factory do
     %Post{
       body: "test description",
-      project: build(:project)
+      project: build(:project),
+      user: build(:user)
     }
   end
 end
