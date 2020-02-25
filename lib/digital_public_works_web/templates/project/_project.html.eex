@@ -1,10 +1,12 @@
 <div class="card my-4">
   <div class="card-body">
-    <h5 class="card-title"><%= @project.title %>
-      <%= if not @project.is_public do %>
-        <a class="btn-warning" href="<%= Routes.project_path(@conn, :edit, @project.id) %>">Needs Review</a>
-      <%= end %>
-    </h5>
+      <%= unless @project.is_public do %>
+        <%= link "Unpublished",
+          to: Routes.project_path(@conn, :show, @project),
+          class: "badge badge-warning float-right ml-2 mb-2"
+        %>
+      <% end %>
+    <h5 class="card-title"><%= @project.title %></h5>
     <p class="card-text"><%= @project.body %></p>
     <a class="btn btn-primary" href="<%= Routes.project_path(@conn, :show, @project) %>">I can help</a>
     <a class="btn btn-default" href="<%= Routes.project_path(@conn, :show, @project) %>">Learn more</a>

@@ -18,14 +18,32 @@ defmodule DigitalPublicWorks.Projects do
       [%Project{}, ...]
 
   """
-  def list_projects(q \\ "") do
-    query =
-      from p in Project,
-      where: ilike(p.title, ^"%#{q}%")
+  def list_projects(_filter \\ nil, _ \\ nil)
 
-    Repo.all(query)
+  def list_projects(filter, nil) do
+    Project
+    |> where(is_public: true)
+    |> filter_projects(filter)
+    |> Repo.all
   end
 
+  def list_projects(filter, %User{is_admin: true}) do
+    Project
+    |> filter_projects(filter)
+    |> Repo.all
+  end
+
+  def list_projects(filter, %User{id: user_id}) do
+    (from p in Project, where: p.is_public == true or p.user_id == ^user_id)
+    |> filter_projects(filter)
+    |> Repo.all
+  end
+
+  defp filter_projects(query, nil), do: query
+
+  defp filter_projects(query, filter) do
+    from p in query, where: ilike(p.title, ^"%#{filter}%")
+  end
 
   @doc """
   Returns the list of featured projects
@@ -125,5 +143,18 @@ defmodule DigitalPublicWorks.Projects do
   """
   def change_project(%Project{} = project) do
     Project.changeset(project, %{})
+  end
+
+
+  def publish_project(%Project{} = project) do
+    project
+    |> Ecto.Changeset.change(%{is_public: true})
+    |> Repo.update
+  end
+
+  def unpublish_project(%Project{} = project) do
+    project
+    |> Ecto.Changeset.change(%{is_public: false})
+    |> Repo.update
   end
 end

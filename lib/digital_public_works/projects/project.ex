@@ -22,7 +22,7 @@ defmodule DigitalPublicWorks.Projects.Project do
   @doc false
   def changeset(project, attrs) do
     project
-    |> cast(attrs, [:title, :body, :is_public])
+    |> cast(attrs, [:title, :body])
     |> validate_required([:title, :body])
     |> unique_constraint(:title)
   end

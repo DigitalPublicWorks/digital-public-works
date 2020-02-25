@@ -1,6 +1,3 @@
-<% is_admin = (@conn.assigns[:current_user] != nil) and @conn.assigns[:current_user].is_admin %>
 <%= for project <- @projects do %>
-  <%= if project.is_public or is_admin do %>
-    <%= render "_project.html", project: project, conn: @conn %>
-  <%= end %>
-<%= end %>
+  <%= render "_project.html", project: project, conn: @conn %>
+<% end %>

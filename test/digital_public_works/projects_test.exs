@@ -10,7 +10,7 @@ defmodule DigitalPublicWorks.ProjectsTest do
     @invalid_attrs %{body: nil, title: nil}
 
     test "list_projects/0 returns all projects" do
-      project = Repo.get(Project, insert(:project).id)
+      project = Repo.get(Project, insert(:project, is_public: true).id)
       assert Projects.list_projects() == [project]
     end
 
