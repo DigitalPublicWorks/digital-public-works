@@ -7,6 +7,7 @@ defmodule DigitalPublicWorksWeb.PostController do
   alias DigitalPublicWorks.Projects.Project
 
   plug :get_project
+  plug :get_post
   plug :check_auth
 
   defp get_project(%{params: %{"project_id" => id}} = conn, _args) do
@@ -17,9 +18,17 @@ defmodule DigitalPublicWorksWeb.PostController do
     conn |> assign(:project, %Project{})
   end
 
+  defp get_post(%{params: %{"id" => id}} = conn, _args) do
+    conn |> assign(:post, Posts.get_post!(id))
+  end
+
+  defp get_post(conn, _args) do
+    conn |> assign(:post, %Post{project: conn.assigns.project})
+  end
+
   defp check_auth(conn, _args) do
     cond do
-      can? conn.assigns[:current_user], action_name(conn), conn.assigns[:project] ->
+      can? conn.assigns.current_user, action_name(conn), conn.assigns.post ->
         conn
       conn.assigns[:current_user] ->
         conn
@@ -36,7 +45,7 @@ defmodule DigitalPublicWorksWeb.PostController do
 
   def new(conn, _params) do
     conn
-    |> assign(:changeset, Posts.change_post(%Post{}))
+    |> assign(:changeset, Posts.change_post(conn.assigns.post))
     |> render("new.html")
   end
 
@@ -57,8 +66,8 @@ defmodule DigitalPublicWorksWeb.PostController do
     end
   end
 
-  def edit(conn, %{"id" => id}) do
-    post = Posts.get_post!(id)
+  def edit(conn, _params) do
+    post = conn.assigns.post
 
     conn
     |> assign(:post, post)
@@ -66,8 +75,8 @@ defmodule DigitalPublicWorksWeb.PostController do
     |> render("edit.html")
   end
 
-  def update(conn, %{"post" => post_params, "id" => id}) do
-    post = Posts.get_post!(id)
+  def update(conn, %{"post" => post_params}) do
+    post = conn.assigns.post
 
     case Posts.update_post(post, post_params) do
       {:ok, _post} ->
@@ -83,8 +92,8 @@ defmodule DigitalPublicWorksWeb.PostController do
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    post = Posts.get_post!(id)
+  def delete(conn, _params) do
+    post = conn.assigns.post
 
     {:ok, _post} = Posts.delete_post(post)
 

@@ -43,7 +43,7 @@ defmodule DigitalPublicWorks.Posts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_post!(id), do: Repo.get!(Post, id)
+  def get_post!(id), do: Repo.get!(Post, id) |> Repo.preload([:project, :user])
 
   @doc """
   Creates a post.
