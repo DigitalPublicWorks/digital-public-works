@@ -39,7 +39,7 @@ defmodule DigitalPublicWorks.Projects do
     |> Repo.all
   end
 
-  defp filter_projects(query, []), do: query
+  defp filter_projects(query, nil), do: query
 
   defp filter_projects(query, search) do
     from p in query, where: ilike(p.title, ^"%#{search}%")
