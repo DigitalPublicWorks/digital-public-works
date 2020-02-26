@@ -33,9 +33,9 @@ defmodule DigitalPublicWorksWeb.ProjectController do
   end
 
   def index(conn, params) do
-    query = params["project"]["q"]
+    search = params["project"]["q"]
 
-    projects = Projects.list_projects(query, conn.assigns.current_user)
+    projects = Projects.list_projects(conn.assigns.current_user, search)
 
     render(conn, "index.html", projects: projects)
   end

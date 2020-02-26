@@ -9,9 +9,26 @@ defmodule DigitalPublicWorks.ProjectsTest do
     @update_attrs %{body: "some updated body", title: "some updated title"}
     @invalid_attrs %{body: nil, title: nil}
 
-    test "list_projects/0 returns all projects" do
-      project = Repo.get(Project, insert(:project, is_public: true).id)
-      assert Projects.list_projects() == [project]
+    test "list_projects/2 returns all projects" do
+      owner = insert(:user)
+      other = insert(:user)
+      admin = insert(:user, is_admin: true)
+
+      project = Repo.get(Project, insert(:project, user: owner).id)
+
+      assert Projects.list_projects(owner) == [project]
+      assert Projects.list_projects(admin) == [project]
+      assert Projects.list_projects(other) == []
+      assert Projects.list_projects        == []
+
+      project = project
+      |> Ecto.Changeset.change(is_public: true)
+      |> Repo.update!
+
+      assert Projects.list_projects(owner) == [project]
+      assert Projects.list_projects(admin) == [project]
+      assert Projects.list_projects(other) == [project]
+      assert Projects.list_projects        == [project]
     end
 
     test "get_project!/1 returns the project with given id" do

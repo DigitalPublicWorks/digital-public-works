@@ -18,31 +18,31 @@ defmodule DigitalPublicWorks.Projects do
       [%Project{}, ...]
 
   """
-  def list_projects(_filter \\ nil, _ \\ nil)
+  def list_projects(_user \\ nil, _search \\ nil)
 
-  def list_projects(filter, nil) do
+  def list_projects(nil, search) do
     Project
     |> where(is_public: true)
-    |> filter_projects(filter)
+    |> filter_projects(search)
     |> Repo.all
   end
 
-  def list_projects(filter, %User{is_admin: true}) do
+  def list_projects(%User{is_admin: true}, search) do
     Project
-    |> filter_projects(filter)
+    |> filter_projects(search)
     |> Repo.all
   end
 
-  def list_projects(filter, %User{id: user_id}) do
+  def list_projects(%User{id: user_id}, search) do
     (from p in Project, where: p.is_public == true or p.user_id == ^user_id)
-    |> filter_projects(filter)
+    |> filter_projects(search)
     |> Repo.all
   end
 
-  defp filter_projects(query, nil), do: query
+  defp filter_projects(query, []), do: query
 
-  defp filter_projects(query, filter) do
-    from p in query, where: ilike(p.title, ^"%#{filter}%")
+  defp filter_projects(query, search) do
+    from p in query, where: ilike(p.title, ^"%#{search}%")
   end
 
   @doc """

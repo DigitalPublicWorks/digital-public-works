@@ -14,6 +14,7 @@ defmodule DigitalPublicWorksWeb.ConnCase do
   """
 
   use ExUnit.CaseTemplate
+  import DigitalPublicWorks.Factory
 
   using do
     quote do
@@ -36,7 +37,8 @@ defmodule DigitalPublicWorksWeb.ConnCase do
     end
 
     user = cond do
-      tags[:as_user] -> DigitalPublicWorks.Factory.insert(:user)
+      tags[:as_user] -> insert(:user)
+      tags[:as_admin] -> insert(:user, is_admin: true)
       true -> nil
     end
 

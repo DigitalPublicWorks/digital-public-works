@@ -140,4 +140,47 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
     end
   end
 
+  describe "publish project" do
+    @tag :as_user
+    test  "user can't publish project", %{conn: conn, user: user} do
+      project = insert(:project, user: user)
+
+      conn = put(conn, Routes.project_path(conn, :publish, project))
+
+      assert redirected_to(conn) == Routes.page_path(conn, :index)
+      assert get_flash(conn, :error) =~ "You don't have access to that"
+    end
+
+    @tag :as_admin
+    test  "admin can publish project", %{conn: conn} do
+      project = insert(:project)
+
+      conn = put(conn, Routes.project_path(conn, :publish, project))
+
+      assert redirected_to(conn) == Routes.project_path(conn, :show, project)
+      assert get_flash(conn, :info) =~ "Project published successfully"
+    end
+  end
+
+  describe "unpublish project" do
+    @tag :as_user
+    test  "user can't unpublish project", %{conn: conn, user: user} do
+      project = insert(:project, user: user, is_public: true)
+
+      conn = put(conn, Routes.project_path(conn, :unpublish, project))
+
+      assert redirected_to(conn) == Routes.page_path(conn, :index)
+      assert get_flash(conn, :error) =~ "You don't have access to that"
+    end
+
+    @tag :as_admin
+    test  "admin can unpublish project", %{conn: conn} do
+      project = insert(:project, is_public: true)
+
+      conn = put(conn, Routes.project_path(conn, :unpublish, project))
+
+      assert redirected_to(conn) == Routes.project_path(conn, :show, project)
+      assert get_flash(conn, :info) =~ "Project unpublished successfully"
+    end
+  end
 end
