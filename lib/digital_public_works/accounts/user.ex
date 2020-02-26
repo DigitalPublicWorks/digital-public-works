@@ -11,6 +11,7 @@ defmodule DigitalPublicWorks.Accounts.User do
     field :email, :string
     field :password, :string, virtual: true
     field :password_hash, :string
+    field :is_admin, :boolean, default: :false
     has_many :projects, Project
 
     timestamps()

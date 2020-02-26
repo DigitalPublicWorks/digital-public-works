@@ -24,6 +24,12 @@ defmodule DigitalPublicWorksWeb.Router do
     resources "/projects", ProjectController do
       resources "/posts", PostController
     end
+
+    scope "/projects/:id" do
+      put "/publish", ProjectController, :publish
+      put "/unpublish", ProjectController, :unpublish
+    end
+
     resources "/user", UserController, singleton: true
     resources "/session", SessionController, singleton: true
   end

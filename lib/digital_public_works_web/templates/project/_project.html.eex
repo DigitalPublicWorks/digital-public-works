@@ -1,5 +1,11 @@
 <div class="card my-4">
   <div class="card-body">
+      <%= unless @project.is_public do %>
+        <%= link "Unpublished",
+          to: Routes.project_path(@conn, :show, @project),
+          class: "badge badge-warning float-right ml-2 mb-2"
+        %>
+      <% end %>
     <h5 class="card-title"><%= @project.title %></h5>
     <p class="card-text"><%= @project.body %></p>
     <a class="btn btn-primary" href="<%= Routes.project_path(@conn, :show, @project) %>">I can help</a>

@@ -33,7 +33,10 @@ defmodule DigitalPublicWorksWeb.ProjectController do
   end
 
   def index(conn, params) do
-    projects = Projects.list_projects(params["project"]["q"])
+    search = params["project"]["q"]
+
+    projects = Projects.list_projects(conn.assigns.current_user, search)
+
     render(conn, "index.html", projects: projects)
   end
 
@@ -87,5 +90,25 @@ defmodule DigitalPublicWorksWeb.ProjectController do
     conn
     |> put_flash(:info, "Project deleted successfully.")
     |> redirect(to: Routes.project_path(conn, :index))
+  end
+
+  def publish(conn, _params) do
+    project = conn.assigns.project
+
+    {:ok, _project} = Projects.publish_project(project)
+
+    conn
+    |> put_flash(:info, "Project published successfully.")
+    |> redirect(to: Routes.project_path(conn, :show, project))
+  end
+
+  def unpublish(conn, _params) do
+    project = conn.assigns.project
+
+    {:ok, _project} = Projects.unpublish_project(project)
+
+    conn
+    |> put_flash(:info, "Project unpublished successfully.")
+    |> redirect(to: Routes.project_path(conn, :show, project))
   end
 end

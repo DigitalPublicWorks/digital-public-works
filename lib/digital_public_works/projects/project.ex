@@ -12,6 +12,7 @@ defmodule DigitalPublicWorks.Projects.Project do
     field :body, :string
     field :title, :string
     field :is_featured, :boolean
+    field :is_public, :boolean, default: :false
     belongs_to :user, User
     has_many :posts, Post
 
