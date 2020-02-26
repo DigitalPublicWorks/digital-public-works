@@ -7,20 +7,26 @@ defmodule DigitalPublicWorks.Posts do
   alias DigitalPublicWorks.Repo
 
   alias DigitalPublicWorks.Posts.Post
-  
+
   alias DigitalPublicWorks.Projects.Project
 
   @doc """
-  Returns the list of post.
+  Returns the list of posts.
 
   ## Examples
 
-      iex> list_post()
+      iex> list_posts()
       [%Post{}, ...]
 
   """
-  def list_post do
-    Repo.all(Post)
+  def list_posts(%Project{} = project) do
+    query =
+      from p in Post,
+      where: [project_id: ^project.id],
+      order_by: [desc: :inserted_at],
+      preload: [:user, :project]
+
+    Repo.all(query)
   end
 
   @doc """
@@ -37,7 +43,7 @@ defmodule DigitalPublicWorks.Posts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_post!(id), do: Repo.get!(Post, id)
+  def get_post!(id), do: Repo.get!(Post, id) |> Repo.preload([:project, :user])
 
   @doc """
   Creates a post.
@@ -51,10 +57,9 @@ defmodule DigitalPublicWorks.Posts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_post(%Project{} = project, attrs \\ %{}) do
+  def create_post(attrs \\ %{}) do
     %Post{}
     |> Post.changeset(attrs)
-    |> Ecto.Changeset.put_change(:project_id, project.id)
     |> Repo.insert()
   end
 

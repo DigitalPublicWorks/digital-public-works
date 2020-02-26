@@ -1,0 +1,10 @@
+<h3>Edit Update</h3>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.project_post_path(@conn, :update, @project, @post)) %>
+
+<%= link "Delete",
+      to: Routes.project_post_path(@conn, :delete, @project, @post),
+      method: :delete,
+      data_confirm: "Are you sure you want to delete this post?",
+      class: "btn btn-link text-danger"
+%>

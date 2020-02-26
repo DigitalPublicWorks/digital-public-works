@@ -6,17 +6,19 @@ defmodule DigitalPublicWorks.PostsTest do
   describe "post" do
     alias DigitalPublicWorks.Posts.Post
 
-    @valid_attrs %{body: "some body"}
-    @update_attrs %{body: "some updated body"}
-    @invalid_attrs %{body: nil}
+    @valid_attrs %{title: "some title", body: "some body"}
+    @update_attrs %{title: "some updated title", body: "some updated body"}
+    @invalid_attrs %{title: nil, body: nil}
 
     def post_fixture() do
       Posts.get_post!(insert(:post).id)
     end
 
     test "list_post/0 returns all post" do
-      post = post_fixture()
-      assert Posts.list_post() == [post]
+      post =
+        post_fixture()
+        |> Repo.preload([:project, :user])
+      assert Posts.list_posts(post.project) == [post]
     end
 
     test "get_post!/1 returns the post with given id" do
@@ -26,13 +28,16 @@ defmodule DigitalPublicWorks.PostsTest do
 
     test "create_post/1 with valid data creates a post" do
       project = insert(:project)
-      assert {:ok, %Post{} = post} = Posts.create_post(project, @valid_attrs)
+      user = insert(:user)
+
+      assert {:ok, %Post{} = post} =
+               Posts.create_post(Map.merge(@valid_attrs, %{user_id: user.id, project_id: project.id}))
+
       assert post.body == "some body"
     end
 
     test "create_post/1 with invalid data returns error changeset" do
-      project = insert(:project)
-      assert {:error, %Ecto.Changeset{}} = Posts.create_post(project, @invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = Posts.create_post(@invalid_attrs)
     end
 
     test "update_post/2 with valid data updates the post" do

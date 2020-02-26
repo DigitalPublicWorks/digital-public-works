@@ -1,4 +1,4 @@
-defmodule DigitalPublicWorks.Plugs.Auth do 
+defmodule DigitalPublicWorks.Plugs.Auth do
   import Plug.Conn
 
   alias DigitalPublicWorks.Accounts
@@ -9,13 +9,17 @@ defmodule DigitalPublicWorks.Plugs.Auth do
     if conn.assigns[:current_user] do
       conn
     else
-      current_user = if user_id = get_session(conn, :current_user_id) do
-        Accounts.get_user!(user_id)
-      end
+      current_user =
+        if user_id = get_session(conn, :current_user_id) do
+          try do
+            Accounts.get_user!(user_id)
+          rescue
+            _ -> nil
+          end
+        end
 
       conn
       |> assign(:current_user, current_user)
     end
   end
-
 end

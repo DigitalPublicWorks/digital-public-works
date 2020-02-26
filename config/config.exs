@@ -8,7 +8,8 @@
 use Mix.Config
 
 config :digital_public_works,
-  ecto_repos: [DigitalPublicWorks.Repo]
+  ecto_repos: [DigitalPublicWorks.Repo],
+  generators: [binary_id: true]
 
 # Configures the endpoint
 config :digital_public_works, DigitalPublicWorksWeb.Endpoint,

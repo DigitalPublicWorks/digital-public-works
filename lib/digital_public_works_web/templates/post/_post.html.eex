@@ -1,0 +1,11 @@
+<div class="card my-4">
+  <div class="card-body">
+    <%= if can? @current_user, :edit, @post do %>
+      <%= link "Edit", to: Routes.project_post_path(@conn, :edit, @post.project, @post), class: "btn btn-link float-right" %>
+    <% end %>
+    <h5 class="card-title"><%= @post.title %></h5>
+    <h6 class="card-subtitle font-weight-normal text-muted"><%= format_date @post.inserted_at %></h6>
+    <hr>
+    <p class="card-text"><%= @post.body %></p>
+  </div>
+</div>
