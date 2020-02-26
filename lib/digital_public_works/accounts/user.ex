@@ -6,11 +6,12 @@ defmodule DigitalPublicWorks.Accounts.User do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
-  
+
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true
     field :password_hash, :string
+    field :is_admin, :boolean, default: :false
     has_many :projects, Project
 
     timestamps()
@@ -38,4 +39,10 @@ defmodule DigitalPublicWorks.Accounts.User do
   end
 
   defp put_pass_hash(changeset), do: changeset
+end
+
+defimpl Bamboo.Formatter, for: DigitalPublicWorks.Accounts.User do
+  def format_email_address(user, _opts) do
+    {"", user.email}
+  end
 end

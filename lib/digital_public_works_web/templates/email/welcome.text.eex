@@ -1,0 +1,3 @@
+Welcome to Digital Public Works!
+
+Sign in here <%= Routes.session_url(DigitalPublicWorksWeb.Endpoint, :create) %>

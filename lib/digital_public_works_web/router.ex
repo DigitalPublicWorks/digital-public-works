@@ -24,8 +24,20 @@ defmodule DigitalPublicWorksWeb.Router do
     resources "/projects", ProjectController do
       resources "/posts", PostController, only: [:new, :create, :edit, :update, :delete]
     end
+
+    scope "/projects/:id" do
+      put "/publish", ProjectController, :publish
+      put "/unpublish", ProjectController, :unpublish
+    end
+
     resources "/user", UserController, singleton: true
     resources "/session", SessionController, singleton: true
+  end
+
+  scope "/" do
+    if Mix.env == :dev do
+      forward "/sent_emails", Bamboo.SentEmailViewerPlug
+    end
   end
 
   # Other scopes may use custom stacks.

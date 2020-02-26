@@ -36,3 +36,13 @@ config :digital_public_works, DigitalPublicWorksWeb.Endpoint,
 #
 # Then you can assemble a release by calling `mix release`.
 # See `mix help release` for more information.
+
+config :digital_public_works, DigitalPublicWorksWeb.Mailer,
+  adapter: Bamboo.SendGridAdapter,
+  hackney_opts: [
+    recv_timeout: :timer.minutes(1)
+  ],
+  api_key: System.get_env("SENDGRID_API_KEY") ||
+    raise """
+    environment variable SENDGRID_API_KEY is missing.
+    """

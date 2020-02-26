@@ -16,3 +16,6 @@ config :digital_public_works, DigitalPublicWorksWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :digital_public_works, DigitalPublicWorksWeb.Mailer,
+  adapter: Bamboo.TestAdapter
