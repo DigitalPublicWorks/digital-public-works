@@ -34,6 +34,12 @@ defmodule DigitalPublicWorksWeb.Router do
     resources "/session", SessionController, singleton: true
   end
 
+  scope "/" do
+    if Mix.env == :dev do
+      forward "/sent_emails", Bamboo.SentEmailViewerPlug
+    end
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", DigitalPublicWorksWeb do
   #   pipe_through :api
