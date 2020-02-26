@@ -1,21 +1,10 @@
-<h2 class="tagline text-center m-4">
-  Work together to make Milwaukee better
+<h2 class="text-center">
+  Work Together to Make Government Better
 </h2>
 
-<div class="explainer">
-  <p class="lead">
-    The Milwaukee Digital Public Works project is a non-governmental community which
-    connects people with problems to people who can help them solve those problems.
-    Citizens can suggest problems to be fixed, ways they can help, things
-    they are concerned about, money to help solve problems, or expertise
-    to help solve problems.
-    <a href="#">Learn more...</a>
-  </p>
-</div>
-
 <%= if length(@projects) > 0 do %>
-<h4 class="cta text-center m-4">
-  These problems need solving
-</h4>
+<h5 class="my-4 text-center">
+  Featured Projects
+</h5>
 <%= render ProjectView, "_projects.html", projects: @projects, conn: @conn %>
 <% end %>

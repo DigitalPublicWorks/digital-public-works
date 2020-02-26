@@ -31,7 +31,7 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
     test "renders form", %{conn: conn} do
       conn = get(conn, Routes.project_path(conn, :new))
 
-      assert html_response(conn, 200) =~ "Submit a problem or project"
+      assert html_response(conn, 200) =~ "Create Project"
     end
   end
 
@@ -51,7 +51,7 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
     test "renders errors when data is invalid", %{conn: conn} do
       conn = post(conn, Routes.project_path(conn, :create), project: @invalid_attrs)
 
-      assert html_response(conn, 200) =~ "Submit a problem or project"
+      assert html_response(conn, 200) =~ "Create Project"
     end
   end
 
@@ -127,7 +127,7 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
 
       conn = get(conn, Routes.project_path(conn, :show, project))
 
-      refute html_response(conn, 200) =~ "Add Update"
+      refute html_response(conn, 200) =~ "Create Post"
     end
 
     @tag :as_user
@@ -136,7 +136,7 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
 
       conn = get(conn, Routes.project_path(conn, :show, project))
 
-      assert html_response(conn, 200) =~ "Add Update"
+      assert html_response(conn, 200) =~ "Create Post"
     end
   end
 

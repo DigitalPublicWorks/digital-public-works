@@ -3,7 +3,7 @@
 
   <%= PBF.textarea f, :body, [input: [rows: 10]] %>
 
-  <%= PBF.submit f, "Submit update", class: "btn btn-primary float-right" %>
+  <%= PBF.submit f, submit_text(@changeset), class: "btn btn-primary float-right" %>
 <% end %>
 
 <%= link "Cancel", to: Routes.project_path(@conn, :show, @project), class: "btn btn-link" %>

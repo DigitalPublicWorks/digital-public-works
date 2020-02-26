@@ -1,3 +1,8 @@
 <%= for project <- @projects do %>
   <%= render "_project.html", project: project, conn: @conn %>
 <% end %>
+<%= if Enum.empty?(@projects) do %>
+<div class="my-4 font-italic text-muted text-center">
+  No projects found
+</div>
+<% end %>

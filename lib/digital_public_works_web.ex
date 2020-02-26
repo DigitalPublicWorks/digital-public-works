@@ -47,6 +47,7 @@ defmodule DigitalPublicWorksWeb do
 
       alias PhoenixBootstrapForm, as: PBF
       import DigitalPublicWorksWeb.Permission
+      import DigitalPublicWorksWeb.FormHelpers
     end
   end
 
