@@ -3,6 +3,7 @@ defmodule DigitalPublicWorks.Projects.Project do
   import Ecto.Changeset
 
   alias DigitalPublicWorks.Accounts.User
+  alias DigitalPublicWorks.Projects.ProjectFollower
   alias DigitalPublicWorks.Posts.Post
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -15,6 +16,7 @@ defmodule DigitalPublicWorks.Projects.Project do
     field :is_public, :boolean, default: :false
     belongs_to :user, User
     has_many :posts, Post
+    many_to_many :followers, User, join_through: ProjectFollower
 
     timestamps()
   end

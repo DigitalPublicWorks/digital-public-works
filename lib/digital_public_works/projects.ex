@@ -6,7 +6,7 @@ defmodule DigitalPublicWorks.Projects do
   import Ecto.Query, warn: false
   alias DigitalPublicWorks.Repo
 
-  alias DigitalPublicWorks.Projects.Project
+  alias DigitalPublicWorks.Projects.{Project, ProjectFollower}
   alias DigitalPublicWorks.Accounts.User
 
   @doc """
@@ -38,6 +38,14 @@ defmodule DigitalPublicWorks.Projects do
     |> filter_projects(search)
     |> Repo.all
   end
+
+  def list_followed_projects(%User{} = user) do
+    user
+    |> Ecto.assoc(:followed_projects)
+    |> Repo.all
+  end
+
+  def list_followed_projects(_), do: []
 
   defp filter_projects(query, nil), do: query
 
@@ -156,5 +164,21 @@ defmodule DigitalPublicWorks.Projects do
     project
     |> Ecto.Changeset.change(%{is_public: false})
     |> Repo.update
+  end
+
+  def add_follower(%Project{} = project, %User{} = user) do
+    %ProjectFollower{}
+    |> ProjectFollower.changeset(%{user_id: user.id, project_id: project.id})
+    |> Repo.insert
+  end
+
+  def remove_follower(%Project{} = project, %User{} = user) do
+    (from p in ProjectFollower, where: p.user_id == ^user.id and p.project_id == ^project.id)
+    |> Repo.delete_all
+  end
+
+  def is_follower?(%Project{} = project, %User{} = user) do
+    (from p in ProjectFollower, where: p.user_id == ^user.id and p.project_id == ^project.id)
+    |> Repo.exists?
   end
 end

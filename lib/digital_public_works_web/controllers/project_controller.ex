@@ -113,4 +113,26 @@ defmodule DigitalPublicWorksWeb.ProjectController do
     |> put_flash(:info, "Project unpublished successfully.")
     |> redirect(to: Routes.project_path(conn, :show, project))
   end
+
+  def follow(conn, _params) do
+    project = conn.assigns.project
+    user = conn.assigns.current_user
+
+    {:ok, _} = Projects.add_follower(project, user)
+
+    conn
+    |> put_flash(:info, "Project followed")
+    |> redirect(to: Routes.project_path(conn, :show, project))
+  end
+
+  def unfollow(conn, _params) do
+    project = conn.assigns.project
+    user = conn.assigns.current_user
+
+    Projects.remove_follower(project, user)
+
+    conn
+    |> put_flash(:info, "Project unfollowed")
+    |> redirect(to: Routes.project_path(conn, :show, project))
+  end
 end

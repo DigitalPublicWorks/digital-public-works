@@ -12,6 +12,12 @@
   <%= link "Unpublish", to: Routes.project_path(@conn, :unpublish, @project), method: :put, class: "btn btn-link float-right" %>
 <% end %>
 
+<%= if can? @current_user, :follow, @project do %>
+  <%= link "Follow", to: Routes.project_path(@conn, :follow, @project), method: :put, class: "btn btn-success float-right" %>
+<% end %>
+<%= if can? @current_user, :unfollow, @project do %>
+  <%= link "Unfollow", to: Routes.project_path(@conn, :unfollow, @project), method: :put, class: "btn btn-warning float-right" %>
+<% end %>
 
 <div class="clearfix"></div>
 

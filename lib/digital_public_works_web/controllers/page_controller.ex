@@ -4,7 +4,8 @@ defmodule DigitalPublicWorksWeb.PageController do
 
   def index(conn, _params) do
     conn
-    |> assign(:projects, Projects.list_featured_projects)
+    |> assign(:featured_projects, Projects.list_featured_projects)
+    |> assign(:followed_projects, Projects.list_followed_projects(conn.assigns.current_user))
     |> render("index.html")
   end
 
