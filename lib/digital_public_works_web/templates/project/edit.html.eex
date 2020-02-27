@@ -2,4 +2,11 @@
 
 <%= render "form.html", Map.put(assigns, :action, Routes.project_path(@conn, :update, @project)) %>
 
-<%= link "Back", to: Routes.project_path(@conn, :show, @project) %>
+<%= link "Cancel", to: Routes.project_path(@conn, :show, @project), class: "btn btn-link" %>
+
+<%= link "Delete",
+      to: Routes.project_path(@conn, :delete, @project),
+      method: :delete,
+      data_confirm: "Are you sure you want to delete this project?",
+      class: "btn btn-link text-danger"
+%>
