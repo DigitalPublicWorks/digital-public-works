@@ -14,7 +14,7 @@ defmodule DigitalPublicWorksWeb.SessionController do
       |> put_session(:current_user_id, user.id)
       |> configure_session(renew: true)
       |> put_flash(:info, "Signed in successfully.")
-      |> redirect(to: Routes.project_path(conn, :index))
+      |> redirect(to: Routes.page_path(conn, :index))
     {:error, _} ->
       conn
       |> put_flash(:error, "There was a problem with your username/password")
@@ -26,6 +26,6 @@ defmodule DigitalPublicWorksWeb.SessionController do
     conn
     |> configure_session(drop: true)
     |> put_flash(:info, "Signed out successfully.")
-    |> redirect(to: Routes.project_path(conn, :index))
+    |> redirect(to: Routes.page_path(conn, :index))
   end
 end

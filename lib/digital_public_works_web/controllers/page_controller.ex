@@ -5,7 +5,10 @@ defmodule DigitalPublicWorksWeb.PageController do
   def index(conn, _params) do
     owned_projects = Projects.list_owned_projects(conn.assigns.current_user)
     followed_projects = Projects.list_followed_projects(conn.assigns.current_user)
-    featured_projects = Projects.list_featured_projects -- followed_projects -- owned_projects
+    featured_projects = Projects.list_featured_projects
+
+    featured_projects = featured_projects -- followed_projects
+    featured_projects = featured_projects -- owned_projects
 
     conn
     |> assign(:owned_projects, owned_projects)
