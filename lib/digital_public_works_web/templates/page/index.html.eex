@@ -2,9 +2,23 @@
   Work Together to Make Government Better
 </h2>
 
-<%= if length(@projects) > 0 do %>
+<%= if length(@owned_projects) > 0 do %>
+<h5 class="my-4 text-center">
+  Your Projects
+</h5>
+<%= render ProjectView, "_projects.html", projects: @owned_projects, conn: @conn %>
+<% end %>
+
+<%= if length(@followed_projects) > 0 do %>
+<h5 class="my-4 text-center">
+  Followed Projects
+</h5>
+<%= render ProjectView, "_projects.html", projects: @followed_projects, conn: @conn %>
+<% end %>
+
+<%= if length(@featured_projects) > 0 do %>
 <h5 class="my-4 text-center">
   Featured Projects
 </h5>
-<%= render ProjectView, "_projects.html", projects: @projects, conn: @conn %>
+<%= render ProjectView, "_projects.html", projects: @featured_projects, conn: @conn %>
 <% end %>

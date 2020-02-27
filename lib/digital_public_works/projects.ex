@@ -44,11 +44,16 @@ defmodule DigitalPublicWorks.Projects do
     |> Ecto.assoc(:followed_projects)
     |> Repo.all
   end
-
   def list_followed_projects(_), do: []
 
-  defp filter_projects(query, nil), do: query
+  def list_owned_projects(%User{} = user) do
+    user
+    |> Ecto.assoc(:projects)
+    |> Repo.all
+  end
+  def list_owned_projects(_), do: []
 
+  defp filter_projects(query, nil), do: query
   defp filter_projects(query, search) do
     from p in query, where: ilike(p.title, ^"%#{search}%")
   end
