@@ -28,6 +28,8 @@ defmodule DigitalPublicWorksWeb.Router do
     scope "/projects/:id" do
       put "/publish", ProjectController, :publish
       put "/unpublish", ProjectController, :unpublish
+      put "/follow", ProjectController, :follow
+      put "/unfollow", ProjectController, :unfollow
     end
 
     resources "/user", UserController, singleton: true

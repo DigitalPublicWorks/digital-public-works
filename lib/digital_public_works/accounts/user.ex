@@ -2,7 +2,7 @@ defmodule DigitalPublicWorks.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias DigitalPublicWorks.Projects.Project
+  alias DigitalPublicWorks.Projects.{Project, ProjectFollower}
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -13,6 +13,7 @@ defmodule DigitalPublicWorks.Accounts.User do
     field :password_hash, :string
     field :is_admin, :boolean, default: :false
     has_many :projects, Project
+    many_to_many :followed_projects, Project, join_through: ProjectFollower
 
     timestamps()
   end

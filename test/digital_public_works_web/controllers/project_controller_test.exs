@@ -183,4 +183,30 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
       assert get_flash(conn, :info) =~ "Project unpublished successfully"
     end
   end
+
+  describe "follow project" do
+    @tag :as_user
+    test  "user can follow project", %{conn: conn} do
+      project = insert(:project)
+
+      conn = put(conn, Routes.project_path(conn, :follow, project))
+
+      assert redirected_to(conn) == Routes.project_path(conn, :show, project)
+      assert get_flash(conn, :info) =~ "Project followed"
+    end
+  end
+
+  describe "unfollow project" do
+    @tag :as_user
+    test  "user can unfollow project", %{conn: conn, user: user} do
+      project = insert(:project)
+      DigitalPublicWorks.Projects.add_follower(project, user)
+
+      conn = put(conn, Routes.project_path(conn, :unfollow, project))
+
+      assert redirected_to(conn) == Routes.project_path(conn, :show, project)
+      assert get_flash(conn, :info) =~ "Project unfollowed"
+    end
+  end
+
 end
