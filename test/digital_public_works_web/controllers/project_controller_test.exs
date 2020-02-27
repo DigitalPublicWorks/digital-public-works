@@ -44,7 +44,7 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
       assert redirected_to(conn) == Routes.project_path(conn, :show, id)
 
       conn = get(conn, Routes.project_path(conn, :show, id))
-      assert html_response(conn, 200) =~ "PROBLEM"
+      assert html_response(conn, 200) =~ @create_attrs.title
     end
 
     @tag :as_user
