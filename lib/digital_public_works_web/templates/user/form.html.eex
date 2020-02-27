@@ -3,5 +3,5 @@
 
   <%= PBF.password_input f, :password %>
 
-  <%= PBF.submit f, "Save", class: "btn btn-primary" %>
+  <%= PBF.submit f, submit_text(@changeset, "Sign Up"), class: "btn btn-primary float-right" %>
 <% end %>

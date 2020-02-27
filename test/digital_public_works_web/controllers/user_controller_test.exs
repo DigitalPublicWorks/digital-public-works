@@ -12,10 +12,8 @@ defmodule DigitalPublicWorksWeb.UserControllerTest do
     test "redirects to show when data is valid", %{conn: conn} do
       conn = post(conn, Routes.user_path(conn, :create), user: params_for(:user))
 
-      assert redirected_to(conn) == Routes.user_path(conn, :show)
-
-      conn = get(conn, Routes.user_path(conn, :show))
-      assert html_response(conn, 200) =~ "Show User"
+      assert redirected_to(conn) == Routes.page_path(conn, :index)
+      assert get_flash(conn, :info) =~ "User created successfully"
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -40,11 +38,8 @@ defmodule DigitalPublicWorksWeb.UserControllerTest do
 
       conn = put(conn, Routes.user_path(conn, :update), user: %{email: new_email})
 
-      assert redirected_to(conn) == Routes.user_path(conn, :show)
-
-      conn = get(conn, Routes.user_path(conn, :show))
-
-      assert html_response(conn, 200) =~ new_email
+      assert redirected_to(conn) == Routes.user_path(conn, :edit)
+      assert get_flash(conn, :info) =~ "User updated successfully"
     end
 
     @tag :as_user

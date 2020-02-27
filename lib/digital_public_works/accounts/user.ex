@@ -18,20 +18,25 @@ defmodule DigitalPublicWorks.Accounts.User do
   end
 
   @doc false
-  def changeset(user, attrs) do
+  def changeset(%__MODULE__{} = user, attrs) do
     user
-    |> cast(attrs, [:email])
-    |> validate_required([:email])
-    |> unique_constraint(:email)
+    |> common_changeset(attrs)
     |> put_pass_hash
   end
 
   def create_changeset(%__MODULE__{} = user, attrs) do
     user
-    |> cast(attrs, [:email, :password])
-    |> validate_required([:email, :password])
-    |> unique_constraint(:email)
+    |> common_changeset(attrs)
+    |> validate_required([:password])
     |> put_pass_hash
+  end
+
+  defp common_changeset(%__MODULE__{} = user, attrs) do
+    user
+    |> cast(attrs, [:email, :password])
+    |> validate_required([:email])
+    |> unique_constraint(:email)
+    |> validate_length(:password, min: 8)
   end
 
   defp put_pass_hash(%Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset) do

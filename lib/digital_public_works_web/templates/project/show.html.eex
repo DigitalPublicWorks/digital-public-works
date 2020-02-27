@@ -1,4 +1,4 @@
-<%= link "< Back", to: Routes.project_path(@conn, :index), class: "btn btn-link" %>
+
 
 <%= if can? @current_user, :edit, @project do %>
   <%= link "Edit", to: Routes.project_path(@conn, :edit, @project), class: "btn btn-link float-right" %>
@@ -13,22 +13,18 @@
 <% end %>
 
 
-<h6 class="text-muted mt-4">PROBLEM
-<%= unless @project.is_public do %>
-  <div class="badge badge-warning float-right">Unpublished</div>
-<% end %>
-</h6>
-<h2><%= @project.title %></h2>
+<div class="clearfix"></div>
 
-<h6 class="text-muted mt-4">DETAILS</h6>
-<p><%= @project.body %></p>
+<h2 class="text-center"><%= @project.title %></h2>
+
+<p class="text-center"><%= @project.body %></p>
 
 <%# <h6 class="text-muted mt-4">NEEDS</h6>
 <p>There have not been any needs defined for this project.</p>
 <a href="#" class="btn btn-primary">Pledge to help</a> %>
 
 <%= if can? @current_user, :create, new_post(@project) do %>
-<%= link "Add Update", to: Routes.project_post_path(@conn, :new, @project), class: "btn btn-link float-right" %>
+<%= link "Create Post", to: Routes.project_post_path(@conn, :new, @project), class: "btn btn-link float-right" %>
 <% end %>
 
 <h6 class="text-muted mt-4">UPDATES</h6>

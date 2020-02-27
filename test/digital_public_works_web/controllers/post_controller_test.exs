@@ -12,7 +12,7 @@ defmodule DigitalPublicWorksWeb.PostControllerTest do
 
       conn = get(conn, Routes.project_post_path(conn, :new, project))
 
-      assert html_response(conn, 200) =~ "New Update"
+      assert html_response(conn, 200) =~ "New Post"
     end
 
     test "prevent non-owners from viewing form", %{conn: conn} do
@@ -44,7 +44,7 @@ defmodule DigitalPublicWorksWeb.PostControllerTest do
 
       conn = post(conn, Routes.project_post_path(conn, :create, project), post: @invalid_attrs)
 
-      assert html_response(conn, 200) =~ "Submit update"
+      assert html_response(conn, 200) =~ "Create Post"
     end
 
     test "prevent non-owners from creating post", %{conn: conn} do
@@ -63,7 +63,7 @@ defmodule DigitalPublicWorksWeb.PostControllerTest do
       post = insert(:post, project: project, user: user)
 
       conn = get(conn, Routes.project_post_path(conn, :edit, project, post))
-      assert html_response(conn, 200) =~ "Edit Update"
+      assert html_response(conn, 200) =~ "Edit Post"
     end
   end
 
@@ -89,7 +89,7 @@ defmodule DigitalPublicWorksWeb.PostControllerTest do
 
       conn = put(conn, Routes.project_post_path(conn, :update, project, post), post: @invalid_attrs)
 
-      assert html_response(conn, 200) =~ "Submit update"
+      assert html_response(conn, 200) =~ "Update Post"
     end
 
     test "prevent non-owners from updating a post", %{conn: conn} do
