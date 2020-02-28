@@ -1,8 +1,8 @@
 use Mix.Config
 
 host =
-  if app_name = System.get_env("HEROKU_APP_NAME") do
-    "#{app_name}.herokuapp.com"
+  if System.get_env("HEROKU_PR_NUMBER") do
+    "#{System.get_env("HEROKU_APP_NAME")}.herokuapp.com"
   else
     "staging.digitalpublicworks.com"
   end
