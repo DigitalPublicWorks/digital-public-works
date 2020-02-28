@@ -27,9 +27,16 @@ defmodule DigitalPublicWorks.Projects.Project do
     |> cast(attrs, [:title, :body])
     |> validate_required([:title, :body])
     |> unique_constraint(:title)
+    |> sanitize_body
     |> Ecto.Changeset.foreign_key_constraint(:followers,
       name: "projects_followers_project_id_fkey",
       message: "You can't delete a project that has followers."
     )
   end
+
+  defp sanitize_body(%Ecto.Changeset{changes: %{body: body}} = changeset) do
+    changeset
+    |> change(%{body: HtmlSanitizeEx.markdown_html(body)})
+  end
+  defp sanitize_body(changeset), do: changeset
 end

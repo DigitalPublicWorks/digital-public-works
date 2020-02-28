@@ -6,6 +6,6 @@
     <h5 class="card-title"><%= @post.title %></h5>
     <h6 class="card-subtitle font-weight-normal text-muted"><%= format_date @post.inserted_at %></h6>
     <hr>
-    <p class="card-text"><%= @post.body %></p>
+    <div class="card-text"><%= trix_content @post.body %></div>
   </div>
 </div>

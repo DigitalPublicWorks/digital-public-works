@@ -47,7 +47,8 @@ defmodule DigitalPublicWorks.MixProject do
       {:argon2_elixir, "~> 2.0"},
       {:ex_machina, "~> 2.3", only: :test},
       {:timex, "~> 3.5"},
-      {:bamboo, "~> 1.4"}
+      {:bamboo, "~> 1.4"},
+      {:html_sanitize_ex, "~> 1.3.0"}
     ]
   end
 

@@ -7,7 +7,7 @@
         %>
       <% end %>
     <h5 class="card-title"><%= @project.title %></h5>
-    <p class="card-text"><%= @project.body %></p>
+    <div class="card-text mb-2"><%= trix_content @project.body %></div>
     <a class="btn btn-primary" href="<%= Routes.project_path(@conn, :show, @project) %>">Learn More</a>
   </div>
 </div>

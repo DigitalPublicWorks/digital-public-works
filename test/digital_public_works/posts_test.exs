@@ -40,6 +40,19 @@ defmodule DigitalPublicWorks.PostsTest do
       assert {:error, %Ecto.Changeset{}} = Posts.create_post(@invalid_attrs)
     end
 
+    test "create_project/1 strips unallowed html" do
+      project = insert(:project)
+      user = insert(:user)
+
+      input_body = ~s[<h1 onclick="alert('test')">Hello</h1><script>alert('test')</script>]
+      output_body = ~s[<h1>Hello</h1>alert('test')]
+
+      params = Map.merge(@valid_attrs, %{body: input_body, user_id: user.id, project_id: project.id})
+
+      assert {:ok, %Post{} = post} = Posts.create_post(params)
+      assert post.body == output_body
+    end
+
     test "update_post/2 with valid data updates the post" do
       post = post_fixture()
       assert {:ok, %Post{} = post} = Posts.update_post(post, @update_attrs)
