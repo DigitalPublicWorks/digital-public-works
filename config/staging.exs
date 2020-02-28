@@ -34,10 +34,7 @@ config :digital_public_works, DigitalPublicWorksWeb.Endpoint,
 config :digital_public_works, DigitalPublicWorksWeb.Mailer,
   adapter: Bamboo.SendGridAdapter,
   sandbox: true,
-  api_key: System.get_env("SENDGRID_API_KEY") ||
-    raise """
-    environment variable SENDGRID_API_KEY is missing.
-    """,
+  api_key: System.fetch_env!("SENDGRID_API_KEY"),
   hackney_opts: [
     recv_timeout: :timer.minutes(1)
   ]
