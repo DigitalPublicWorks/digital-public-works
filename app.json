@@ -17,7 +17,7 @@
         }
       ],
       "scripts": {
-        "postdeploy": "mix ecto.setup"
+        "postdeploy": "mix run priv/repo/seeds.exs"
       }
     }
   }
