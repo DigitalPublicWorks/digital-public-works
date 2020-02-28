@@ -7,7 +7,6 @@ config :digital_public_works, DigitalPublicWorksWeb.Endpoint,
 
 config :logger, level: :info
 
-
 database_url =
   System.get_env("DATABASE_URL") ||
     raise """
@@ -18,7 +17,7 @@ database_url =
 config :digital_public_works, DigitalPublicWorks.Repo,
   ssl: true,
   url: database_url,
-  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
+  pool_size: String.to_integer(System.get_env("POOL_SIZE", "10"))
 
 secret_key_base =
   System.get_env("SECRET_KEY_BASE") ||
@@ -28,16 +27,17 @@ secret_key_base =
     """
 
 config :digital_public_works, DigitalPublicWorksWeb.Endpoint,
-  http: [:inet6, port: String.to_integer(System.get_env("PORT") || "4000")],
+  http: [:inet6, port: String.to_integer(System.get_env("PORT", "4000"))],
   secret_key_base: secret_key_base
 
 config :digital_public_works, DigitalPublicWorksWeb.Mailer,
   adapter: Bamboo.SendGridAdapter,
   sandbox: true,
-  api_key: System.get_env("SENDGRID_API_KEY") ||
-    raise """
-    environment variable SENDGRID_API_KEY is missing.
-    """,
   hackney_opts: [
     recv_timeout: :timer.minutes(1)
-  ]
+  ],
+  api_key:
+    System.get_env("SENDGRID_API_KEY") ||
+      raise("""
+      environment variable SENDGRID_API_KEY is missing.
+      """)
