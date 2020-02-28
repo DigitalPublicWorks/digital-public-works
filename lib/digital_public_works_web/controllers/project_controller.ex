@@ -87,11 +87,23 @@ defmodule DigitalPublicWorksWeb.ProjectController do
   def delete(conn, _params) do
     project = conn.assigns.project
 
-    {:ok, _project} = Projects.delete_project(project)
+    case Projects.delete_project(project) do
+      {:ok, _project} ->
+        conn
+        |> put_flash(:info, "Project deleted successfully.")
+        |> redirect(to: Routes.project_path(conn, :index))
 
-    conn
-    |> put_flash(:info, "Project deleted successfully.")
-    |> redirect(to: Routes.project_path(conn, :index))
+      {:error, changeset} ->
+        error_message =
+          changeset.errors
+          |> Keyword.values
+          |> Enum.map(&(elem(&1, 0)))
+          |> Enum.join(", ")
+
+        conn
+        |> put_flash(:error, error_message)
+        |> redirect(to: Routes.project_path(conn, :edit, project))
+    end
   end
 
   def publish(conn, _params) do

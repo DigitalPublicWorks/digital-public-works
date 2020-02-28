@@ -24,36 +24,39 @@ defmodule DigitalPublicWorks.Projects do
     Project
     |> where(is_public: true)
     |> filter_projects(search)
-    |> Repo.all
+    |> Repo.all()
   end
 
   def list_projects(%User{is_admin: true}, search) do
     Project
     |> filter_projects(search)
-    |> Repo.all
+    |> Repo.all()
   end
 
   def list_projects(%User{id: user_id}, search) do
-    (from p in Project, where: p.is_public == true or p.user_id == ^user_id)
+    from(p in Project, where: p.is_public == true or p.user_id == ^user_id)
     |> filter_projects(search)
-    |> Repo.all
+    |> Repo.all()
   end
 
   def list_followed_projects(%User{} = user) do
     user
     |> Ecto.assoc(:followed_projects)
-    |> Repo.all
+    |> Repo.all()
   end
+
   def list_followed_projects(_), do: []
 
   def list_owned_projects(%User{} = user) do
     user
     |> Ecto.assoc(:projects)
-    |> Repo.all
+    |> Repo.all()
   end
+
   def list_owned_projects(_), do: []
 
   defp filter_projects(query, nil), do: query
+
   defp filter_projects(query, search) do
     from p in query, where: ilike(p.title, ^"%#{search}%")
   end
@@ -70,11 +73,10 @@ defmodule DigitalPublicWorks.Projects do
   def list_featured_projects do
     query =
       from p in Project,
-      where: [is_featured: true]
+        where: [is_featured: true]
 
     Repo.all(query)
   end
-
 
   @doc """
   Gets a single project.
@@ -142,7 +144,9 @@ defmodule DigitalPublicWorks.Projects do
 
   """
   def delete_project(%Project{} = project) do
-    Repo.delete(project)
+    project
+    |> Project.changeset()
+    |> Repo.delete()
   end
 
   @doc """
@@ -158,32 +162,31 @@ defmodule DigitalPublicWorks.Projects do
     Project.changeset(project, %{})
   end
 
-
   def publish_project(%Project{} = project) do
     project
     |> Ecto.Changeset.change(%{is_public: true})
-    |> Repo.update
+    |> Repo.update()
   end
 
   def unpublish_project(%Project{} = project) do
     project
     |> Ecto.Changeset.change(%{is_public: false})
-    |> Repo.update
+    |> Repo.update()
   end
 
   def add_follower(%Project{} = project, %User{} = user) do
     %ProjectFollower{}
     |> ProjectFollower.changeset(%{user_id: user.id, project_id: project.id})
-    |> Repo.insert
+    |> Repo.insert()
   end
 
   def remove_follower(%Project{} = project, %User{} = user) do
-    (from p in ProjectFollower, where: p.user_id == ^user.id and p.project_id == ^project.id)
-    |> Repo.delete_all
+    from(p in ProjectFollower, where: p.user_id == ^user.id and p.project_id == ^project.id)
+    |> Repo.delete_all()
   end
 
   def is_follower?(%Project{} = project, %User{} = user) do
-    (from p in ProjectFollower, where: p.user_id == ^user.id and p.project_id == ^project.id)
-    |> Repo.exists?
+    from(p in ProjectFollower, where: p.user_id == ^user.id and p.project_id == ^project.id)
+    |> Repo.exists?()
   end
 end
