@@ -100,6 +100,19 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
         get(conn, Routes.project_path(conn, :show, project))
       end
     end
+
+    @tag :as_user
+    test "can't delete project with followers", %{conn: conn, user: user} do
+      project = insert(:project, user: user)
+      user = insert(:user)
+
+      DigitalPublicWorks.Projects.add_follower(project, user)
+
+      conn = delete(conn, Routes.project_path(conn, :delete, project))
+
+      assert redirected_to(conn) == Routes.project_path(conn, :edit, project)
+      assert get_flash(conn, :error) =~ "You can't delete a project that has followers"
+    end
   end
 
   describe "show project" do

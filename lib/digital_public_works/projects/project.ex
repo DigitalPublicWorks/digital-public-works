@@ -22,10 +22,14 @@ defmodule DigitalPublicWorks.Projects.Project do
   end
 
   @doc false
-  def changeset(project, attrs) do
+  def changeset(project, attrs \\ %{}) do
     project
     |> cast(attrs, [:title, :body])
     |> validate_required([:title, :body])
     |> unique_constraint(:title)
+    |> Ecto.Changeset.foreign_key_constraint(:followers,
+      name: "projects_followers_project_id_fkey",
+      message: "You can't delete a project that has followers."
+    )
   end
 end

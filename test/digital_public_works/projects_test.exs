@@ -3,6 +3,7 @@ defmodule DigitalPublicWorks.ProjectsTest do
 
   alias DigitalPublicWorks.Projects
   alias DigitalPublicWorks.Projects.Project
+  alias DigitalPublicWorks.Posts
 
   describe "projects" do
     @valid_attrs %{body: "some body", title: "some title"}
@@ -65,6 +66,22 @@ defmodule DigitalPublicWorks.ProjectsTest do
       project = insert(:project)
       assert {:ok, %Project{}} = Projects.delete_project(project)
       assert_raise Ecto.NoResultsError, fn -> Projects.get_project!(project.id) end
+    end
+
+    test "delete_project/1 raises error when project has followers" do
+      project = insert(:project)
+      user = insert(:user)
+
+      Projects.add_follower(project, user)
+
+      assert {:error, %Ecto.Changeset{} } = Projects.delete_project(project)
+    end
+
+    test "delete_project/1 deleting project also deletes posts" do
+      %{project: project, id: post_id}  = insert(:post)
+
+      assert {:ok, %Project{}} = Projects.delete_project(project)
+      assert_raise Ecto.NoResultsError, fn -> Posts.get_post!(post_id) end
     end
 
     test "change_project/1 returns a project changeset" do
