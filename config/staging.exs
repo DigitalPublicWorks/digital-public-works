@@ -1,7 +1,14 @@
 use Mix.Config
 
+host =
+  if app_name = System.get_env("HEROKU_APP_NAME") do
+    "#{app_name}.herokuapp.com"
+  else
+    "staging.digitalpublicworks.com"
+  end
+
 config :digital_public_works, DigitalPublicWorksWeb.Endpoint,
-  url: [scheme: "https", host: "staging.digitalpublicworks.com", port: 443],
+  url: [scheme: "https", host: host, port: 443],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
