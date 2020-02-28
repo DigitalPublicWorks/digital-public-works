@@ -1,5 +1,6 @@
 defmodule DigitalPublicWorksWeb.Permission do
 
+  alias DigitalPublicWorks.Projects
   alias DigitalPublicWorks.Projects.Project
   alias DigitalPublicWorks.Posts.Post
 
@@ -13,6 +14,10 @@ defmodule DigitalPublicWorksWeb.Permission do
         user && user.is_admin && !project.is_public
       action in [:unpublish] ->
         user && user.is_admin && project.is_public
+      action in [:follow] ->
+        user && user.id != project.user_id && !Projects.is_follower?(project, user)
+      action in [:unfollow] ->
+        user && user.id != project.user_id && Projects.is_follower?(project, user)
       true -> false
     end
   end

@@ -71,5 +71,21 @@ defmodule DigitalPublicWorks.ProjectsTest do
       project = insert(:project)
       assert %Ecto.Changeset{} = Projects.change_project(project)
     end
+
+    test "follow and unfollow project" do
+      user = insert(:user)
+      project = Projects.get_project!(insert(:project).id)
+
+      assert Ecto.assoc(user, :followed_projects) |> Repo.all == []
+      assert Projects.is_follower?(project, user) == false
+
+      Projects.add_follower(project, user)
+      assert Ecto.assoc(user, :followed_projects) |> Repo.all == [project]
+      assert Projects.is_follower?(project, user) == true
+
+      Projects.remove_follower(project, user)
+      assert Ecto.assoc(user, :followed_projects) |> Repo.all == []
+      assert Projects.is_follower?(project, user) == false
+    end
   end
 end
