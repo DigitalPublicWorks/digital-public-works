@@ -1,0 +1,24 @@
+{
+  "environments": {
+    "review": {
+      "addons": ["heroku-postgresql:hobby-dev"],
+      "formation": {
+        "web": {
+          "quantity": 1,
+          "size": "free"
+        }
+      },
+      "buildpacks": [
+        {
+          "url": "https://buildpack-registry.s3.amazonaws.com/buildpacks/hashnuke/elixir.tgz"
+        },
+        {
+          "url": "https://github.com/gjaldon/heroku-buildpack-phoenix-static.git"
+        }
+      ],
+      "scripts": {
+        "postdeploy": "mix run priv/repo/seeds.exs"
+      }
+    }
+  }
+}
