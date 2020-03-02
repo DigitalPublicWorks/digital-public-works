@@ -40,7 +40,7 @@ defmodule DigitalPublicWorks.PostsTest do
       assert {:error, %Ecto.Changeset{}} = Posts.create_post(@invalid_attrs)
     end
 
-    test "create_project/1 strips unallowed html" do
+    test "create_post/1 strips unallowed html" do
       project = insert(:project)
       user = insert(:user)
 

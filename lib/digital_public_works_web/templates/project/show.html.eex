@@ -34,7 +34,7 @@
 
 <h2 class="text-center"><%= @project.title %></h2>
 
-<div class="mb-3"><%= trix_content @project.body %></div>
+<div class="mb-3"><%= @project.body %></div>
 
 <%# <h6 class="text-muted mt-4">NEEDS</h6>
 <p>There have not been any needs defined for this project.</p>

@@ -49,18 +49,6 @@ defmodule DigitalPublicWorks.ProjectsTest do
       assert {:error, %Ecto.Changeset{}} = Projects.create_project(user, @invalid_attrs)
     end
 
-    test "create_project/1 strips unallowed html" do
-      user = insert(:user)
-
-      input_body = ~s[<h1 onclick="alert('test')">Hello</h1><script>alert('test')</script>]
-      output_body = ~s[<h1>Hello</h1>alert('test')]
-
-      params = Map.merge(@valid_attrs, %{body: input_body})
-
-      assert {:ok, %Project{} = project} = Projects.create_project(user, params)
-      assert project.body == output_body
-    end
-
     test "update_project/2 with valid data updates the project" do
       project = insert(:project)
       assert {:ok, %Project{} = project} = Projects.update_project(project, @update_attrs)
