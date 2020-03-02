@@ -1,1 +1,16 @@
 /* This file is for your main application css. */
+
+@import "../node_modules/trix/dist/trix.css";
+
+trix-editor {
+  min-height: 10em;
+  border-color: #ced4da;
+}
+
+trix-editor, trix-toolbar .trix-button {
+  background-color: white;
+}
+
+.trix-button-group.trix-button-group--file-tools {
+  display: none;
+}
