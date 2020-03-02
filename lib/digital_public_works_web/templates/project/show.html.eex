@@ -36,7 +36,7 @@
 
     <h2 class="text-center"><%= @project.title %></h2>
 
-    <p class="text-center"><%= @project.body %></p>
+    <div class="mb-3"><%= @project.body %></div>
 
     <div class="row">
       <div class="col">
