@@ -1,3 +1,7 @@
-<h3>New Post</h3>
+<div class="row justify-content-center">
+  <div class="col col-main">
+    <h3>New Post</h3>
 
-<%= render "form.html", Map.put(assigns, :action, Routes.project_post_path(@conn, :create, @project)) %>
+    <%= render "form.html", Map.put(assigns, :action, Routes.project_post_path(@conn, :create, @project)) %>
+  </div>
+</div>

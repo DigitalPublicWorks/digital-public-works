@@ -1,1 +1,15 @@
 /* This file is for your main application css. */
+
+.col-main {
+  max-width: 720px;
+}
+
+.col-main-small {
+  max-width: 320px;
+}
+
+@media screen and (min-width: 768px) {
+  .col-sidebar {
+    max-width: 320px;
+  }
+}

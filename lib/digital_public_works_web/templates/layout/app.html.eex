@@ -11,7 +11,7 @@
   <body class="bg-light">
    
     <nav class="navbar navbar-expand-md navbar-light bg-light">
-      <div class="container">
+      <div class="container-fluid">
         <a class="navbar-brand" href="/">
           <img width="30" height="30" class="d-inline-block align-top" alt="" src="<%= Routes.static_path(@conn, "/images/logo.png") %>">
           Digital Public Works
@@ -24,7 +24,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-              <a class="nav-link" href="<%= Routes.project_path(@conn, :index) %>">View Projects <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="<%= Routes.project_path(@conn, :index) %>">Search Projects</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="<%= Routes.project_path(@conn, :new) %>">Submit a Project</a>
@@ -64,12 +64,8 @@
       </div>
     <% end) %>
 
-    <main role="main" class="container mt-4">
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
-          <%= render @view_module, @view_template, assigns %>
-        </div>
-      </div>
+    <main role="main" class="container-fluid mt-4">
+      <%= render @view_module, @view_template, assigns %>
     </main>
     
     <ul class="nav justify-content-center mt-4">

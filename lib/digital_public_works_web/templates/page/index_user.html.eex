@@ -1,0 +1,20 @@
+<div class="row justify-content-center">
+  <div class="col-md col-sidebar">
+    <div class="card mb-4">
+      <div class="card-body">
+        <%= render "_sidebar_group.html", Map.merge(assigns, %{title: "Your Projects", projects: @owned_projects}) %>
+        <div class="my-4"></div>
+        <%= render "_sidebar_group.html", Map.merge(assigns, %{title: "Followed Projects", projects: @followed_projects}) %>
+      </div>
+    </div>
+  </div>
+  <div class="col-md col-main">
+    <%= for post <- @posts do %>
+      <h6 class="mb-3">
+        <%= link post.project.title, to: Routes.project_path(@conn, :show, post.project) %>
+        <span class="font-weight-light">posted a new update</span>
+      </h6>
+      <%= render DigitalPublicWorksWeb.PostView, "_post.html", Map.put(assigns, :post, post) %>
+    <% end %>
+  </div>
+</div>

@@ -1,3 +1,7 @@
-<h2 class="text-center">Submit a Project</h2>
+<div class="row justify-content-center">
+  <div class="col col-main">
+    <h2 class="text-center">Submit a Project</h2>
 
-<%= render "form.html", Map.put(assigns, :action, Routes.project_path(@conn, :create)) %>
+    <%= render "form.html", Map.put(assigns, :action, Routes.project_path(@conn, :create)) %>
+  </div>
+</div>
