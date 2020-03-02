@@ -27,7 +27,7 @@
               <a class="nav-link" href="<%= Routes.project_path(@conn, :index) %>">Search Projects</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="<%= Routes.project_path(@conn, :new) %>">Submit a Project</a>
+              <a class="nav-link" href="<%= Routes.project_path(@conn, :new) %>">Create Project</a>
             </li>
           </ul>
           <ul class="navbar-nav">
