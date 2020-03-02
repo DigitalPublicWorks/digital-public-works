@@ -19,7 +19,7 @@
       <%= render DigitalPublicWorksWeb.PostView, "_post.html", Map.put(assigns, :post, post) %>
     <% end %>
     <%= if Enum.empty? @posts do %>
-      <p class="lead">Welcome to Digital Public Works!</p>
+      <p class="lead font-weight-normal">Welcome to Digital Public Works!</p>
       <p>
         <%= link "Search Projects", to: Routes.project_path(@conn, :index), class: "text-body font-weight-bold" %>
         allows you to find a project. Once you are on a project page you can <strong>Follow</strong> it and it will show up here.
