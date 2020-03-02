@@ -20,9 +20,15 @@ defmodule DigitalPublicWorks.Posts do
 
   """
   def list_posts(%Project{} = project) do
+    list_posts [project]
+  end
+
+  def list_posts(projects) when is_list(projects) do
+    project_ids = Enum.map(projects, &(&1.id))
+
     query =
       from p in Post,
-      where: [project_id: ^project.id],
+      where: p.project_id in ^project_ids,
       order_by: [desc: :inserted_at],
       preload: [:user, :project]
 

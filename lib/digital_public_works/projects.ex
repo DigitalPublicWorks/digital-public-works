@@ -55,10 +55,19 @@ defmodule DigitalPublicWorks.Projects do
 
   def list_owned_projects(_), do: []
 
-  defp filter_projects(query, nil), do: query
+  defp filter_projects(query, ""), do: filter_projects(query, nil)
+
+  defp filter_projects(query, nil) do
+    from p in query,
+      order_by: [desc: :is_featured],
+      order_by: [desc: :inserted_at]
+  end
 
   defp filter_projects(query, search) do
-    from p in query, where: ilike(p.title, ^"%#{search}%")
+    from p in query,
+      where: fragment("to_tsvector(title || ' ' || body) @@ plainto_tsquery(?)", ^search),
+      order_by:
+        fragment("ts_rank(to_tsvector(title || ' ' || body), plainto_tsquery(?)) DESC", ^search)
   end
 
   @doc """

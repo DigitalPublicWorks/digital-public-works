@@ -1,5 +1,5 @@
 <div class="row justify-content-center">
-  <div class="col-sm-6 col-md-offset-3">
+  <div class="col col-main-small">
     <div class="card mb-4">
       <div class="card-body">
         <h3 class="card-title">Sign Up</h3>

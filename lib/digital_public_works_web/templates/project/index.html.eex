@@ -1,5 +1,9 @@
-<%= form_for @conn, Routes.project_path(@conn, :index), [as: :project, method: :get], fn f -> %>
-  <%= text_input f, :q, [autofocus: true, placeholder: "Search...", class: "form-control"] %>
-<% end %>
+<div class="row justify-content-center">
+  <div class="col col-main">
+    <%= form_for @conn, Routes.project_path(@conn, :index), [as: :project, method: :get], fn f -> %>
+      <%= text_input f, :q, [autofocus: true, placeholder: "Search...", class: "form-control"] %>
+    <% end %>
 
-<%= render "_projects.html", projects: @projects, conn: @conn %>
+    <%= render "_projects.html", projects: @projects, conn: @conn %>
+  </div>
+</div>

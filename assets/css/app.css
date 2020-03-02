@@ -2,6 +2,20 @@
 
 @import "../node_modules/trix/dist/trix.css";
 
+.col-main {
+  max-width: 720px;
+}
+
+.col-main-small {
+  max-width: 320px;
+}
+
+@media screen and (min-width: 768px) {
+  .col-sidebar {
+    max-width: 320px;
+  }
+}
+
 trix-editor {
   min-height: 10em;
   border-color: #ced4da;

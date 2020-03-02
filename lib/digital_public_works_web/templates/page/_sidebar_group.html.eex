@@ -1,0 +1,9 @@
+<h6><%= @title %></h6>
+<%= for project <- @projects do %>
+  <div>
+    <%= link project.title, to: Routes.project_path(@conn, :show, project), class: "px-0 btn btn-link" %>
+  </div>
+<% end %>
+<%= if Enum.empty? @projects do %>
+  <div class="font-italic">None</div>
+<% end %>
