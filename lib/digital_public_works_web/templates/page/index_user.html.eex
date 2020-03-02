@@ -11,7 +11,7 @@
   <div class="col-md col-main">
     <%= for post <- @posts do %>
       <h6 class="mb-3">
-        <%= link post.project.title, to: Routes.project_path(@conn, :show, post.project) %>
+        <%= link post.project.title, to: Routes.project_path(@conn, :show, post.project), class: "text-body" %>
         <span class="font-weight-light">posted a new update</span>
       </h6>
       <%= render DigitalPublicWorksWeb.PostView, "_post.html", Map.put(assigns, :post, post) %>
