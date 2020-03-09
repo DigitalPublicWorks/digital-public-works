@@ -8,6 +8,16 @@
           <%= PBF.password_input f, :password %>
           <%= PBF.submit f, "Log In", class: "btn btn-primary float-right" %>
         <% end %>
+
+        <div class="clearfix"></div>
+
+
+        <div class="text-muted text-center my-4">&mdash; OR &mdash;</div>
+
+        <%= link to: Routes.auth_path(@conn, :request, "google"), class: "btn btn-secondary btn-block" do %>
+          <%= img_tag "/images/google.svg", class: "google-logo" %>
+          Continue with Google
+        <% end %>
       </div>
     </div>
     <p class="text-center">New to Digital Public Works? <%= link "Sign Up", to: Routes.user_path(@conn, :new) %></p>

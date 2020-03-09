@@ -42,6 +42,14 @@ defmodule DigitalPublicWorksWeb.Router do
     end
   end
 
+  scope "/auth", DigitalPublicWorksWeb do
+    pipe_through :browser
+
+    get("/:provider", AuthController, :request)
+    get("/:provider/callback", AuthController, :callback)
+    post("/:provider/callback", AuthController, :callback)
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", DigitalPublicWorksWeb do
   #   pipe_through :api

@@ -28,3 +28,16 @@ trix-editor, trix-toolbar .trix-button {
 .trix-button-group.trix-button-group--file-tools {
   display: none;
 }
+
+img.google-logo {
+  display: block;
+  position: absolute;
+  top: 0.4em;
+  left: 0.4em;
+  height: 1.5em;
+  width: 1.5em;
+}
+
+.btn {
+  position: relative;
+}
