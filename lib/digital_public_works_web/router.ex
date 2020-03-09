@@ -30,6 +30,8 @@ defmodule DigitalPublicWorksWeb.Router do
       put "/unpublish", ProjectController, :unpublish
       put "/follow", ProjectController, :follow
       put "/unfollow", ProjectController, :unfollow
+      get "/about/edit", ProjectAboutController, :edit
+      put "/about", ProjectAboutController, :update
     end
 
     resources "/user", UserController, singleton: true

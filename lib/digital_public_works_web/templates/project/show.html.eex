@@ -38,6 +38,27 @@
 
     <div class="mb-3"><%= @project.body %></div>
 
+    <%= if has_content?(@project.about) or can? @current_user, :edit, @project do %>
+      <div class="row">
+        <div class="col">
+          <h6 class="font-weight-light mt-2">About</h6>
+        </div>
+        <div class="col text-right">
+          <%= if can? @current_user, :edit, @project do %>
+            <%= link "Edit", to: Routes.project_about_path(@conn, :edit, @project), class: "btn btn-link" %>
+          <% end %>
+        </div>
+      </div>
+
+      <%= if has_content? @project.about do %>
+        <div class="card mb-4 card-collapsible" tabindex="-1">
+          <div class="card-body">
+            <%= trix_content @project.about %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+
     <div class="row">
       <div class="col">
         <h6 class="font-weight-light mt-2">Updates</h6>

@@ -8,4 +8,8 @@ defmodule DigitalPublicWorksWeb.ProjectView do
     Ecto.build_assoc(project, :posts)
     |> Repo.preload(:project)
   end
+
+  def has_content?(str) do
+    str != nil and String.trim(str) != ""
+  end
 end

@@ -1,5 +1,5 @@
 <div class="card mb-4">
-  <div class="card-body">
+  <div class="card-body card-collapsible" tabindex="-1">
     <%= if can? @current_user, :edit, @post do %>
       <%= link "Edit", to: Routes.project_post_path(@conn, :edit, @post.project, @post), class: "btn btn-link float-right" %>
     <% end %>
