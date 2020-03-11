@@ -3,6 +3,7 @@ defmodule DigitalPublicWorksWeb.Permission do
   alias DigitalPublicWorks.Projects
   alias DigitalPublicWorks.Projects.Project
   alias DigitalPublicWorks.Posts.Post
+  alias DigitalPublicWorks.Accounts.ProjectInvite
 
   def can?(user, action, %Project{} = project) do
     cond do
@@ -26,6 +27,14 @@ defmodule DigitalPublicWorksWeb.Permission do
     cond do
       action in [:show, :index] -> true
       action in [:new, :create, :edit, :update, :delete] -> can?(user, :edit, post.project)
+      true -> false
+    end
+  end
+
+  def can?(user, action, %ProjectInvite{} = project_invite) do
+    cond do
+      action in [:show, :update] -> user
+      action in [:index, :create, :delete] -> can?(user, :edit, project_invite.project)
       true -> false
     end
   end

@@ -2,7 +2,7 @@ defmodule DigitalPublicWorks.Projects.Project do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias DigitalPublicWorks.Accounts.User
+  alias DigitalPublicWorks.Accounts.{User, ProjectInvite}
   alias DigitalPublicWorks.Projects.ProjectFollower
   alias DigitalPublicWorks.Posts.Post
 
@@ -17,6 +17,8 @@ defmodule DigitalPublicWorks.Projects.Project do
     belongs_to :user, User
     has_many :posts, Post
     many_to_many :followers, User, join_through: ProjectFollower
+    many_to_many :users, User, join_through: "projects_users"
+    has_many :project_invites, ProjectInvite
 
     timestamps()
   end

@@ -1,0 +1,34 @@
+<div class="row justify-content-center">
+  <div class="col-sm col-main-small">
+    <h5>Users</h5>
+    <ul>
+      <%= if Enum.empty? @users do %>
+        <li class="font-italic">None</li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="col-sm col-main-small">
+    <h5>Invite User</h5>
+
+    <%= form_for @changeset, Routes.project_invite_path(@conn, :create, @project), fn f -> %>
+      <%= PBF.text_input f, :email %>
+      <%= PBF.submit f, "Send Invite", class: "btn btn-primary text-right" %>
+    <% end %>
+
+    <h5>Pending Invites</h5>
+    <ul>
+      <%= for invite <- @project_invites do %>
+        <li>
+          <%= invite.email %>
+          <%= if can? @current_user, :delete, invite do %>
+            <%= link "Revoke", to: Routes.project_invite_path(@conn, :delete, @project, invite), method: :delete, class: "btn btn-link" %>
+          <% end %>
+        </li>
+      <% end %>
+      <%= if Enum.empty? @project_invites do %>
+        <li class="font-italic">None</li>
+      <% end %>
+    </ul>
+  </div>
+</div>

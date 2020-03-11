@@ -11,6 +11,8 @@
         <% end %>
 
         <%= if can? @current_user, :edit, @project do %>
+          <%= link "Manage Users", to: Routes.project_invite_path(@conn, :index, @project), class: "btn btn-link" %>
+
           <%= link "Edit", to: Routes.project_path(@conn, :edit, @project), class: "btn btn-link" %>
         <% end %>
 

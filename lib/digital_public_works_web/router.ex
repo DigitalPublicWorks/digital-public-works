@@ -23,6 +23,7 @@ defmodule DigitalPublicWorksWeb.Router do
 
     resources "/projects", ProjectController do
       resources "/posts", PostController, only: [:new, :create, :edit, :update, :delete]
+      resources "/invites", ProjectInviteController, only: [:index, :create, :delete], as: :invite
     end
 
     scope "/projects/:id" do
@@ -31,6 +32,8 @@ defmodule DigitalPublicWorksWeb.Router do
       put "/follow", ProjectController, :follow
       put "/unfollow", ProjectController, :unfollow
     end
+
+    resources "/invites", ProjectInviteController, only: [:show, :update]
 
     resources "/user", UserController, singleton: true
     resources "/session", SessionController, singleton: true

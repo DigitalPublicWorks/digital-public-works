@@ -1,0 +1,3 @@
+You have been invited to the project "<%= @project.title %>" on Digital Public Works.
+
+Accept invite here <%= Routes.project_invite_url(DigitalPublicWorksWeb.Endpoint, :show, @project_invite) %>
