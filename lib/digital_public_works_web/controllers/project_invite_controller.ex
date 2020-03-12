@@ -16,11 +16,24 @@ defmodule DigitalPublicWorksWeb.ProjectInviteController do
   defp get_project(conn, _args), do: conn
 
   defp get_project_invite(%{params: %{"id" => id}} = conn, _args) do
-    project_invite = Accounts.get_project_invite!(id)
+    try do
+      project_invite = Accounts.get_project_invite!(id)
 
-    project_invite = Map.put(project_invite, :project, conn.assigns[:project])
+      project_invite =
+        if project = conn.assigns[:project] do
+          Map.put(project_invite, :project, project)
+        else
+          project_invite |> Repo.preload(:project)
+        end
 
-    conn |> assign(:project_invite, project_invite)
+      conn |> assign(:project_invite, project_invite)
+    rescue
+      _ ->
+        conn
+        |> put_flash(:error, "Invite not found.")
+        |> redirect(to: Routes.page_path(conn, :index))
+        |> halt()
+    end
   end
 
   defp get_project_invite(conn, _args) do
@@ -77,6 +90,28 @@ defmodule DigitalPublicWorksWeb.ProjectInviteController do
         |> assign(:users, project |> project_users)
         |> assign(:changeset, changeset)
         |> render("index.html")
+    end
+  end
+
+  def update(conn, _params) do
+    user = conn.assigns.current_user
+    invite = conn.assigns.project_invite
+
+    case Accounts.update_project_invite(invite, user) do
+      {:ok, _project_invite} ->
+        conn
+        |> put_flash(:info, "Joined project.")
+        |> redirect(to: Routes.project_path(conn, :show, invite.project))
+      {:error, changeset} ->
+        error_message =
+          changeset.errors
+          |> Keyword.values
+          |> Enum.map(&(elem(&1, 0)))
+          |> Enum.join(", ")
+
+        conn
+        |> put_flash(:error, "Error joining project. #{error_message}.")
+        |> redirect(to: Routes.page_path(conn, :index))
     end
   end
 

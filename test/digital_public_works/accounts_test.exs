@@ -1,7 +1,7 @@
 defmodule DigitalPublicWorks.AccountsTest do
   use DigitalPublicWorks.DataCase
 
-  alias DigitalPublicWorks.Accounts
+  alias DigitalPublicWorks.{Accounts, Projects}
 
   describe "users" do
     alias DigitalPublicWorks.Accounts.User
@@ -68,7 +68,6 @@ defmodule DigitalPublicWorks.AccountsTest do
     alias DigitalPublicWorks.Accounts.ProjectInvite
 
     @valid_attrs %{email: "some email"}
-    @update_attrs %{email: "some updated email"}
     @invalid_attrs %{email: nil}
 
     def project_invite_fixture(attrs \\ %{}) do
@@ -97,16 +96,22 @@ defmodule DigitalPublicWorks.AccountsTest do
       assert {:error, %Ecto.Changeset{}} = Accounts.create_project_invite(insert(:project), @invalid_attrs)
     end
 
-    test "update_project_invite/2 with valid data updates the project_invite" do
-      project_invite = project_invite_fixture()
-      assert {:ok, %ProjectInvite{} = project_invite} = Accounts.update_project_invite(project_invite, @update_attrs)
-      assert project_invite.email == "some updated email"
+    test "update_project_invite/2 adds user to project and deletes project_invite " do
+      project_invite = insert(:project_invite)
+      user = insert(:user)
+
+      assert {:ok, %ProjectInvite{} = project_invite} = Accounts.update_project_invite(project_invite, user)
+      assert Projects.is_user?(project_invite.project, user)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_project_invite!(project_invite.id) end
     end
 
     test "update_project_invite/2 with invalid data returns error changeset" do
-      project_invite = project_invite_fixture()
-      assert {:error, %Ecto.Changeset{}} = Accounts.update_project_invite(project_invite, @invalid_attrs)
-      assert project_invite == Accounts.get_project_invite!(project_invite.id)
+      project_invite = insert(:project_invite)
+      user = insert(:user)
+      Projects.add_user(project_invite.project, user)
+
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_project_invite(project_invite, user)
+      Accounts.get_project_invite!(project_invite.id)
     end
 
     test "delete_project_invite/1 deletes the project_invite" do

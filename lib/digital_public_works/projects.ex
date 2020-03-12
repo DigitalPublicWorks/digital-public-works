@@ -6,7 +6,7 @@ defmodule DigitalPublicWorks.Projects do
   import Ecto.Query, warn: false
   alias DigitalPublicWorks.Repo
 
-  alias DigitalPublicWorks.Projects.{Project, ProjectFollower}
+  alias DigitalPublicWorks.Projects.{Project, ProjectFollower, ProjectUser}
   alias DigitalPublicWorks.Accounts.User
 
   @doc """
@@ -34,7 +34,10 @@ defmodule DigitalPublicWorks.Projects do
   end
 
   def list_projects(%User{id: user_id}, search) do
-    from(p in Project, where: p.is_public == true or p.user_id == ^user_id)
+    from(p in Project,
+      left_join: u in assoc(p, :users),
+      where: p.is_public == true or p.user_id == ^user_id or u.id == ^user_id
+    )
     |> filter_projects(search)
     |> Repo.all()
   end
@@ -54,6 +57,14 @@ defmodule DigitalPublicWorks.Projects do
   end
 
   def list_owned_projects(_), do: []
+
+  def list_joined_projects(%User{} = user) do
+    user
+    |> Ecto.assoc(:joined_projects)
+    |> Repo.all()
+  end
+
+  def list_joined_projects(_), do: []
 
   defp filter_projects(query, ""), do: filter_projects(query, nil)
 
@@ -198,4 +209,24 @@ defmodule DigitalPublicWorks.Projects do
     from(p in ProjectFollower, where: p.user_id == ^user.id and p.project_id == ^project.id)
     |> Repo.exists?()
   end
+
+  def is_follower?(_, _), do: false
+
+  def add_user(%Project{} = project, %User{} = user) do
+    %ProjectUser{}
+    |> ProjectUser.changeset(%{user_id: user.id, project_id: project.id})
+    |> Repo.insert()
+  end
+
+  def remove_user(%Project{} = project, %User{} = user) do
+    from(p in ProjectUser, where: p.user_id == ^user.id and p.project_id == ^project.id)
+    |> Repo.delete_all()
+  end
+
+  def is_user?(%Project{} = project, %User{} = user) do
+    from(p in ProjectUser, where: p.user_id == ^user.id and p.project_id == ^project.id)
+    |> Repo.exists?()
+  end
+
+  def is_user?(_, _), do: false
 end

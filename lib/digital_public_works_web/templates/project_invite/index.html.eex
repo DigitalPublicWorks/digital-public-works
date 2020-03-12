@@ -1,22 +1,23 @@
 <div class="row justify-content-center">
-  <div class="col-sm col-main-small">
+  <div class="col col-main">
+    <p>By inviting users to this project you give them the ability to post updates.</p>
+
     <h5>Users</h5>
     <ul>
+      <%= for user <- @users do %>
+        <li>
+          <%= user.email %>
+          <%= if can? @current_user, :edit, @project do %>
+            <%= link "Remove", to: Routes.project_path(@conn, :remove_user, @project, user.id), method: :delete, class: "btn btn-link" %>
+          <% end %>
+        </li>
+      <% end %>
       <%= if Enum.empty? @users do %>
         <li class="font-italic">None</li>
       <% end %>
     </ul>
-  </div>
 
-  <div class="col-sm col-main-small">
-    <h5>Invite User</h5>
-
-    <%= form_for @changeset, Routes.project_invite_path(@conn, :create, @project), fn f -> %>
-      <%= PBF.text_input f, :email %>
-      <%= PBF.submit f, "Send Invite", class: "btn btn-primary text-right" %>
-    <% end %>
-
-    <h5>Pending Invites</h5>
+    <h5>Invites</h5>
     <ul>
       <%= for invite <- @project_invites do %>
         <li>
@@ -30,5 +31,10 @@
         <li class="font-italic">None</li>
       <% end %>
     </ul>
+
+    <%= form_for @changeset, Routes.project_invite_path(@conn, :create, @project), [class: "col-main-small"], fn f -> %>
+      <%= PBF.text_input f, :email %>
+      <%= PBF.submit f, "Send Invite", class: "btn btn-primary text-right" %>
+    <% end %>
   </div>
 </div>

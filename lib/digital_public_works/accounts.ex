@@ -6,6 +6,7 @@ defmodule DigitalPublicWorks.Accounts do
   import Ecto.Query, warn: false
   alias DigitalPublicWorks.Repo
 
+  alias DigitalPublicWorks.Projects
   alias DigitalPublicWorks.Accounts.User
   alias DigitalPublicWorks.Projects.Project
 
@@ -176,10 +177,9 @@ defmodule DigitalPublicWorks.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_project_invite(%ProjectInvite{} = project_invite, attrs) do
-    project_invite
-    |> ProjectInvite.changeset(attrs)
-    |> Repo.update()
+  def update_project_invite(%ProjectInvite{} = project_invite, user) do
+    with {:ok, _} <- Projects.add_user(project_invite.project, user),
+         do: delete_project_invite(project_invite)
   end
 
   @doc """

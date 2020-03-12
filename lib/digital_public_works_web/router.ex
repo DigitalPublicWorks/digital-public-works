@@ -31,9 +31,11 @@ defmodule DigitalPublicWorksWeb.Router do
       put "/unpublish", ProjectController, :unpublish
       put "/follow", ProjectController, :follow
       put "/unfollow", ProjectController, :unfollow
+      put "/leave", ProjectController, :leave
+      delete "/users/:user_id", ProjectController, :remove_user
     end
 
-    resources "/invites", ProjectInviteController, only: [:show, :update]
+    get "/invites/:id", ProjectInviteController, :update
 
     resources "/user", UserController, singleton: true
     resources "/session", SessionController, singleton: true

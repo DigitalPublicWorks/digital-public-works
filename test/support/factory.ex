@@ -1,7 +1,7 @@
 defmodule DigitalPublicWorks.Factory do
   use ExMachina.Ecto, repo: DigitalPublicWorks.Repo
 
-  alias DigitalPublicWorks.Accounts.User
+  alias DigitalPublicWorks.Accounts.{User, ProjectInvite}
   alias DigitalPublicWorks.Projects.Project
   alias DigitalPublicWorks.Posts.Post
 
@@ -25,6 +25,13 @@ defmodule DigitalPublicWorks.Factory do
       body: "test description",
       project: build(:project),
       user: build(:user)
+    }
+  end
+
+  def project_invite_factory do
+    %ProjectInvite{
+      email: sequence(:email, &"email-#{&1}@example.com"),
+      project: build(:project)
     }
   end
 end

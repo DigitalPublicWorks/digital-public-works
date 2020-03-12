@@ -3,14 +3,18 @@ defmodule DigitalPublicWorksWeb.PageController do
   alias DigitalPublicWorks.{Projects, Posts}
 
   def index(%{assigns: %{current_user: current_user}} = conn, _params) when current_user != nil do
-    owned_projects = Projects.list_owned_projects(conn.assigns.current_user)
-    followed_projects = Projects.list_followed_projects(conn.assigns.current_user)
+    user = conn.assigns.current_user
 
-    posts = Posts.list_posts(owned_projects ++ followed_projects)
+    owned_projects = Projects.list_owned_projects(user)
+    followed_projects = Projects.list_followed_projects(user)
+    joined_projects = Projects.list_joined_projects(user)
+
+    posts = Posts.list_posts(owned_projects ++ followed_projects ++ joined_projects)
 
     conn
     |> assign(:owned_projects, owned_projects)
     |> assign(:followed_projects, followed_projects)
+    |> assign(:joined_projects, joined_projects)
     |> assign(:posts, posts)
     |> render("index_user.html")
   end

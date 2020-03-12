@@ -11,5 +11,6 @@ defmodule DigitalPublicWorks.Repo.Migrations.CreateProjectInvites do
     end
 
     create index(:project_invites, [:project_id])
+    create unique_index(:project_invites, [:project_id, :email])
   end
 end
