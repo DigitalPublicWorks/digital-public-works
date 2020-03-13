@@ -2,7 +2,6 @@ defmodule DigitalPublicWorksWeb.AuthController do
   use DigitalPublicWorksWeb, :controller
   plug Ueberauth
 
-  alias Ueberauth.Strategy.Helpers
   alias DigitalPublicWorks.Accounts
 
   def callback(%{assigns: %{ueberauth_failure: _fails}} = conn, _params) do
