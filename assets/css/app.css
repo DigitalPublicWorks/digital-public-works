@@ -65,5 +65,5 @@ input[type=checkbox]:checked + .card-body-collapsible  {
 }
 
 input[type=checkbox]:checked + .card-body-collapsible:after {
-  background-image: none;
+  display: none;
 }
