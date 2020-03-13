@@ -34,4 +34,8 @@ defmodule DigitalPublicWorksWeb.GlobalHelpers do
   def user_name(obj) do
     obj.user.display_name || "Project Member"
   end
+
+  def has_content?(str) do
+    str != nil and String.trim(str) != ""
+  end
 end

@@ -1,5 +1,6 @@
 <div class="card mb-4">
-  <div class="card-body">
+  <input id="post-<%= @post.id %>" type="checkbox" hidden />
+  <label for="post-<%= @post.id %>" class="card-body card-body-collapsible">
     <%= if can? @current_user, :edit, @post do %>
       <%= link "Edit", to: Routes.project_post_path(@conn, :edit, @post.project, @post), class: "btn btn-link float-right" %>
     <% end %>
@@ -12,5 +13,5 @@
     </h6>
     <hr>
     <div class="card-text"><%= trix_content @post.body %></div>
-  </div>
+  </label>
 </div>
