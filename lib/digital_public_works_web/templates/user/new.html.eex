@@ -4,6 +4,15 @@
       <div class="card-body">
         <h3 class="card-title">Sign Up</h3>
         <%= render "form.html", Map.put(assigns, :action, Routes.user_path(@conn, :create)) %>
+
+        <div class="clearfix"></div>
+
+        <div class="text-muted text-center my-4">&mdash; OR &mdash;</div>
+
+        <%= link to: Routes.auth_path(@conn, :request, "google"), class: "btn btn-secondary btn-block" do %>
+          <%= img_tag "/images/google.svg", class: "google-logo" %>
+          Continue with Google
+        <% end %>
       </div>
     </div>
     <p class="text-center">Already have an account? <%= link "Log In", to: Routes.session_path(@conn, :new) %></p>

@@ -112,4 +112,14 @@ defmodule DigitalPublicWorks.Accounts do
     |> get_user_by()
     |> Argon2.check_pass(password)
   end
+
+  def find_or_create_by_email(email) do
+    case get_user_by(%{"email" => email}) do
+      nil ->
+        length = 32
+        password = :crypto.strong_rand_bytes(length) |> Base.encode64() |> binary_part(0, length)
+        create_user(%{email: email, password: password})
+      user -> {:ok, user}
+    end
+  end
 end
