@@ -29,29 +29,28 @@ trix-editor, trix-toolbar .trix-button {
   display: none;
 }
 
-.card-collapsible {
+.card-body-collapsible {
   max-height: 200px;
+  margin: 0;
   overflow: hidden;
-  outline: none;
   cursor: zoom-in;
 }
 
-.card-collapsible:after {
+.card-body-collapsible:after {
   content: "";
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 50%;
+  top: 125px;
   background-image: linear-gradient(to bottom, rgba(0,0,0,0), #fff);
 }
 
-.card-collapsible:focus {
+input[type=checkbox]:checked + .card-body-collapsible  {
   max-height: initial;
-  cursor: initial;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.09), 0 6px 6px rgba(0,0,0,0.13);
+  cursor: zoom-out;
 }
 
-.card-collapsible:focus:after {
+input[type=checkbox]:checked + .card-body-collapsible:after {
   background-image: none;
-} 
+}
