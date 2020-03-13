@@ -36,7 +36,7 @@
 
     <h2 class="text-center"><%= @project.title %></h2>
 
-    <h6 class="text-center font-weight-normal">by <%= @project.user.display_name || "Project Member" %></h6>
+    <h6 class="text-center font-weight-normal">by <%= user_name(@project) %></h6>
 
     <div class="mb-3"><%= @project.body %></div>
 

@@ -7,7 +7,7 @@
       <%= @post.title %>
     </h5>
     <h6 class="card-subtitle font-weight-normal">
-      by <%= @post.user.display_name || "Project Member" %> -
+      by <%= user_name(@post) %> -
       <span><%= format_date @post.inserted_at %></span>
     </h6>
     <hr>
