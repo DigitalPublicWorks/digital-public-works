@@ -1,4 +1,6 @@
 <%= form_for @changeset, @action, fn f -> %>
+  <%= PBF.text_input f, :display_name %>
+
   <%= PBF.text_input f, :email %>
 
   <%= PBF.password_input f, :password %>

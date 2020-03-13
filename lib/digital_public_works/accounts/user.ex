@@ -8,6 +8,7 @@ defmodule DigitalPublicWorks.Accounts.User do
   @foreign_key_type :binary_id
 
   schema "users" do
+    field :display_name, :string
     field :email, :string
     field :password, :string, virtual: true
     field :password_hash, :string
@@ -34,7 +35,7 @@ defmodule DigitalPublicWorks.Accounts.User do
 
   defp common_changeset(%__MODULE__{} = user, attrs) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:display_name, :email, :password])
     |> validate_required([:email])
     |> unique_constraint(:email)
     |> validate_length(:password, min: 8)
