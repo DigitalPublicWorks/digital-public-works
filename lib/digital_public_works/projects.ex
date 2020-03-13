@@ -42,6 +42,7 @@ defmodule DigitalPublicWorks.Projects do
   def list_followed_projects(%User{} = user) do
     user
     |> Ecto.assoc(:followed_projects)
+    |> filter_projects()
     |> Repo.all()
   end
 
@@ -50,17 +51,21 @@ defmodule DigitalPublicWorks.Projects do
   def list_owned_projects(%User{} = user) do
     user
     |> Ecto.assoc(:projects)
+    |> filter_projects()
     |> Repo.all()
   end
 
   def list_owned_projects(_), do: []
+
+  defp filter_projects(query, search \\ nil)
 
   defp filter_projects(query, ""), do: filter_projects(query, nil)
 
   defp filter_projects(query, nil) do
     from p in query,
       order_by: [desc: :is_featured],
-      order_by: [desc: :inserted_at]
+      order_by: [desc: :inserted_at],
+      preload: [:user]
   end
 
   defp filter_projects(query, search) do
@@ -84,7 +89,9 @@ defmodule DigitalPublicWorks.Projects do
       from p in Project,
         where: [is_featured: true]
 
-    Repo.all(query)
+    query
+    |> filter_projects()
+    |> Repo.all()
   end
 
   @doc """
@@ -101,7 +108,7 @@ defmodule DigitalPublicWorks.Projects do
       ** (Ecto.NoResultsError)
 
   """
-  def get_project!(id), do: Repo.get!(Project, id)
+  def get_project!(id), do: Repo.get!(Project, id) |> Repo.preload([:user])
 
   @doc """
   Creates a project.
