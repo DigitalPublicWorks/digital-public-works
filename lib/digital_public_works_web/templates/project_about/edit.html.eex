@@ -1,0 +1,10 @@
+<div class="row justify-content-center">
+  <div class="col col-main">
+    <h3><%= @project.title %></h3>
+    <%= form_for @changeset, @action, [autocomplete: "off"], fn f -> %>
+      <%= trix_editor f, :about, label: [text: "Describe your project in detail"] %>
+
+      <%= PBF.submit f, submit_text(@changeset), class: "btn btn-primary float-right" %>
+    <% end %>
+  </div>
+</div>

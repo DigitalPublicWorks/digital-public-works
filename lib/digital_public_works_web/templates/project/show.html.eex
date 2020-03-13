@@ -36,7 +36,31 @@
 
     <h2 class="text-center"><%= @project.title %></h2>
 
+    <h6 class="text-center font-weight-normal">by <%= user_name(@project) %></h6>
+
     <div class="mb-3"><%= @project.body %></div>
+
+    <%= if has_content?(@project.about) or can? @current_user, :edit, @project do %>
+      <div class="row">
+        <div class="col">
+          <h6 class="font-weight-light mt-2">About</h6>
+        </div>
+        <div class="col text-right">
+          <%= if can? @current_user, :edit, @project do %>
+            <%= link "Edit", to: Routes.project_about_path(@conn, :edit, @project), class: "btn btn-link" %>
+          <% end %>
+        </div>
+      </div>
+
+      <%= if has_content? @project.about do %>
+        <div class="card mb-4">
+          <input id="project-about" type="checkbox" hidden />
+          <label for="project-about" class="card-body card-body-collapsible">
+            <%= trix_content @project.about %>
+          </label>
+        </div>
+      <% end %>
+    <% end %>
 
     <div class="row">
       <div class="col">

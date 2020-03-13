@@ -12,6 +12,7 @@ defmodule DigitalPublicWorks.Projects.Project do
   schema "projects" do
     field :body, :string
     field :title, :string
+    field :about, :string
     field :is_featured, :boolean
     field :is_public, :boolean, default: :false
     belongs_to :user, User
@@ -24,12 +25,19 @@ defmodule DigitalPublicWorks.Projects.Project do
   @doc false
   def changeset(project, attrs \\ %{}) do
     project
-    |> cast(attrs, [:title, :body])
+    |> cast(attrs, [:title, :body, :about])
     |> validate_required([:title, :body])
     |> unique_constraint(:title)
+    |> sanitize_about()
     |> Ecto.Changeset.foreign_key_constraint(:followers,
       name: "projects_followers_project_id_fkey",
       message: "You can't delete a project that has followers."
     )
   end
+
+  defp sanitize_about(%Ecto.Changeset{changes: %{about: about}} = changeset) do
+    changeset
+    |> change(%{about: HtmlSanitizeEx.markdown_html(about)})
+  end
+  defp sanitize_about(changeset), do: changeset
 end
