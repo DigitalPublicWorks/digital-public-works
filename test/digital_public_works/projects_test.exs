@@ -113,7 +113,7 @@ defmodule DigitalPublicWorks.ProjectsTest do
       assert Projects.is_user?(project, user) == false
 
       Projects.add_user(project, user)
-      assert Ecto.assoc(user, :joined_projects) |> Repo.all == [project]
+      assert Ecto.assoc(user, :joined_projects) |> Repo.all |> Repo.preload(:user) == [project]
       assert Projects.is_user?(project, user) == true
 
       Projects.remove_user(project, user)
