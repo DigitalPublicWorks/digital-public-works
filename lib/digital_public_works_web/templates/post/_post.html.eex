@@ -1,11 +1,17 @@
 <div class="card mb-4">
-  <div class="card-body">
+  <input id="post-<%= @post.id %>" type="checkbox" hidden />
+  <label for="post-<%= @post.id %>" class="card-body card-body-collapsible">
     <%= if can? @current_user, :edit, @post do %>
       <%= link "Edit", to: Routes.project_post_path(@conn, :edit, @post.project, @post), class: "btn btn-link float-right" %>
     <% end %>
-    <h5 class="card-title"><%= @post.title %></h5>
-    <h6 class="card-subtitle font-weight-normal text-muted"><%= format_date @post.inserted_at %></h6>
+    <h5 class="card-title">
+      <%= @post.title %>
+    </h5>
+    <h6 class="card-subtitle font-weight-normal">
+      by <%= user_name(@post) %> -
+      <span><%= format_date @post.inserted_at %></span>
+    </h6>
     <hr>
     <div class="card-text"><%= trix_content @post.body %></div>
-  </div>
+  </label>
 </div>

@@ -33,6 +33,8 @@ defmodule DigitalPublicWorksWeb.Router do
       put "/unfollow", ProjectController, :unfollow
       put "/leave", ProjectController, :leave
       delete "/users/:user_id", ProjectController, :remove_user
+      get "/about/edit", ProjectAboutController, :edit
+      put "/about", ProjectAboutController, :update
     end
 
     get "/invites/:id", ProjectInviteController, :update
@@ -45,6 +47,14 @@ defmodule DigitalPublicWorksWeb.Router do
     if Mix.env == :dev do
       forward "/sent_emails", Bamboo.SentEmailViewerPlug
     end
+  end
+
+  scope "/auth", DigitalPublicWorksWeb do
+    pipe_through :browser
+
+    get("/:provider", AuthController, :request)
+    get("/:provider/callback", AuthController, :callback)
+    post("/:provider/callback", AuthController, :callback)
   end
 
   # Other scopes may use custom stacks.

@@ -48,7 +48,9 @@ defmodule DigitalPublicWorks.MixProject do
       {:ex_machina, "~> 2.3", only: :test},
       {:timex, "~> 3.5"},
       {:bamboo, "~> 1.4"},
-      {:html_sanitize_ex, "~> 1.3.0"}
+      {:html_sanitize_ex, "~> 1.3.0"},
+      {:ueberauth, "~> 0.6"},
+      {:ueberauth_google, "~> 0.8"}
     ]
   end
 

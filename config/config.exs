@@ -32,6 +32,15 @@ config :phoenix_bootstrap_form,
   label_align_class: "",
   form_group_class: "form-group"
 
+config :ueberauth, Ueberauth,
+  providers: [
+    google: { Ueberauth.Strategy.Google, [] }
+  ]
+
+config :ueberauth, Ueberauth.Strategy.Google.OAuth,
+  client_id: System.get_env("GOOGLE_CLIENT_ID"),
+  client_secret: System.get_env("GOOGLE_CLIENT_SECRET")
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

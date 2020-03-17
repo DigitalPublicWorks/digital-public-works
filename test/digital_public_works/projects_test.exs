@@ -15,7 +15,7 @@ defmodule DigitalPublicWorks.ProjectsTest do
       other = insert(:user)
       admin = insert(:user, is_admin: true)
 
-      project = Repo.get(Project, insert(:project, user: owner).id)
+      project = Projects.get_project!(insert(:project, user: owner).id)
 
       assert Projects.list_projects(owner) == [project]
       assert Projects.list_projects(admin) == [project]
@@ -33,8 +33,8 @@ defmodule DigitalPublicWorks.ProjectsTest do
     end
 
     test "get_project!/1 returns the project with given id" do
-      project = Repo.get(Project, insert(:project).id)
-      assert Projects.get_project!(project.id) == project
+      project = insert(:project)
+      assert Projects.get_project!(project.id).id == project.id
     end
 
     test "create_project/1 with valid data creates a project" do
@@ -57,7 +57,7 @@ defmodule DigitalPublicWorks.ProjectsTest do
     end
 
     test "update_project/2 with invalid data returns error changeset" do
-      project = Repo.get(Project, insert(:project).id)
+      project = Projects.get_project!(insert(:project).id)
       assert {:error, %Ecto.Changeset{}} = Projects.update_project(project, @invalid_attrs)
       assert project == Projects.get_project!(project.id)
     end
@@ -97,7 +97,7 @@ defmodule DigitalPublicWorks.ProjectsTest do
       assert Projects.is_follower?(project, user) == false
 
       Projects.add_follower(project, user)
-      assert Ecto.assoc(user, :followed_projects) |> Repo.all == [project]
+      assert Projects.list_followed_projects(user) == [project]
       assert Projects.is_follower?(project, user) == true
 
       Projects.remove_follower(project, user)

@@ -32,7 +32,9 @@ defmodule DigitalPublicWorks.Posts do
       order_by: [desc: :inserted_at],
       preload: [:user, :project]
 
-    Repo.all(query)
+    query
+    |> preload([:user])
+    |> Repo.all()
   end
 
   @doc """

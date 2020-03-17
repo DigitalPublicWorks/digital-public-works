@@ -2,7 +2,7 @@
 
   <%= PBF.text_input f, :title, label: [text: "Project Title"] %>
 
-  <%= PBF.textarea f, :body, input: [rows: 6], label: [text: "Describe the problem you are trying to solve in as much detail as possible. Tell us who is affected by it, where it is happening, and how you are trying to solve it."] %>
+  <%= PBF.textarea f, :body, input: [rows: 6], label: [text: "Briefly describe the problem you are trying to solve. Mention who is affected by it, where it is happening, and how you are trying to solve it."] %>
 
   <%= PBF.submit f, submit_text(@changeset), class: "btn btn-primary float-right" %>
 <% end %>
