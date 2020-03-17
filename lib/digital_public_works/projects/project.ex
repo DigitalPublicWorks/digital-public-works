@@ -2,7 +2,8 @@ defmodule DigitalPublicWorks.Projects.Project do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias DigitalPublicWorks.Accounts.{User, ProjectInvite}
+  alias DigitalPublicWorks.Accounts.User
+  alias DigitalPublicWorks.Invites.ProjectInvite
   alias DigitalPublicWorks.Projects.{ProjectFollower, ProjectUser}
   alias DigitalPublicWorks.Posts.Post
 

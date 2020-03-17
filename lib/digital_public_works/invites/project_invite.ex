@@ -1,4 +1,4 @@
-defmodule DigitalPublicWorks.Accounts.ProjectInvite do
+defmodule DigitalPublicWorks.Invites.ProjectInvite do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -21,7 +21,7 @@ defmodule DigitalPublicWorks.Accounts.ProjectInvite do
   end
 end
 
-defimpl Bamboo.Formatter, for: DigitalPublicWorks.Accounts.ProjectInvite do
+defimpl Bamboo.Formatter, for: DigitalPublicWorks.Invites.ProjectInvite do
   def format_email_address(user, _opts) do
     {"", user.email}
   end

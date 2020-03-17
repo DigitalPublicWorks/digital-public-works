@@ -3,7 +3,7 @@ defmodule DigitalPublicWorksWeb.Permission do
   alias DigitalPublicWorks.Projects
   alias DigitalPublicWorks.Projects.Project
   alias DigitalPublicWorks.Posts.Post
-  alias DigitalPublicWorks.Accounts.ProjectInvite
+  alias DigitalPublicWorks.Invites.ProjectInvite
 
   def can?(user, action, %Project{} = project) do
     cond do

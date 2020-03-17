@@ -1,7 +1,7 @@
 defmodule DigitalPublicWorksWeb.ProjectInviteController do
   use DigitalPublicWorksWeb, :controller
 
-  alias DigitalPublicWorks.{Projects, Accounts}
+  alias DigitalPublicWorks.{Projects, Invites}
   alias DigitalPublicWorks.Repo
   alias DigitalPublicWorksWeb.{Email, Mailer}
 
@@ -17,7 +17,7 @@ defmodule DigitalPublicWorksWeb.ProjectInviteController do
 
   defp get_project_invite(%{params: %{"id" => id}} = conn, _args) do
     try do
-      project_invite = Accounts.get_project_invite!(id)
+      project_invite = Invites.get_project_invite!(id)
 
       project_invite =
         if project = conn.assigns[:project] do
@@ -69,14 +69,14 @@ defmodule DigitalPublicWorksWeb.ProjectInviteController do
     conn
     |> assign(:project_invites, project |> project_invites)
     |> assign(:users, project |> project_users)
-    |> assign(:changeset, Accounts.change_project_invite())
+    |> assign(:changeset, Invites.change_project_invite())
     |> render("index.html")
   end
 
   def create(conn, %{"project_invite" => params}) do
     project = conn.assigns.project
 
-    case Accounts.create_project_invite(conn.assigns.project, params) do
+    case Invites.create_project_invite(conn.assigns.project, params) do
       {:ok, project_invite} ->
         Email.project_invite_email(project_invite |> Map.put(:project, project)) |> Mailer.deliver_now
 
@@ -97,7 +97,7 @@ defmodule DigitalPublicWorksWeb.ProjectInviteController do
     user = conn.assigns.current_user
     invite = conn.assigns.project_invite
 
-    case Accounts.update_project_invite(invite, user) do
+    case Invites.update_project_invite(invite, user) do
       {:ok, _project_invite} ->
         conn
         |> put_flash(:info, "Joined project.")
@@ -119,7 +119,7 @@ defmodule DigitalPublicWorksWeb.ProjectInviteController do
     project = conn.assigns.project
     project_invite = conn.assigns.project_invite
 
-    case Accounts.delete_project_invite(project_invite) do
+    case Invites.delete_project_invite(project_invite) do
       {:ok, _project_invite} ->
         conn
         |> put_flash(:info, "Invite revoked.")

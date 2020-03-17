@@ -7,7 +7,7 @@ defmodule DigitalPublicWorksWeb.ProjectInviteControllerTest do
   end
 
   defp get_project_invite(project, email) do
-    from(p in DigitalPublicWorks.Accounts.ProjectInvite, where: p.email == ^email)
+    from(p in DigitalPublicWorks.Invites.ProjectInvite, where: p.email == ^email)
     |> DigitalPublicWorks.Repo.one
     |> Map.put(:project, project)
   end

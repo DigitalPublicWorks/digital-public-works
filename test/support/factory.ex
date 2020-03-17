@@ -1,9 +1,10 @@
 defmodule DigitalPublicWorks.Factory do
   use ExMachina.Ecto, repo: DigitalPublicWorks.Repo
 
-  alias DigitalPublicWorks.Accounts.{User, ProjectInvite}
+  alias DigitalPublicWorks.Accounts.User
   alias DigitalPublicWorks.Projects.Project
   alias DigitalPublicWorks.Posts.Post
+  alias DigitalPublicWorks.Invites.ProjectInvite
 
   def user_factory do
     %User{
