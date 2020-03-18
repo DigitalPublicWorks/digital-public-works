@@ -20,6 +20,7 @@
         <% end %>
       </div>
     </div>
+    <p class="text-center"><%= link "Forgot your password?", to: Routes.password_reset_path(@conn, :new) %></p>
     <p class="text-center">New to Digital Public Works? <%= link "Sign Up", to: Routes.user_path(@conn, :new) %></p>
   </div>
 </div>

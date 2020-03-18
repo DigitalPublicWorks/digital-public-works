@@ -119,7 +119,62 @@ defmodule DigitalPublicWorks.Accounts do
         length = 32
         password = :crypto.strong_rand_bytes(length) |> Base.encode64() |> binary_part(0, length)
         create_user(%{email: email, password: password})
-      user -> {:ok, user}
+
+      user ->
+        {:ok, user}
     end
+  end
+
+  # Password Reset
+
+  def get_password_reset!(nil), do: raise Ecto.NoResultsError, queryable: User
+
+  def get_password_reset!(reset_token) do
+    from(u in User, where: [reset_token: ^reset_token])
+    |> Repo.one!()
+  end
+
+  def create_password_reset(%User{} = user) do
+    user
+    |> Ecto.Changeset.change(%{
+      reset_token: generate_url_safe_token(),
+      reset_sent_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    })
+    |> Repo.update()
+  end
+
+  def generate_url_safe_token(length \\ 16) do
+    :crypto.strong_rand_bytes(length) |> Base.url_encode64() |> binary_part(0, length)
+  end
+
+  def update_password_reset(%User{reset_token: reset_token} = user, _args)
+      when is_nil(reset_token) do
+    user
+    |> Ecto.Changeset.change()
+    |> Ecto.Changeset.add_error(:inserted_at, "Password reset not initiated")
+  end
+
+  def update_password_reset(%User{} = user, %{"password" => password}) do
+    expires_at = Timex.shift(user.reset_sent_at, minutes: 10)
+
+    case NaiveDateTime.compare(NaiveDateTime.utc_now(), expires_at) do
+      :lt ->
+        with {:ok, user} <- update_user(user, %{"password" => password}),
+             do: user |> delete_password_reset()
+
+      _ ->
+        changeset =
+          user
+          |> Ecto.Changeset.change()
+          |> Ecto.Changeset.add_error(:inserted_at, "Password reset has expired")
+
+        {:error, changeset}
+    end
+  end
+
+  def delete_password_reset(%User{} = user) do
+    user
+    |> Ecto.Changeset.change(%{reset_token: nil, reset_sent_at: nil})
+    |> Repo.update()
   end
 end
