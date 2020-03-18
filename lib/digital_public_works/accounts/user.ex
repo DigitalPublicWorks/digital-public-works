@@ -13,6 +13,9 @@ defmodule DigitalPublicWorks.Accounts.User do
     field :password, :string, virtual: true
     field :password_hash, :string
     field :is_admin, :boolean, default: :false
+    field :reset_token, :string
+    field :reset_sent_at, :naive_datetime
+
     has_many :projects, Project
     many_to_many :followed_projects, Project, join_through: ProjectFollower
 

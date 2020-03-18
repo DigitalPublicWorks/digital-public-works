@@ -12,6 +12,19 @@ defmodule DigitalPublicWorks.Factory do
     }
   end
 
+  def reset_user_factory() do
+    reset_sent_at =
+      NaiveDateTime.utc_now()
+      |> NaiveDateTime.truncate(:second)
+
+    reset_token = DigitalPublicWorks.Accounts.generate_url_safe_token()
+
+    struct!(
+      user_factory(),
+      %{reset_token: reset_token, reset_sent_at: reset_sent_at}
+    )
+  end
+
   def project_factory do
     %Project{
       title: sequence(:email, &"Project #{&1}"),

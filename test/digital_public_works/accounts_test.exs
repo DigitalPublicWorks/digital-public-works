@@ -2,10 +2,9 @@ defmodule DigitalPublicWorks.AccountsTest do
   use DigitalPublicWorks.DataCase
 
   alias DigitalPublicWorks.Accounts
+  alias DigitalPublicWorks.Accounts.User
 
   describe "users" do
-    alias DigitalPublicWorks.Accounts.User
-
     @valid_attrs %{email: "some email", password: "some password"}
     @update_attrs %{email: "some updated email", password: "some updated password"}
     @invalid_attrs %{email: nil, password: nil}
@@ -61,6 +60,66 @@ defmodule DigitalPublicWorks.AccountsTest do
     test "change_user/1 returns a user changeset" do
       user = user_fixture()
       assert %Ecto.Changeset{} = Accounts.change_user(user)
+    end
+  end
+
+  describe "password_resets" do
+    def password_reset_fixture(attrs \\ %{}) do
+      insert(:reset_user, attrs) |> Map.get(:id) |> Accounts.get_user!()
+    end
+
+    test "get_password_reset!/1 returns the password_reset with given reset_token" do
+      user = password_reset_fixture()
+      assert Accounts.get_password_reset!(user.reset_token) == user
+    end
+
+    test "get_password_reset!/1 raise exception when reset_token is nil" do
+      user = insert(:user)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_password_reset!(user.reset_token) end
+    end
+
+    test "create_password_reset/1 with valid data creates a password_reset" do
+      assert {:ok, %User{} = user} = Accounts.create_password_reset(insert(:user))
+      refute user.reset_token |> is_nil()
+      refute user.reset_sent_at |> is_nil()
+    end
+
+    test "update_password_reset/2 with valid data updates the user password and deletes password reset" do
+      user = password_reset_fixture()
+      new_password = "newpassword"
+
+      assert {:ok, %User{} = user} =
+               Accounts.update_password_reset(user, %{"password" => new_password})
+
+      assert {:ok, _user} =
+               Accounts.verify_user(%{"email" => user.email, "password" => new_password})
+
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_password_reset!(user.reset_token) end
+    end
+
+    test "update_password_reset/2 with expired invite returns error" do
+      expired_time =
+        NaiveDateTime.utc_now()
+        |> Timex.shift(minutes: -11)
+        |> NaiveDateTime.truncate(:second)
+
+      user = password_reset_fixture(reset_sent_at: expired_time)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Accounts.update_password_reset(user, %{"password" => "doesntmatter"})
+
+      assert Accounts.get_password_reset!(user.reset_token) == user
+    end
+
+    test "delete_password_reset/1 deletes the password_reset" do
+      user = password_reset_fixture()
+      assert {:ok, %User{} = user} = Accounts.delete_password_reset(user)
+      assert is_nil(user.reset_token)
+      assert is_nil(user.reset_sent_at)
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Accounts.get_password_reset!(user.reset_token)
+      end
     end
   end
 end

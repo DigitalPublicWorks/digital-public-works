@@ -1,0 +1,13 @@
+<div class="row justify-content-center">
+  <div class="col col-main-small">
+    <div class="card mb-4">
+      <div class="card-body">
+        <h3 class="card-title">Update Password</h3>
+        <%= form_for @conn, Routes.password_reset_path(@conn, :update, @user.reset_token), fn f -> %>
+          <%= PBF.password_input f, :password, [input: [autofocus: true]] %>
+          <%= PBF.submit f, "Update Password", class: "btn btn-primary float-right" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

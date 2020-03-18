@@ -36,6 +36,11 @@ defmodule DigitalPublicWorksWeb.Router do
 
     resources "/user", UserController, singleton: true
     resources "/session", SessionController, singleton: true
+
+    get "/forgot_password", PasswordResetController, :new
+    post "/forgot_passowrd", PasswordResetController, :create
+    get "/update_password/:reset_token", PasswordResetController, :edit
+    post "/update_password/:reset_token", PasswordResetController, :update
   end
 
   scope "/" do

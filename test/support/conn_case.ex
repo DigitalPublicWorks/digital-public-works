@@ -26,6 +26,8 @@ defmodule DigitalPublicWorksWeb.ConnCase do
       @endpoint DigitalPublicWorksWeb.Endpoint
 
       import DigitalPublicWorks.Factory
+
+      use Bamboo.Test
     end
   end
 
