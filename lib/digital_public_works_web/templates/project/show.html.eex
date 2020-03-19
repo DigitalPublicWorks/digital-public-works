@@ -11,7 +11,13 @@
         <% end %>
 
         <%= if can? @current_user, :edit, @project do %>
+          <%= link "Manage Users", to: Routes.project_invite_path(@conn, :index, @project), class: "btn btn-link" %>
+
           <%= link "Edit", to: Routes.project_path(@conn, :edit, @project), class: "btn btn-link" %>
+        <% end %>
+
+        <%= if can? @current_user, :leave, @project do %>
+          <%= link "Leave Project", to: Routes.project_path(@conn, :leave, @project), method: :put, class: "btn btn-link", data_confirm: "Are you sure you want to leave this project? The project owner will need to send you an invite to rejoin." %>
         <% end %>
 
         <%= if can? @current_user, :follow, @project do %>

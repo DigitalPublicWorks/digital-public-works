@@ -1,9 +1,11 @@
 <div class="row justify-content-center">
-  <%= unless Enum.empty?(@owned_projects) and Enum.empty?(@followed_projects) do %>
+  <%= unless @owned_projects ++ @followed_projects ++ @joined_projects == [] do %>
     <div class="col-md col-sidebar">
       <div class="card mb-4">
         <div class="card-body">
           <%= render "_sidebar_group.html", Map.merge(assigns, %{title: "Your Projects", projects: @owned_projects}) %>
+          <div class="my-4"></div>
+          <%= render "_sidebar_group.html", Map.merge(assigns, %{title: "Joined Projects", projects: @joined_projects}) %>
           <div class="my-4"></div>
           <%= render "_sidebar_group.html", Map.merge(assigns, %{title: "Followed Projects", projects: @followed_projects}) %>
         </div>

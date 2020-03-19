@@ -222,4 +222,31 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
     end
   end
 
+  describe "leave project" do
+    @tag :as_user
+    test  "user can leave project", %{conn: conn, user: user} do
+      project = insert(:project)
+      DigitalPublicWorks.Projects.add_user(project, user)
+
+      conn = put(conn, Routes.project_path(conn, :leave, project))
+
+      assert redirected_to(conn) == Routes.project_path(conn, :show, project)
+      assert get_flash(conn, :info) =~ "Left project"
+    end
+  end
+
+  describe "remove user" do
+    @tag :as_user
+    test  "user can remove joined user", %{conn: conn, user: user} do
+      joined_user = insert(:user)
+      project = insert(:project, user: user)
+      DigitalPublicWorks.Projects.add_user(project, joined_user)
+
+      conn = delete(conn, Routes.project_path(conn, :remove_user, project, joined_user))
+
+      assert redirected_to(conn) == Routes.project_invite_path(conn, :index, project)
+      assert get_flash(conn, :info) =~ "Removed user"
+    end
+  end
+
 end

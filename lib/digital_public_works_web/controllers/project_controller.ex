@@ -1,9 +1,8 @@
 defmodule DigitalPublicWorksWeb.ProjectController do
   use DigitalPublicWorksWeb, :controller
 
-  alias DigitalPublicWorks.Projects
+  alias DigitalPublicWorks.{Projects, Posts, Accounts}
   alias DigitalPublicWorks.Projects.Project
-  alias DigitalPublicWorks.Posts
 
   plug :get_project
   plug :check_auth
@@ -133,7 +132,7 @@ defmodule DigitalPublicWorksWeb.ProjectController do
     {:ok, _} = Projects.add_follower(project, user)
 
     conn
-    |> put_flash(:info, "Project followed")
+    |> put_flash(:info, "Project followed.")
     |> redirect(to: Routes.project_path(conn, :show, project))
   end
 
@@ -144,7 +143,29 @@ defmodule DigitalPublicWorksWeb.ProjectController do
     Projects.remove_follower(project, user)
 
     conn
-    |> put_flash(:info, "Project unfollowed")
+    |> put_flash(:info, "Project unfollowed.")
     |> redirect(to: Routes.project_path(conn, :show, project))
+  end
+
+  def leave(conn, _params) do
+    project = conn.assigns.project
+    user = conn.assigns.current_user
+
+    Projects.remove_user(project, user)
+
+    conn
+    |> put_flash(:info, "Left project.")
+    |> redirect(to: Routes.project_path(conn, :show, project))
+  end
+
+  def remove_user(conn, %{"user_id" => user_id}) do
+    project = conn.assigns.project
+    user = Accounts.get_user!(user_id)
+
+    Projects.remove_user(project, user)
+
+    conn
+    |> put_flash(:info, "Removed user.")
+    |> redirect(to: Routes.project_invite_path(conn, :index, project))
   end
 end
