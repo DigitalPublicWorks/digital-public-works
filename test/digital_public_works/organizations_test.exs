@@ -7,7 +7,11 @@ defmodule DigitalPublicWorks.OrganizationsTest do
     alias DigitalPublicWorks.Organizations.Organization
 
     @valid_attrs %{description: "some description", name: "some name", slug: "some slug"}
-    @update_attrs %{description: "some updated description", name: "some updated name", slug: "some updated slug"}
+    @update_attrs %{
+      description: "some updated description",
+      name: "some updated name",
+      slug: "some updated slug"
+    }
     @invalid_attrs %{description: nil, name: nil, slug: nil}
 
     def organization_fixture(attrs \\ %{}) do
@@ -30,7 +34,9 @@ defmodule DigitalPublicWorks.OrganizationsTest do
     end
 
     test "create_organization/1 with valid data creates a organization" do
-      assert {:ok, %Organization{} = organization} = Organizations.create_organization(@valid_attrs)
+      assert {:ok, %Organization{} = organization} =
+               Organizations.create_organization(@valid_attrs)
+
       assert organization.description == "some description"
       assert organization.name == "some name"
       assert organization.slug == "some slug"
@@ -42,7 +48,10 @@ defmodule DigitalPublicWorks.OrganizationsTest do
 
     test "update_organization/2 with valid data updates the organization" do
       organization = organization_fixture()
-      assert {:ok, %Organization{} = organization} = Organizations.update_organization(organization, @update_attrs)
+
+      assert {:ok, %Organization{} = organization} =
+               Organizations.update_organization(organization, @update_attrs)
+
       assert organization.description == "some updated description"
       assert organization.name == "some updated name"
       assert organization.slug == "some updated slug"
@@ -50,7 +59,10 @@ defmodule DigitalPublicWorks.OrganizationsTest do
 
     test "update_organization/2 with invalid data returns error changeset" do
       organization = organization_fixture()
-      assert {:error, %Ecto.Changeset{}} = Organizations.update_organization(organization, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Organizations.update_organization(organization, @invalid_attrs)
+
       assert organization == Organizations.get_organization!(organization.id)
     end
 
@@ -63,6 +75,42 @@ defmodule DigitalPublicWorks.OrganizationsTest do
     test "change_organization/1 returns a organization changeset" do
       organization = organization_fixture()
       assert %Ecto.Changeset{} = Organizations.change_organization(organization)
+    end
+
+    test "can add and remove users from organization" do
+      organization = organization_fixture()
+      user = insert(:user).id |> DigitalPublicWorks.Accounts.get_user!()
+
+      assert organization |> Ecto.assoc(:users) |> Repo.all() == []
+      refute Organizations.is_user?(organization, user)
+
+      Organizations.add_user(organization, user)
+      assert organization |> Ecto.assoc(:users) |> Repo.all() == [user]
+      assert Organizations.is_user?(organization, user)
+
+      Organizations.remove_user(organization, user)
+      assert organization |> Ecto.assoc(:users) |> Repo.all() == []
+      refute Organizations.is_user?(organization, user)
+    end
+
+    test "can add and remove projects from organization" do
+      organization = organization_fixture()
+      project = insert(:project).id |> DigitalPublicWorks.Projects.get_project!()
+
+      assert organization |> Ecto.assoc(:projects) |> Repo.all() == []
+      refute Organizations.is_project?(organization, project)
+
+      Organizations.add_project(organization, project)
+
+      assert organization |> Ecto.assoc(:projects) |> Repo.all() |> Repo.preload(:user) == [
+               project
+             ]
+
+      assert Organizations.is_project?(organization, project)
+
+      Organizations.remove_project(organization, project)
+      assert organization |> Ecto.assoc(:projects) |> Repo.all() == []
+      refute Organizations.is_project?(organization, project)
     end
   end
 end

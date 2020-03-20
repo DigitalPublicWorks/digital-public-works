@@ -101,4 +101,50 @@ defmodule DigitalPublicWorks.Organizations do
   def change_organization(%Organization{} = organization) do
     Organization.changeset(organization, %{})
   end
+
+  alias DigitalPublicWorks.Accounts.User
+  alias DigitalPublicWorks.Organizations.OrganizationUser
+
+  def add_user(%Organization{} = organization, %User{} = user) do
+    %OrganizationUser{}
+    |> Ecto.Changeset.change(%{organization_id: organization.id, user_id: user.id})
+    |> Repo.insert()
+  end
+
+  def remove_user(%Organization{} = organization, %User{} = user) do
+    organization_user_query(organization, user) |> Repo.delete_all()
+  end
+
+  def is_user?(%Organization{} = organization, %User{} = user) do
+    organization_user_query(organization, user) |> Repo.exists?()
+  end
+
+  defp organization_user_query(%Organization{} = organization, %User{} = user) do
+    from(o in OrganizationUser,
+      where: o.organization_id == ^organization.id and o.user_id == ^user.id
+    )
+  end
+
+  alias DigitalPublicWorks.Projects.Project
+  alias DigitalPublicWorks.Organizations.OrganizationProject
+
+  def add_project(%Organization{} = organization, %Project{} = project) do
+    %OrganizationProject{}
+    |> Ecto.Changeset.change(%{organization_id: organization.id, project_id: project.id})
+    |> Repo.insert()
+  end
+
+  def remove_project(%Organization{} = organization, %Project{} = project) do
+    organization_project_query(organization, project) |> Repo.delete_all()
+  end
+
+  def is_project?(%Organization{} = organization, %Project{} = project) do
+    organization_project_query(organization, project) |> Repo.exists?()
+  end
+
+  defp organization_project_query(%Organization{} = organization, %Project{} = project) do
+    from(o in OrganizationProject,
+      where: o.organization_id == ^organization.id and o.project_id == ^project.id
+    )
+  end
 end
