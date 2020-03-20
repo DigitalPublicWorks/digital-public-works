@@ -62,5 +62,13 @@ defmodule DigitalPublicWorks.AccountsTest do
       user = user_fixture()
       assert %Ecto.Changeset{} = Accounts.change_user(user)
     end
+
+    test "email column is case insensitve" do
+      {:ok, %User{} = user} = Accounts.create_user(%{email: "testing@example.com", password: "test1234"})
+
+      {:error, %Ecto.Changeset{}} = Accounts.create_user(%{email: "TESTING@example.com", password: "test1234"})
+
+      {:ok, ^user} = Accounts.verify_user(%{"email" => "TESTing@example.COM", "password" => "test1234"})
+    end
   end
 end
