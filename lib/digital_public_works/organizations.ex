@@ -102,6 +102,10 @@ defmodule DigitalPublicWorks.Organizations do
     Organization.changeset(organization, %{})
   end
 
+  def get_organization_by_slug(slug) do
+    from(o in Organization, where: [slug: ^slug]) |> Repo.one()
+  end
+
   alias DigitalPublicWorks.Accounts.User
   alias DigitalPublicWorks.Organizations.OrganizationUser
 

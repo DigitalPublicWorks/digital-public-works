@@ -41,6 +41,8 @@ defmodule DigitalPublicWorksWeb.Router do
 
     resources "/user", UserController, singleton: true
     resources "/session", SessionController, singleton: true
+
+    get "/o/:slug", OrganizationController, :show
   end
 
   scope "/" do

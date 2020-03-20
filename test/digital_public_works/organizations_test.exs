@@ -77,6 +77,11 @@ defmodule DigitalPublicWorks.OrganizationsTest do
       assert %Ecto.Changeset{} = Organizations.change_organization(organization)
     end
 
+    test "get_organization_by_slug/1 returns a organization" do
+      organization = organization_fixture()
+      assert organization == Organizations.get_organization_by_slug(organization.slug)
+    end
+
     test "can add and remove users from organization" do
       organization = organization_fixture()
       user = insert(:user).id |> DigitalPublicWorks.Accounts.get_user!()

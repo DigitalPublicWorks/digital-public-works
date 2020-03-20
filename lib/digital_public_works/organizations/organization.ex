@@ -25,3 +25,7 @@ defmodule DigitalPublicWorks.Organizations.Organization do
     |> validate_required([:name, :slug, :description])
   end
 end
+
+defimpl Phoenix.Param, for: DigitalPublicWorks.Organizations.Organization do
+  def to_param(%{slug: slug}), do: slug
+end
