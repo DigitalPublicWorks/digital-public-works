@@ -44,4 +44,13 @@ defmodule DigitalPublicWorksWeb.Permission do
     end
   end
 
+  alias DigitalPublicWorks.{Organizations, Organizations.Organization}
+  def can?(user, action, %Organization{} = organization) do
+    cond do
+      action in [:show] -> true
+      action in [:add_project, :remove_project] ->
+        user && Organizations.is_user?(organization, user)
+    end
+  end
+
 end

@@ -42,7 +42,11 @@ defmodule DigitalPublicWorksWeb.Router do
     resources "/user", UserController, singleton: true
     resources "/session", SessionController, singleton: true
 
-    get "/o/:slug", OrganizationController, :show
+    scope "/o/:slug" do
+      get "/", OrganizationController, :show
+      post "/projects", OrganizationProjectController, :create
+      delete "/projects", OrganizationProjectController, :delete
+    end
   end
 
   scope "/" do
