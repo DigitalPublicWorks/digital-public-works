@@ -19,7 +19,7 @@
       <div style="position: relative;">
         <%= render DigitalPublicWorksWeb.ProjectView, "_project.html", Map.put(assigns, :project, project) %>
 
-        <%= if can? @current_user, :add_project, @organization do %>
+        <%= if can? @current_user, :remove_project, @organization do %>
           <%=
             link "Remove",
               to: Routes.organization_path(@conn, :remove_project, @organization, %{project_id: project.id}),
