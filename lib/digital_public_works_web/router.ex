@@ -44,8 +44,8 @@ defmodule DigitalPublicWorksWeb.Router do
 
     scope "/o/:slug" do
       get "/", OrganizationController, :show
-      post "/projects", OrganizationProjectController, :create
-      delete "/projects", OrganizationProjectController, :delete
+      post "/projects", OrganizationController, :add_project
+      delete "/projects", OrganizationController, :remove_project
     end
   end
 

@@ -4,7 +4,7 @@ defmodule DigitalPublicWorksWeb.Plugs.GetOrganization do
 
   alias DigitalPublicWorks.Organizations
 
-  def init(id_key), do: id_key || "id"
+  def init(opts), do: opts
 
   def call(%{params: %{"slug" => slug}} = conn, _args) do
     case Organizations.get_organization_by_slug(slug) do

@@ -5,9 +5,13 @@
     <p><%= @organization.description %></p>
 
     <%= if can? @current_user, :add_project, @organization do %>
-      <%= form_for @conn, Routes.organization_project_path(@conn, :create, @organization), [class: "form-inline d-flex"], fn f -> %>
-        <%= text_input f, :project_id, [placeholder: "Project ID or URL", class: "form-control"] %>
-        <%= submit "Add Project", class: "btn btn-primary" %>
+      <%= form_for @conn, Routes.organization_path(@conn, :add_project, @organization), [autocomplete: "off"], fn f -> %>
+        <div class="input-group">
+          <%= text_input f, :project_id, [placeholder: "Project ID (i.e. d0058b7d-33da-4179-ad5f-3efada50b5d6)", class: "form-control"] %>
+          <div class="input-group-append">
+            <%= submit "Add Project", class: "btn btn-primary" %>
+          </div>
+        </div>
       <% end %>
     <% end %>
 
@@ -18,7 +22,7 @@
         <%= if can? @current_user, :add_project, @organization do %>
           <%=
             link "Remove",
-              to: Routes.organization_project_path(@conn, :delete, @organization, %{project_id: project.id}),
+              to: Routes.organization_path(@conn, :remove_project, @organization, %{project_id: project.id}),
               method: :delete,
               class: "btn btn-link text-danger p-4",
               style: "position: absolute; bottom: 0; right: 0"

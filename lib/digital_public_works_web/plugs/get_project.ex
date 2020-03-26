@@ -7,9 +7,7 @@ defmodule DigitalPublicWorksWeb.Plugs.GetProject do
   def init(id_key), do: id_key || "id"
 
   def call(conn, id_key) do
-    %{params: %{^id_key => id}} = conn
-
-    case get_project(id) do
+    case get_project(conn.params[id_key]) do
       nil -> conn |> not_found()
       project -> conn |> assign(:project, project)
     end
@@ -26,7 +24,17 @@ defmodule DigitalPublicWorksWeb.Plugs.GetProject do
   defp not_found(conn) do
     conn
     |> put_flash(:error, "Project not found")
-    |> redirect(to: "/")
+    |> redirect(to: redirect_url(conn))
     |> halt()
+  end
+
+  defp redirect_url(conn) do
+    url =
+      conn
+      |> Plug.Conn.get_req_header("referer")
+      |> Enum.at(0)
+      |> URI.parse
+
+    "#{url.path}?#{url.query}"
   end
 end
