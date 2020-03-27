@@ -24,6 +24,10 @@ defmodule DigitalPublicWorks.DataCase do
       import DigitalPublicWorks.DataCase
 
       import DigitalPublicWorks.Factory
+
+      def reload(%DigitalPublicWorks.Projects.Project{id: id}) do
+        DigitalPublicWorks.Projects.get_project!(id)
+      end
     end
   end
 

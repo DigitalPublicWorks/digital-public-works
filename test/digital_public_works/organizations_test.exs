@@ -3,6 +3,10 @@ defmodule DigitalPublicWorks.OrganizationsTest do
 
   alias DigitalPublicWorks.Organizations
 
+  defp get_organization_projects(organization) do
+    organization |> Ecto.assoc(:projects) |> Repo.all() |> Repo.preload([:user, :organizations])
+  end
+
   describe "organizations" do
     alias DigitalPublicWorks.Organizations.Organization
 
@@ -102,19 +106,15 @@ defmodule DigitalPublicWorks.OrganizationsTest do
       organization = organization_fixture()
       project = insert(:project).id |> DigitalPublicWorks.Projects.get_project!()
 
-      assert organization |> Ecto.assoc(:projects) |> Repo.all() == []
+      assert get_organization_projects(organization) == []
       refute Organizations.is_project?(organization, project)
 
       Organizations.add_project(organization, project)
-
-      assert organization |> Ecto.assoc(:projects) |> Repo.all() |> Repo.preload(:user) == [
-               project
-             ]
-
+      assert get_organization_projects(organization) == [project |> reload()]
       assert Organizations.is_project?(organization, project)
 
       Organizations.remove_project(organization, project)
-      assert organization |> Ecto.assoc(:projects) |> Repo.all() == []
+      assert get_organization_projects(organization) == []
       refute Organizations.is_project?(organization, project)
     end
   end

@@ -12,9 +12,9 @@ defmodule DigitalPublicWorksWeb.Permission do
       action in [:edit, :update, :delete, :remove_user] ->
         user && user.id == project.user_id
       action in [:publish] ->
-        user && user.is_admin && !project.is_public
+        user && user.id == project.user_id && !project.is_public
       action in [:unpublish] ->
-        user && user.is_admin && project.is_public
+        user && user.id == project.user_id && project.is_public
       action in [:follow] ->
         user && user.id != project.user_id && !Projects.is_follower?(project, user) && !Projects.is_user?(project, user)
       action in [:unfollow] ->

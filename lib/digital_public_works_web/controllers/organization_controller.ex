@@ -9,7 +9,7 @@ defmodule DigitalPublicWorksWeb.OrganizationController do
 
   def show(%{assigns: %{organization: organization}} = conn, _params) do
     conn
-    |> assign(:organization, organization |> Repo.preload(projects: :user))
+    |> assign(:organization, organization |> Repo.preload(projects: [:user, :organizations]))
     |> render("show.html")
   end
 

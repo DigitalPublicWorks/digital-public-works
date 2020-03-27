@@ -18,26 +18,21 @@ defmodule DigitalPublicWorks.Projects do
       [%Project{}, ...]
 
   """
-  def list_projects(_user \\ nil, _search \\ nil)
+  def list_projects() do
+    Project
+    |> filter_projects()
+    |> Repo.all()
+  end
 
-  def list_projects(nil, search) do
+  def list_published_projects(search \\ nil) do
     Project
     |> where(is_public: true)
     |> filter_projects(search)
     |> Repo.all()
   end
 
-  def list_projects(%User{is_admin: true}, search) do
-    Project
-    |> filter_projects(search)
-    |> Repo.all()
-  end
-
-  def list_projects(%User{id: user_id}, search) do
-    from(p in Project,
-      left_join: u in assoc(p, :users),
-      where: p.is_public == true or p.user_id == ^user_id or u.id == ^user_id
-    )
+  def list_endorsed_projects(search \\ nil) do
+    from(p in Project, where: [is_public: true], right_join: o in assoc(p, :organizations))
     |> filter_projects(search)
     |> Repo.all()
   end
@@ -63,6 +58,7 @@ defmodule DigitalPublicWorks.Projects do
   def list_joined_projects(%User{} = user) do
     user
     |> Ecto.assoc(:joined_projects)
+    |> filter_projects()
     |> Repo.all()
   end
 
@@ -76,14 +72,15 @@ defmodule DigitalPublicWorks.Projects do
     from p in query,
       order_by: [desc: :is_featured],
       order_by: [desc: :inserted_at],
-      preload: [:user]
+      preload: [:user, :organizations]
   end
 
   defp filter_projects(query, search) do
     from p in query,
       where: fragment("to_tsvector(title || ' ' || body) @@ plainto_tsquery(?)", ^search),
       order_by:
-        fragment("ts_rank(to_tsvector(title || ' ' || body), plainto_tsquery(?)) DESC", ^search)
+        fragment("ts_rank(to_tsvector(title || ' ' || body), plainto_tsquery(?)) DESC", ^search),
+      preload: [:user, :organizations]
   end
 
   @doc """
@@ -119,7 +116,7 @@ defmodule DigitalPublicWorks.Projects do
       ** (Ecto.NoResultsError)
 
   """
-  def get_project!(id), do: Repo.get!(Project, id) |> Repo.preload([:user])
+  def get_project!(id), do: Repo.get!(Project, id) |> Repo.preload([:user, :organizations])
 
   @doc """
   Creates a project.

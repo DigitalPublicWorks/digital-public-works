@@ -1,14 +1,20 @@
-<div class="card my-4">
-  <div class="card-body">
-      <%= if @project.is_featured do %>
-        <div class="badge badge-success float-right ml-2 mb-2">Featured</div>
-      <% end %>
-      <%= unless @project.is_public do %>
-        <%= link "Unpublished",
-          to: Routes.project_path(@conn, :show, @project),
-          class: "badge badge-warning float-right ml-2 mb-2"
-        %>
-      <% end %>
+<div class="card mb-4">
+  <%= unless Enum.empty?(@project.organizations) do %>
+    <div class="card-header">
+      Endorsed by
+      <%= organization_links @conn, @project %>
+    </div>
+  <% end %>
+  <div class="card-body" style="position: relative;">
+    <%= if @project.is_featured do %>
+      <div class="badge badge-success float-right ml-2 mb-2">Featured</div>
+    <% end %>
+    <%= unless @project.is_public do %>
+      <%= link "Unpublished",
+        to: Routes.project_path(@conn, :show, @project),
+        class: "badge badge-warning float-right ml-2 mb-2"
+      %>
+    <% end %>
     <h5 class="card-title">
       <%= @project.title %>
       <small>
