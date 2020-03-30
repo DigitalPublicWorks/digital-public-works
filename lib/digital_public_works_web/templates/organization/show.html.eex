@@ -15,7 +15,7 @@
       <% end %>
     <% end %>
 
-    <%= for project <- @organization.projects do %>
+    <%= for project <- @projects do %>
       <div style="position: relative;">
         <%= render DigitalPublicWorksWeb.ProjectView, "_project.html", Map.put(assigns, :project, project) %>
 

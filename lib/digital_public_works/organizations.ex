@@ -123,6 +123,8 @@ defmodule DigitalPublicWorks.Organizations do
     organization_user_query(organization, user) |> Repo.exists?()
   end
 
+  def is_user?(_, nil), do: false
+
   defp organization_user_query(%Organization{} = organization, %User{} = user) do
     from(o in OrganizationUser,
       where: o.organization_id == ^organization.id and o.user_id == ^user.id
@@ -145,6 +147,8 @@ defmodule DigitalPublicWorks.Organizations do
   def is_project?(%Organization{} = organization, %Project{} = project) do
     organization_project_query(organization, project) |> Repo.exists?()
   end
+
+  def is_project?(_, nil), do: false
 
   defp organization_project_query(%Organization{} = organization, %Project{} = project) do
     from(o in OrganizationProject,

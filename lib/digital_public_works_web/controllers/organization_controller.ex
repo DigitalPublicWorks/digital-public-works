@@ -1,15 +1,26 @@
 defmodule DigitalPublicWorksWeb.OrganizationController do
   use DigitalPublicWorksWeb, :controller
 
-  alias DigitalPublicWorks.{Organizations, Repo}
+  alias DigitalPublicWorks.{Organizations, Projects}
 
   plug DigitalPublicWorksWeb.Plugs.GetOrganization
   plug DigitalPublicWorksWeb.Plugs.GetProject, "project_id" when action in [:add_project, :remove_project]
   plug DigitalPublicWorksWeb.Plugs.Authorize, :organization
 
   def show(%{assigns: %{organization: organization}} = conn, _params) do
+    import Projects, only: [all: 0, for_organization: 2, published: 1, fetch: 1]
+
+    projects = all() |> for_organization(organization)
+
+    projects =
+      if Organizations.is_user?(organization, conn.assigns.current_user) do
+        projects
+      else
+        projects |> published()
+      end
+
     conn
-    |> assign(:organization, organization |> Repo.preload(projects: [:user, :organizations]))
+    |> assign(:projects, projects |> fetch())
     |> render("show.html")
   end
 
