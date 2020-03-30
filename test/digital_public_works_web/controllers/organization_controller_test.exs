@@ -28,12 +28,29 @@ defmodule DigitalPublicWorksWeb.OrganizationControllerTest do
   end
 
   describe "show organization" do
-    setup [:create_organization]
+    setup [:create_organization, :create_organization_project]
 
     test "displays name", %{conn: conn, organization: organization} do
       conn = get(conn, Routes.organization_path(conn, :show, organization))
 
       assert html_response(conn, 200) =~ organization.name
+    end
+
+    @tag :as_user
+    test "shows unpublished projects to org members", %{conn: conn, user: user, organization: organization, organization_project: organization_project} do
+      Organizations.add_user(organization, user)
+
+      conn = get(conn, Routes.organization_path(conn, :show, organization))
+
+      assert html_response(conn, 200) =~ organization_project.title
+      assert html_response(conn, 200) =~ "Unpublished"
+    end
+
+    test "doesn't show unpublished projects to non-org members", %{conn: conn, organization: organization, organization_project: organization_project} do
+      conn = get(conn, Routes.organization_path(conn, :show, organization))
+
+      refute html_response(conn, 200) =~ organization_project.title
+      refute html_response(conn, 200) =~ "Unpublished"
     end
   end
 
