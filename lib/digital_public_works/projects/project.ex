@@ -35,13 +35,17 @@ defmodule DigitalPublicWorks.Projects.Project do
     |> unique_constraint(:title)
     |> sanitize_about()
     |> generate_slug()
-    |> unique_constraint(:title,
-      name: "project_slugs_pkey",
-      message: "has already been taken"
-    )
     |> foreign_key_constraint(:followers,
       name: "projects_followers_project_id_fkey",
       message: "You can't delete a project that has followers."
+    )
+    |> unique_constraint(:title,
+      name: "projects_slug_index",
+      message: "has already been taken"
+    )
+    |> unique_constraint(:title,
+      name: "project_slugs_pkey",
+      message: "has already been taken"
     )
   end
 
