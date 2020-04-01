@@ -121,4 +121,52 @@ defmodule DigitalPublicWorks.ProjectsTest do
       assert Projects.is_user?(project, user) == false
     end
   end
+
+  describe "project slugs" do
+    test "slug is created automatically" do
+      project =
+        with {:ok, project} <-
+               Projects.create_project(insert(:user), %{title: "Hello World!", body: "test"}),
+             do: project |> reload
+
+      assert project.slug == "hello-world"
+    end
+
+    test "project can be looked up by last 10 slugs" do
+      project = insert(:project) |> reload()
+
+      original_slug = project.slug
+      original_title = project.title
+
+      assert project == Projects.get_project_by_slug!(original_slug)
+
+      for i <- 0..9 do
+        {:ok, _} = Projects.update_project(project, %{title: "#{original_title} #{i}"})
+      end
+
+      project = project |> reload()
+
+      for i <- 0..9 do
+        assert project == Projects.get_project_by_slug!("#{original_slug}-#{i}")
+      end
+
+      assert_raise Ecto.NoResultsError, fn -> Projects.get_project_by_slug!(original_slug) end
+    end
+
+    test "project can't use old slug of another project" do
+      p1 = insert(:project) |> reload()
+      p2 = insert(:project) |> reload()
+
+      old_slug = p1.slug
+
+      refute p1.slug == p1.title
+
+      {:ok, p1} = Projects.update_project(p1, %{title: "Hello World!"})
+
+      refute p1.slug == old_slug
+
+      {:error, %Ecto.Changeset{errors: [title: {"has already been taken", _}]}} = Projects.update_project(p2, %{title: old_slug})
+    end
+
+  end
 end

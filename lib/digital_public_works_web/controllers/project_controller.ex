@@ -7,6 +7,10 @@ defmodule DigitalPublicWorksWeb.ProjectController do
   plug :get_project
   plug :check_auth
 
+  defp get_project(%{params: %{"slug" => slug}} = conn, _args) do
+    conn |> assign(:project, Projects.get_project_by_slug!(slug))
+  end
+
   defp get_project(%{params: %{"id" => id}} = conn, _args) do
     conn |> assign(:project, Projects.get_project!(id))
   end
@@ -56,6 +60,12 @@ defmodule DigitalPublicWorksWeb.ProjectController do
         render(conn, "new.html", changeset: changeset)
     end
   end
+
+  # def show(conn, %{"id" => _}) do
+  #   conn
+  #   |> redirect(to: Routes.pretty_project_path(conn, :show, conn.assigns.project.slug))
+  #   |> halt()
+  # end
 
   def show(conn, _params) do
     conn

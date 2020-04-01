@@ -26,6 +26,8 @@ defmodule DigitalPublicWorksWeb.Router do
       resources "/invites", ProjectInviteController, only: [:index, :create, :delete], as: :invite
     end
 
+    get "/p/:slug", ProjectController, :show, as: :pretty_project
+
     scope "/projects/:id" do
       put "/publish", ProjectController, :publish
       put "/unpublish", ProjectController, :unpublish

@@ -15,7 +15,8 @@ defmodule DigitalPublicWorks.Factory do
 
   def project_factory do
     %Project{
-      title: sequence(:email, &"Project #{&1}"),
+      title: sequence(:title, &"Project #{&1}"),
+      slug: sequence(:slug, &"project-#{&1}"),
       body: "test description",
       user: build(:user)
     }

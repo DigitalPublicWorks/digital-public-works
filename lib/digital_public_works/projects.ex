@@ -121,6 +121,11 @@ defmodule DigitalPublicWorks.Projects do
   """
   def get_project!(id), do: Repo.get!(Project, id) |> Repo.preload([:user])
 
+  def get_project_by_slug!(slug) do
+    from(p in Project, inner_join: s in assoc(p, :project_slugs), where: s.slug == ^slug)
+    |> Repo.one!() |> Repo.preload([:user])
+  end
+
   @doc """
   Creates a project.
 
