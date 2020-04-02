@@ -61,12 +61,6 @@ defmodule DigitalPublicWorksWeb.ProjectController do
     end
   end
 
-  # def show(conn, %{"id" => _}) do
-  #   conn
-  #   |> redirect(to: Routes.pretty_project_path(conn, :show, conn.assigns.project.slug))
-  #   |> halt()
-  # end
-
   def show(conn, _params) do
     conn
     |> assign(:posts, Posts.list_posts(conn.assigns.project))
