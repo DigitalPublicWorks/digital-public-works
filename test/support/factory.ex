@@ -36,4 +36,12 @@ defmodule DigitalPublicWorks.Factory do
       project: build(:project)
     }
   end
+
+  def organization_factory do
+    %DigitalPublicWorks.Organizations.Organization{
+      name: sequence(:name, &"Organization #{&1}"),
+      description: "Test organization description",
+      slug: sequence(:slug, &"organization-#{&1}")
+    }
+  end
 end

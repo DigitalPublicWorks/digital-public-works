@@ -6,6 +6,7 @@ defmodule DigitalPublicWorks.Projects.Project do
   alias DigitalPublicWorks.Invites.ProjectInvite
   alias DigitalPublicWorks.Projects.{ProjectFollower, ProjectUser, ProjectSlug}
   alias DigitalPublicWorks.Posts.Post
+  alias DigitalPublicWorks.Organizations.{Organization, OrganizationProject}
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -23,6 +24,7 @@ defmodule DigitalPublicWorks.Projects.Project do
     many_to_many :users, User, join_through: ProjectUser
     has_many :project_invites, ProjectInvite
     has_many :project_slugs, ProjectSlug, on_replace: :delete
+    many_to_many :organizations, Organization, join_through: OrganizationProject
 
     timestamps()
   end

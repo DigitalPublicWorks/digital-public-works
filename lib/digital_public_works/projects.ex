@@ -18,65 +18,68 @@ defmodule DigitalPublicWorks.Projects do
       [%Project{}, ...]
 
   """
-  def list_projects(_user \\ nil, _search \\ nil)
+  def list_projects(), do: all() |> fetch()
 
-  def list_projects(nil, search) do
-    Project
-    |> where(is_public: true)
-    |> filter_projects(search)
-    |> Repo.all()
-  end
+  def list_published_projects(search \\ nil), do: all() |> published() |> fetch(search)
 
-  def list_projects(%User{is_admin: true}, search) do
-    Project
-    |> filter_projects(search)
-    |> Repo.all()
-  end
+  def list_featured_projects(), do: all() |> featured() |> fetch()
 
-  def list_projects(%User{id: user_id}, search) do
-    from(p in Project,
-      left_join: u in assoc(p, :users),
-      where: p.is_public == true or p.user_id == ^user_id or u.id == ^user_id
-    )
-    |> filter_projects(search)
-    |> Repo.all()
-  end
+  def list_endorsed_projects(search \\ nil), do: all() |> endorsed() |> fetch(search)
 
-  def list_followed_projects(%User{} = user) do
-    user
-    |> Ecto.assoc(:followed_projects)
-    |> filter_projects()
-    |> Repo.all()
-  end
-
+  def list_followed_projects(%User{} = user), do: all() |> followed_by(user) |> fetch()
   def list_followed_projects(_), do: []
 
-  def list_owned_projects(%User{} = user) do
-    user
-    |> Ecto.assoc(:projects)
-    |> filter_projects()
-    |> Repo.all()
-  end
-
+  def list_owned_projects(%User{} = user), do: all() |> owned_by(user) |> fetch()
   def list_owned_projects(_), do: []
 
-  def list_joined_projects(%User{} = user) do
-    user
-    |> Ecto.assoc(:joined_projects)
-    |> Repo.all()
-  end
-
+  def list_joined_projects(%User{} = user), do: all() |> joined_by(user) |> fetch()
   def list_joined_projects(_), do: []
 
-  defp filter_projects(query, search \\ nil)
+  @doc """
+    scopes
+
+  """
+
+  def all(), do: Project
+
+  def published(query) do
+    from(p in query, where: [is_public: true])
+  end
+
+  def featured(query) do
+    from(p in query, where: [is_featured: true])
+  end
+
+  def endorsed(query) do
+    from(p in query, inner_join: o in assoc(p, :organizations))
+  end
+
+  def joined_by(query, user) do
+    from(p in query, inner_join: u in assoc(p, :users), where: u.id == ^user.id)
+  end
+
+  def owned_by(query, user) do
+    from(p in query, inner_join: u in assoc(p, :user), where: u.id == ^user.id)
+  end
+
+  def followed_by(query, user) do
+    from(p in query, inner_join: u in assoc(p, :followers), where: u.id == ^user.id)
+  end
+
+  def for_organization(query, organization) do
+    from(p in query, inner_join: o in assoc(p, :organizations), where: o.id == ^organization.id)
+  end
+
+  def fetch(query, search \\ nil) do
+    from(p in query, preload: [:user, :organizations]) |> filter_projects(search) |> Repo.all()
+  end
 
   defp filter_projects(query, ""), do: filter_projects(query, nil)
 
   defp filter_projects(query, nil) do
     from p in query,
       order_by: [desc: :is_featured],
-      order_by: [desc: :inserted_at],
-      preload: [:user]
+      order_by: [desc: :inserted_at]
   end
 
   defp filter_projects(query, search) do
@@ -84,25 +87,6 @@ defmodule DigitalPublicWorks.Projects do
       where: fragment("to_tsvector(title || ' ' || body) @@ plainto_tsquery(?)", ^search),
       order_by:
         fragment("ts_rank(to_tsvector(title || ' ' || body), plainto_tsquery(?)) DESC", ^search)
-  end
-
-  @doc """
-  Returns the list of featured projects
-
-  ## Examples
-
-      iex> list_featured_projects()
-      [%Project{}, ...]
-
-  """
-  def list_featured_projects do
-    query =
-      from p in Project,
-        where: [is_featured: true]
-
-    query
-    |> filter_projects()
-    |> Repo.all()
   end
 
   @doc """
@@ -119,7 +103,7 @@ defmodule DigitalPublicWorks.Projects do
       ** (Ecto.NoResultsError)
 
   """
-  def get_project!(id), do: Repo.get!(Project, id) |> Repo.preload([:user])
+  def get_project!(id), do: Repo.get!(Project, id) |> Repo.preload([:user, :organizations])
 
   def get_project_by_slug!(slug) do
     from(p in Project, inner_join: s in assoc(p, :project_slugs), where: s.slug == ^slug)

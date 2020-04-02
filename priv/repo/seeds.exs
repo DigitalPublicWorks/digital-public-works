@@ -10,7 +10,7 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
-alias DigitalPublicWorks.{Accounts, Projects, Posts, Repo}
+alias DigitalPublicWorks.{Accounts, Projects, Posts, Organizations, Repo}
 
 {:ok, admin} = Accounts.create_user(%{email: "admin@example.com", password: "test1234"})
 
@@ -38,3 +38,13 @@ Posts.create_post(%{
   body:
     "We rolled out the ability to post project updates which is how you are seeing this message. We also cleaned up the UI by removing placeholder links and text and making it more consistent. We're working on the ability to follow projects. That way you can stay up to date with the projects you are most interested in. We are looking for someone who can help us develop a privacy policy and terms of service."
 })
+
+{:ok, organization} = Organizations.create_organization(%{
+  name: "Code for Milwaukee",
+  slug: "codeformke",
+  description: "Our mission is to enhance the delivery of public services to improve the lives of Milwaukeeans. We aim to create and maintain community resources by engaging residents in relationship building and technical problem-solving."
+})
+
+organization |> Organizations.add_project(project)
+
+organization |> Organizations.add_user(user)
