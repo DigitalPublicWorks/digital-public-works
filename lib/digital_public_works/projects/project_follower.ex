@@ -1,5 +1,6 @@
 defmodule DigitalPublicWorks.Projects.ProjectFollower do
   use Ecto.Schema
+  import Ecto.Changeset
 
   alias DigitalPublicWorks.{Accounts.User, Projects.Project}
 
@@ -15,9 +16,9 @@ defmodule DigitalPublicWorks.Projects.ProjectFollower do
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> Ecto.Changeset.cast(params, [:user_id, :project_id])
-    |> Ecto.Changeset.validate_required([:user_id, :project_id])
-    |> Ecto.Changeset.foreign_key_constraint(:user_id)
-    |> Ecto.Changeset.foreign_key_constraint(:project_id)
+    |> cast(params, [:user_id, :project_id])
+    |> validate_required([:user_id, :project_id])
+    |> foreign_key_constraint(:user_id)
+    |> foreign_key_constraint(:project_id)
   end
 end
