@@ -31,10 +31,10 @@ defmodule DigitalPublicWorksWeb.PostControllerTest do
 
       conn = post(conn, Routes.project_post_path(conn, :create, project), post: @create_attrs)
 
-      assert %{id: id} = redirected_params(conn)
-      assert redirected_to(conn) == Routes.project_path(conn, :show, id)
+      assert %{slug: slug} = redirected_params(conn)
+      assert redirected_to(conn) == Routes.project_path(conn, :show, slug)
 
-      conn = get(conn, Routes.project_path(conn, :show, id))
+      conn = get(conn, Routes.project_path(conn, :show, slug))
       assert html_response(conn, 200) =~ "Test Post"
     end
 
@@ -75,10 +75,10 @@ defmodule DigitalPublicWorksWeb.PostControllerTest do
 
       conn = put(conn, Routes.project_post_path(conn, :update, project, post), post: @update_attrs)
 
-      assert %{id: id} = redirected_params(conn)
-      assert redirected_to(conn) == Routes.project_path(conn, :show, id)
+      assert %{slug: slug} = redirected_params(conn)
+      assert redirected_to(conn) == Routes.project_path(conn, :show, slug)
 
-      conn = get(conn, Routes.project_path(conn, :show, id))
+      conn = get(conn, Routes.project_path(conn, :show, slug))
       assert html_response(conn, 200) =~ "Updated Post"
     end
 

@@ -66,3 +66,7 @@ defmodule DigitalPublicWorks.Projects.Project do
     |> change(%{slug: slug})
   end
 end
+
+defimpl Phoenix.Param, for: DigitalPublicWorks.Projects.Project do
+  def to_param(%{slug: slug}), do: slug
+end

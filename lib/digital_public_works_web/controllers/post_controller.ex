@@ -10,6 +10,10 @@ defmodule DigitalPublicWorksWeb.PostController do
   plug :get_post
   plug :check_auth
 
+  defp get_project(%{params: %{"project_slug" => slug}} = conn, _args) do
+    conn |> assign(:project, Projects.get_project_by_slug!(slug))
+  end
+
   defp get_project(%{params: %{"project_id" => id}} = conn, _args) do
     conn |> assign(:project, Projects.get_project!(id))
   end

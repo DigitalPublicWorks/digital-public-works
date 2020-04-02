@@ -21,14 +21,17 @@ defmodule DigitalPublicWorksWeb.Router do
     get "/terms", PageController, :terms
     get "/privacy", PageController, :privacy
 
-    resources "/projects", ProjectController do
+    get "/p/:slug", ProjectController, :show
+
+    get "/projects", ProjectController, :index
+    get "/projects/new", ProjectController, :new
+
+    resources "/p", ProjectController, [param: "slug", only: [:create, :edit, :update, :delete]] do
       resources "/posts", PostController, only: [:new, :create, :edit, :update, :delete]
       resources "/invites", ProjectInviteController, only: [:index, :create, :delete], as: :invite
     end
 
-    get "/p/:slug", ProjectController, :show, as: :pretty_project
-
-    scope "/projects/:id" do
+    scope "/p/:slug" do
       put "/publish", ProjectController, :publish
       put "/unpublish", ProjectController, :unpublish
       put "/follow", ProjectController, :follow
@@ -38,6 +41,9 @@ defmodule DigitalPublicWorksWeb.Router do
       get "/about/edit", ProjectAboutController, :edit
       put "/about", ProjectAboutController, :update
     end
+
+    get "/projects/:id", ProjectController, :show, as: :permalink_project
+
 
     get "/invites/:id", ProjectInviteController, :update
 

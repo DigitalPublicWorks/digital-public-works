@@ -40,10 +40,10 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
     test "redirects to show when data is valid", %{conn: conn} do
       conn = post(conn, Routes.project_path(conn, :create), project: @create_attrs)
 
-      assert %{id: id} = redirected_params(conn)
-      assert redirected_to(conn) == Routes.project_path(conn, :show, id)
+      assert %{slug: slug} = redirected_params(conn)
+      assert redirected_to(conn) == Routes.project_path(conn, :show, slug)
 
-      conn = get(conn, Routes.project_path(conn, :show, id))
+      conn = get(conn, Routes.project_path(conn, :show, slug))
       assert html_response(conn, 200) =~ @create_attrs.title
     end
 
@@ -72,7 +72,8 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
 
       conn = put(conn, Routes.project_path(conn, :update, project), project: @update_attrs)
 
-      assert redirected_to(conn) == Routes.project_path(conn, :show, project)
+      assert %{slug: slug} = redirected_params(conn)
+      assert redirected_to(conn) == Routes.project_path(conn, :show, slug)
 
       conn = get(conn, Routes.project_path(conn, :show, project))
       assert html_response(conn, 200) =~ "some updated body"
