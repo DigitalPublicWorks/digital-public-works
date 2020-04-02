@@ -46,6 +46,13 @@
 
     <div class="mb-3"><%= @project.body %></div>
 
+    <%= unless Enum.empty?(@project.organizations) do %>
+      <div class="mb-3">
+        Endorsed by
+        <%= organization_links @conn, @project %>
+      </div>
+    <% end %>
+
     <%= if has_content?(@project.about) or can? @current_user, :edit, @project do %>
       <div class="row">
         <div class="col">

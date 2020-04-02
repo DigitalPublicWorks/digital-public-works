@@ -1,6 +1,6 @@
 defmodule DigitalPublicWorksWeb.PageController do
   use DigitalPublicWorksWeb, :controller
-  alias DigitalPublicWorks.{Projects, Posts}
+  alias DigitalPublicWorks.{Projects, Posts, Repo}
 
   def index(%{assigns: %{current_user: current_user}} = conn, _params) when current_user != nil do
     user = conn.assigns.current_user
@@ -11,11 +11,14 @@ defmodule DigitalPublicWorksWeb.PageController do
 
     posts = Posts.list_posts(owned_projects ++ followed_projects ++ joined_projects)
 
+    organizations = user |> Ecto.assoc(:organizations) |> Repo.all()
+
     conn
     |> assign(:owned_projects, owned_projects)
     |> assign(:followed_projects, followed_projects)
     |> assign(:joined_projects, joined_projects)
     |> assign(:posts, posts)
+    |> assign(:organizations, organizations)
     |> render("index_user.html")
   end
 

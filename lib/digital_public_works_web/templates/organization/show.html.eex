@@ -1,0 +1,34 @@
+<div class="row justify-content-center">
+  <div class="col col-main">
+
+    <h3 class="text-center"><%= @organization.name %></h3>
+    <p><%= @organization.description %></p>
+
+    <%= if can? @current_user, :add_project, @organization do %>
+      <%= form_for @conn, Routes.organization_path(@conn, :add_project, @organization), [autocomplete: "off", class: "mb-4"], fn f -> %>
+        <div class="input-group">
+          <%= text_input f, :project_id, [placeholder: "Project ID (i.e. d0058b7d-33da-4179-ad5f-3efada50b5d6)", class: "form-control"] %>
+          <div class="input-group-append">
+            <%= submit "Endorse Project", class: "btn btn-primary" %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+
+    <%= for project <- @projects do %>
+      <div style="position: relative;">
+        <%= render DigitalPublicWorksWeb.ProjectView, "_project.html", Map.put(assigns, :project, project) %>
+
+        <%= if can? @current_user, :remove_project, @organization do %>
+          <%=
+            link "Remove Endorsement",
+              to: Routes.organization_path(@conn, :remove_project, @organization, %{project_id: project.id}),
+              method: :delete,
+              class: "btn btn-link text-danger p-0",
+              style: "position: absolute; top: 0.75em; right: 1.25em"
+          %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,8 +1,21 @@
 <div class="row justify-content-center">
   <div class="col col-main">
-    <%= form_for @conn, Routes.project_path(@conn, :index), [as: :project, method: :get], fn f -> %>
-      <%= text_input f, :q, [autofocus: true, placeholder: "Search...", class: "form-control"] %>
-    <% end %>
+    <form action="<%= Routes.project_path(@conn, :index) %>" class="mb-2">
+      <div class="form-row">
+        <div class="col-sm form-group">
+          <input type="text" name="q" value="<%= @conn.params["q"] %>" autofocus=true placeholder="Search..." class="form-control">
+        </div>
+        <div class="col-auto ml-auto form-group">
+          <div class="form-check m-2">
+            <input class="form-check-input" id="endorsed-only" type="checkbox" name="endorsed" value="true" <%= if @conn.params["endorsed"] == "true", do: "checked" %> />
+            <label class="form-check-label" for="endorsed-only">Endorsed projects only</label>
+          </div>
+        </div>
+        <div class="col-auto form-group">
+          <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+      </div>
+    </form>
 
     <%= render "_projects.html", projects: @projects, conn: @conn %>
   </div>

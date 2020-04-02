@@ -11,25 +11,17 @@ defmodule DigitalPublicWorks.ProjectsTest do
     @invalid_attrs %{body: nil, title: nil}
 
     test "list_projects/2 returns all projects" do
-      owner = insert(:user)
-      other = insert(:user)
-      admin = insert(:user, is_admin: true)
+      project = insert(:project) |> reload()
 
-      project = Projects.get_project!(insert(:project, user: owner).id)
-
-      assert Projects.list_projects(owner) == [project]
-      assert Projects.list_projects(admin) == [project]
-      assert Projects.list_projects(other) == []
-      assert Projects.list_projects        == []
+      assert Projects.list_projects() == [project]
+      assert Projects.list_published_projects() == []
 
       project = project
       |> Ecto.Changeset.change(is_public: true)
       |> Repo.update!
 
-      assert Projects.list_projects(owner) == [project]
-      assert Projects.list_projects(admin) == [project]
-      assert Projects.list_projects(other) == [project]
-      assert Projects.list_projects        == [project]
+      assert Projects.list_projects() |> Repo.preload(:user) == [project]
+      assert Projects.list_published_projects() |> Repo.preload(:user) == [project]
     end
 
     test "get_project!/1 returns the project with given id" do
@@ -107,17 +99,17 @@ defmodule DigitalPublicWorks.ProjectsTest do
 
     test "add and remove user" do
       user = insert(:user)
-      project = Projects.get_project!(insert(:project).id)
+      project = insert(:project) |> reload()
 
-      assert Ecto.assoc(user, :joined_projects) |> Repo.all == []
+      assert Projects.list_joined_projects(user) == []
       assert Projects.is_user?(project, user) == false
 
       Projects.add_user(project, user)
-      assert Ecto.assoc(user, :joined_projects) |> Repo.all |> Repo.preload(:user) == [project]
+      assert Projects.list_joined_projects(user) == [project |> reload()]
       assert Projects.is_user?(project, user) == true
 
       Projects.remove_user(project, user)
-      assert Ecto.assoc(user, :joined_projects) |> Repo.all == []
+      assert Projects.list_joined_projects(user) == []
       assert Projects.is_user?(project, user) == false
     end
   end

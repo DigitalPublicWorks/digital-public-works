@@ -12,16 +12,16 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
     end
 
     test "filters projects not specified by search", %{conn: conn} do
-      project_title = "Milwaukee"
-      insert(:project, title: project_title)
-      conn = get(conn, Routes.project_path(conn, :index), project: %{q: project_title})
+      project_title = "Milwaukee Project"
+      insert(:project, title: project_title, is_public: true)
+      conn = get(conn, Routes.project_path(conn, :index), %{q: "Milwaukee"})
       assert html_response(conn, 200) =~ project_title
     end
 
     test "lists projects specified by search", %{conn: conn} do
-      project_title = "Milwaukee"
-      insert(:project, title: project_title)
-      conn = get(conn, Routes.project_path(conn, :index), project: %{q: "Chicago"})
+      project_title = "Milwaukee Project"
+      insert(:project, title: project_title, is_public: true)
+      conn = get(conn, Routes.project_path(conn, :index), %{q: "Chicago"})
       refute html_response(conn, 200) =~ project_title
     end
   end
@@ -155,8 +155,8 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
 
   describe "publish project" do
     @tag :as_user
-    test  "user can't publish project", %{conn: conn, user: user} do
-      project = insert(:project, user: user)
+    test  "non owner can't publish project", %{conn: conn} do
+      project = insert(:project)
 
       conn = put(conn, Routes.project_path(conn, :publish, project))
 
@@ -164,9 +164,9 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
       assert get_flash(conn, :error) =~ "You don't have access to that"
     end
 
-    @tag :as_admin
-    test  "admin can publish project", %{conn: conn} do
-      project = insert(:project)
+    @tag :as_user
+    test  "owner can publish project", %{conn: conn, user: user} do
+      project = insert(:project, user: user)
 
       conn = put(conn, Routes.project_path(conn, :publish, project))
 
@@ -177,8 +177,8 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
 
   describe "unpublish project" do
     @tag :as_user
-    test  "user can't unpublish project", %{conn: conn, user: user} do
-      project = insert(:project, user: user, is_public: true)
+    test  "non owner can't unpublish project", %{conn: conn} do
+      project = insert(:project, is_public: true)
 
       conn = put(conn, Routes.project_path(conn, :unpublish, project))
 
@@ -186,9 +186,9 @@ defmodule DigitalPublicWorksWeb.ProjectControllerTest do
       assert get_flash(conn, :error) =~ "You don't have access to that"
     end
 
-    @tag :as_admin
-    test  "admin can unpublish project", %{conn: conn} do
-      project = insert(:project, is_public: true)
+    @tag :as_user
+    test  "owner can unpublish project", %{conn: conn, user: user} do
+      project = insert(:project, user: user, is_public: true)
 
       conn = put(conn, Routes.project_path(conn, :unpublish, project))
 

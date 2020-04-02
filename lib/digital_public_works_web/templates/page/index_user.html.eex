@@ -1,17 +1,29 @@
 <div class="row justify-content-center">
-  <%= unless @owned_projects ++ @followed_projects ++ @joined_projects == [] do %>
-    <div class="col-md col-sidebar">
-      <div class="card mb-4">
-        <div class="card-body">
-          <%= render "_sidebar_group.html", Map.merge(assigns, %{title: "Your Projects", projects: @owned_projects}) %>
-          <div class="my-4"></div>
-          <%= render "_sidebar_group.html", Map.merge(assigns, %{title: "Joined Projects", projects: @joined_projects}) %>
-          <div class="my-4"></div>
-          <%= render "_sidebar_group.html", Map.merge(assigns, %{title: "Followed Projects", projects: @followed_projects}) %>
-        </div>
+
+  <div class="col-md col-sidebar">
+    <div class="card mb-4">
+      <div class="card-body">
+        <%= render "_sidebar_group.html", Map.merge(assigns, %{title: "Your Projects", projects: @owned_projects}) %>
+        <div class="my-4"></div>
+        <%= render "_sidebar_group.html", Map.merge(assigns, %{title: "Joined Projects", projects: @joined_projects}) %>
+        <div class="my-4"></div>
+        <%= render "_sidebar_group.html", Map.merge(assigns, %{title: "Followed Projects", projects: @followed_projects}) %>
       </div>
     </div>
-  <% end %>
+    <%= unless @organizations == [] do %>
+      <div class="card mb-4">
+        <div class="card-body">
+          <h6>Organizations</h6>
+          <%= for organization <- @organizations do %>
+            <div>
+              <%= link organization.name, to: Routes.organization_path(@conn, :show, organization), class: "px-0 btn btn-link d-block text-truncate text-left" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
   <div class="col-md col-main">
     <%= for post <- @posts do %>
       <h6 class="mb-3">

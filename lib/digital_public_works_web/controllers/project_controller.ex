@@ -33,9 +33,13 @@ defmodule DigitalPublicWorksWeb.ProjectController do
   end
 
   def index(conn, params) do
-    search = params["project"]["q"]
+    q = params["q"]
 
-    projects = Projects.list_projects(conn.assigns.current_user, search)
+    projects =
+      case params["endorsed"] do
+        "true" -> Projects.list_endorsed_projects(q)
+        _ -> Projects.list_published_projects(q)
+      end
 
     render(conn, "index.html", projects: projects)
   end
@@ -95,8 +99,8 @@ defmodule DigitalPublicWorksWeb.ProjectController do
       {:error, changeset} ->
         error_message =
           changeset.errors
-          |> Keyword.values
-          |> Enum.map(&(elem(&1, 0)))
+          |> Keyword.values()
+          |> Enum.map(&elem(&1, 0))
           |> Enum.join(", ")
 
         conn

@@ -3,6 +3,7 @@ defmodule DigitalPublicWorks.Accounts.User do
   import Ecto.Changeset
 
   alias DigitalPublicWorks.Projects.{Project, ProjectFollower, ProjectUser}
+  alias DigitalPublicWorks.Organizations.{Organization, OrganizationUser}
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -16,6 +17,7 @@ defmodule DigitalPublicWorks.Accounts.User do
     has_many :projects, Project
     many_to_many :followed_projects, Project, join_through: ProjectFollower
     many_to_many :joined_projects, Project, join_through: ProjectUser
+    many_to_many :organizations, Organization, join_through: OrganizationUser
 
     timestamps()
   end

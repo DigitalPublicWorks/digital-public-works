@@ -1,5 +1,6 @@
 defmodule DigitalPublicWorks.Projects.ProjectUser do
   use Ecto.Schema
+  import Ecto.Changeset
 
   alias DigitalPublicWorks.{Accounts.User, Projects.Project}
 
@@ -15,10 +16,10 @@ defmodule DigitalPublicWorks.Projects.ProjectUser do
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> Ecto.Changeset.cast(params, [:user_id, :project_id])
-    |> Ecto.Changeset.validate_required([:user_id, :project_id])
-    |> Ecto.Changeset.foreign_key_constraint(:user_id)
-    |> Ecto.Changeset.foreign_key_constraint(:project_id)
-    |> Ecto.Changeset.unique_constraint(:user_id, name: "projects_users_project_id_user_id_index", message: "You already joined this project")
+    |> cast(params, [:user_id, :project_id])
+    |> validate_required([:user_id, :project_id])
+    |> foreign_key_constraint(:user_id)
+    |> foreign_key_constraint(:project_id)
+    |> unique_constraint(:user_id, name: "projects_users_project_id_user_id_index", message: "You already joined this project")
   end
 end
