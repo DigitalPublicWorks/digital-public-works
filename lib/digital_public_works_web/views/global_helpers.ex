@@ -38,4 +38,38 @@ defmodule DigitalPublicWorksWeb.GlobalHelpers do
   def has_content?(str) do
     str != nil and String.trim(str) != ""
   end
+
+  def render_meta(conn) do
+    conn.assigns
+    |> Map.get(:meta, %{})  # Default to empty struct in case :meta was deleted off the conn
+    |> Map.drop([:title])   # Don't render the non-meta tag types
+    |> Map.keys()
+    |> Enum.map(&meta_tag(conn, &1))
+  end
+
+  def meta_tag(conn, :title) do
+    content_tag(:title, fetch_meta_value(conn, :title))
+  end
+
+  def meta_tag(conn, key) 
+      when key in [:author, :generator, :keywords, :viewport, :description, :"application-name"] do
+    tag(
+      :meta,
+      name: key,
+      content: fetch_meta_value(conn, key)
+    )
+  end
+
+  def meta_tag(conn, key) do
+    tag(
+      :meta, 
+      property: key, 
+      content: fetch_meta_value(conn, key)
+    )
+  end
+
+  defp fetch_meta_value(conn, key) do
+    get_in(conn.assigns, [:meta, key])
+  end
+
 end

@@ -6,6 +6,7 @@ defmodule DigitalPublicWorksWeb.ProjectController do
 
   plug :get_project
   plug :check_auth
+  plug :set_project_meta
 
   defp get_project(%{params: %{"id" => id}} = conn, _args) do
     conn |> assign(:project, Projects.get_project!(id))
@@ -13,6 +14,18 @@ defmodule DigitalPublicWorksWeb.ProjectController do
 
   defp get_project(conn, _args) do
     conn |> assign(:project, %Project{})
+  end
+
+  defp set_project_meta(conn, _args) do
+    if project = conn.assigns[:project] do
+      conn
+      |> meta(:title, "#{project.title} on Digital Public Works")
+      |> meta(:"og:title", "#{project.title} on Digital Public Works")
+      |> meta(:description, project.body)
+      |> meta(:"og:description", project.body)
+      |> meta(:"twitter:card", "summary")
+      |> meta("og:type", "article")
+    end
   end
 
   defp check_auth(conn, _args) do
@@ -41,12 +54,17 @@ defmodule DigitalPublicWorksWeb.ProjectController do
         _ -> Projects.list_published_projects(q)
       end
 
-    render(conn, "index.html", projects: projects)
+    conn
+    |> meta(:title, "Projects on Digital Public Works")
+    |> render("index.html", projects: projects)
   end
 
   def new(conn, _params) do
     changeset = Projects.change_project(%Project{})
-    render(conn, "new.html", changeset: changeset)
+
+    conn
+    |> meta(:title, "Create a new project on Digital Public Works")
+    |> render("new.html", changeset: changeset)
   end
 
   def create(conn, %{"project" => project_params}) do

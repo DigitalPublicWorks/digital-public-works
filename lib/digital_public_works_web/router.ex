@@ -8,6 +8,7 @@ defmodule DigitalPublicWorksWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug DigitalPublicWorks.Plugs.Auth
+    plug DigitalPublicWorks.Plugs.Meta
   end
 
   pipeline :api do
