@@ -7,7 +7,7 @@
     <%= if can? @current_user, :add_project, @organization do %>
       <%= form_for @conn, Routes.organization_path(@conn, :add_project, @organization), [autocomplete: "off", class: "mb-4"], fn f -> %>
         <div class="input-group">
-          <%= text_input f, :project_id, [placeholder: "Project ID (i.e. d0058b7d-33da-4179-ad5f-3efada50b5d6)", class: "form-control"] %>
+          <%= text_input f, :project_url, [placeholder: "Project URL", class: "form-control"] %>
           <div class="input-group-append">
             <%= submit "Endorse Project", class: "btn btn-primary" %>
           </div>

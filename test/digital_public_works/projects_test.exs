@@ -112,6 +112,17 @@ defmodule DigitalPublicWorks.ProjectsTest do
       assert Projects.list_joined_projects(user) == []
       assert Projects.is_user?(project, user) == false
     end
+
+    test "can get project by url" do
+      alias DigitalPublicWorksWeb.Router.Helpers, as: Routes
+      alias DigitalPublicWorksWeb.Endpoint
+
+      project = insert(:project) |> reload()
+
+      assert project == Projects.get_project_by_url!(Routes.project_url(Endpoint, :show, project))
+
+      assert project == Projects.get_project_by_url!(Routes.permalink_project_url(Endpoint, :show, project.id))
+    end
   end
 
   describe "project slugs" do

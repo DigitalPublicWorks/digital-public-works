@@ -113,6 +113,18 @@ defmodule DigitalPublicWorks.Projects do
     |> Repo.one!() |> preload()
   end
 
+  def get_project_by_url!(url) do
+    slug_or_id = url
+    |> String.split("/")
+    |> List.last()
+
+    if :error == Ecto.UUID.dump(slug_or_id) do
+      get_project_by_slug!(slug_or_id)
+    else
+      get_project!(slug_or_id)
+    end
+  end
+
   @doc """
   Creates a project.
 
