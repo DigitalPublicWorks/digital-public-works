@@ -70,6 +70,7 @@ defmodule DigitalPublicWorksWeb.ProjectInviteController do
     |> assign(:project_invites, project |> project_invites)
     |> assign(:users, project |> project_users)
     |> assign(:changeset, Invites.change_project_invite())
+    |> meta(:title, "Invite users to #{conn.assigns[:project].title}")
     |> render("index.html")
   end
 

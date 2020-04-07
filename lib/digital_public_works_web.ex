@@ -26,6 +26,7 @@ defmodule DigitalPublicWorksWeb do
       alias DigitalPublicWorksWeb.Router.Helpers, as: Routes
 
       import DigitalPublicWorksWeb.Permission
+      import DigitalPublicWorksWeb.Meta
     end
   end
 

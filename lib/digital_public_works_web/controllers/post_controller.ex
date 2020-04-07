@@ -9,6 +9,7 @@ defmodule DigitalPublicWorksWeb.PostController do
   plug :get_project
   plug :get_post
   plug :check_auth
+  plug :set_post_meta
 
   defp get_project(%{params: %{"project_id" => id}} = conn, _args) do
     conn |> assign(:project, Projects.get_project!(id))
@@ -43,9 +44,21 @@ defmodule DigitalPublicWorksWeb.PostController do
     end
   end
 
+  defp set_post_meta(conn, _) do
+    post = conn.assigns[:post]
+    conn
+    |> meta(:title, "#{post.title} from #{post.project.title} on Digital Public Works")
+    |> meta(:"og:title", "#{post.title} from #{post.project.title} on Digital Public Works")
+    |> meta(:description, post.body)
+    |> meta(:"og:description", post.body)
+    |> meta(:"twitter:card", "summary")
+    |> meta("og:type", "article")
+  end
+
   def new(conn, _params) do
     conn
     |> assign(:changeset, Posts.change_post(conn.assigns.post))
+    |> meta(:title, "Update the followers of #{conn.assigns[:project].title}")
     |> render("new.html")
   end
 
