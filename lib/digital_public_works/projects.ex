@@ -24,7 +24,7 @@ defmodule DigitalPublicWorks.Projects do
 
   def list_featured_projects(), do: all() |> featured() |> fetch()
 
-  def list_endorsed_projects(search \\ nil), do: all() |> endorsed() |> fetch(search)
+  def list_endorsed_projects(search \\ nil), do: all() |> published() |> endorsed() |> fetch(search)
 
   def list_followed_projects(%User{} = user), do: all() |> followed_by(user) |> fetch()
   def list_followed_projects(_), do: []
