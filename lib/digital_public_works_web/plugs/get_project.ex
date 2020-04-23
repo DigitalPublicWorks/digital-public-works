@@ -4,21 +4,18 @@ defmodule DigitalPublicWorksWeb.Plugs.GetProject do
 
   alias DigitalPublicWorks.Projects
 
-  def init(id_key), do: id_key || "id"
+  def init(slug_key), do: slug_key || "slug"
 
-  def call(conn, id_key) do
-    case get_project(conn.params[id_key]) do
-      nil -> conn |> not_found()
-      project -> conn |> assign(:project, project)
-    end
+  def call(conn, slug_key) do
+    conn |> assign(:project, get_project(conn.params[slug_key]))
+  rescue
+    _ -> conn |> not_found()
   end
 
-  defp get_project(nil), do: nil
+  defp get_project(nil), do: raise("Not found")
 
-  defp get_project(id) do
-    Projects.get_project!(id)
-  rescue
-    _ -> nil
+  defp get_project(slug) do
+    Projects.get_project_by_slug!(slug)
   end
 
   defp not_found(conn) do
@@ -33,8 +30,10 @@ defmodule DigitalPublicWorksWeb.Plugs.GetProject do
       conn
       |> Plug.Conn.get_req_header("referer")
       |> Enum.at(0)
-      |> URI.parse
+      |> URI.parse()
 
     "#{url.path}?#{url.query}"
+  rescue
+    _ -> "/"
   end
 end
