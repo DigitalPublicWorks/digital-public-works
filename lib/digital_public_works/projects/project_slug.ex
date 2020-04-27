@@ -1,6 +1,9 @@
 defmodule DigitalPublicWorks.Projects.ProjectSlug do
   use Ecto.Schema
 
+  # Mainteded by DB trigger
+  # priv/repo/migrations/20200331192041_create_project_slugs.exs
+
   @primary_key {:slug, :string, []}
   @foreign_key_type :string
 
