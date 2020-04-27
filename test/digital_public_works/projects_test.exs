@@ -112,5 +112,63 @@ defmodule DigitalPublicWorks.ProjectsTest do
       assert Projects.list_joined_projects(user) == []
       assert Projects.is_user?(project, user) == false
     end
+
+    test "can get project by url" do
+      alias DigitalPublicWorksWeb.Router.Helpers, as: Routes
+      alias DigitalPublicWorksWeb.Endpoint
+
+      project = insert(:project) |> reload()
+
+      assert project == Projects.get_project_by_url!(Routes.project_url(Endpoint, :show, project))
+
+      assert project == Projects.get_project_by_url!(Routes.permalink_project_url(Endpoint, :show, project.id))
+    end
+  end
+
+  describe "project slugs" do
+    test "slug is created automatically" do
+      {:ok, project} = Projects.create_project(insert(:user), %{title: "Hello World!", body: "test"})
+
+      assert project.slug == "hello-world"
+    end
+
+    test "project can be looked up by last 10 slugs" do
+      project = insert(:project) |> reload()
+
+      original_slug = project.slug
+      original_title = project.title
+
+      assert project == Projects.get_project_by_slug!(original_slug)
+
+      for i <- 0..9 do
+        {:ok, _} = Projects.update_project(project, %{title: "#{original_title} #{i}"})
+      end
+
+      project = project |> reload()
+
+      for i <- 0..9 do
+        assert project == Projects.get_project_by_slug!("#{original_slug}-#{i}")
+      end
+
+      assert_raise Ecto.NoResultsError, fn -> Projects.get_project_by_slug!(original_slug) end
+    end
+
+    test "project can't use the same slug as another project" do
+      Projects.create_project(insert(:user), %{title: "Hello World", body: "test"})
+      {:error, %Ecto.Changeset{}} = Projects.create_project(insert(:user), %{title: "Hello World!!!", body: "test"})
+    end
+
+    test "project can't use old slug of another project" do
+      p1 = insert(:project) |> reload()
+      p2 = insert(:project) |> reload()
+
+      old_slug = p1.slug
+
+      {:ok, p1} = Projects.update_project(p1, %{title: "Hello World!"})
+
+      refute p1.slug == old_slug
+
+      {:error, %Ecto.Changeset{}} = Projects.update_project(p2, %{title: old_slug})
+    end
   end
 end

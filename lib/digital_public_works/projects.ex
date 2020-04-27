@@ -69,9 +69,12 @@ defmodule DigitalPublicWorks.Projects do
   def for_organization(query, organization) do
     from(p in query, inner_join: o in assoc(p, :organizations), where: o.id == ^organization.id)
   end
+  def preload(query, associations \\ [:user, :organizations]) do
+    query |> Repo.preload(associations)
+  end
 
   def fetch(query, search \\ nil) do
-    from(p in query, preload: [:user, :organizations]) |> filter_projects(search) |> Repo.all()
+    from(p in query) |> filter_projects(search) |> Repo.all() |> preload()
   end
 
   defp filter_projects(query, ""), do: filter_projects(query, nil)
@@ -103,7 +106,24 @@ defmodule DigitalPublicWorks.Projects do
       ** (Ecto.NoResultsError)
 
   """
-  def get_project!(id), do: Repo.get!(Project, id) |> Repo.preload([:user, :organizations])
+  def get_project!(id), do: Repo.get!(Project, id) |> preload()
+
+  def get_project_by_slug!(slug) do
+    from(p in Project, inner_join: s in assoc(p, :project_slugs), where: s.slug == ^slug)
+    |> Repo.one!() |> preload()
+  end
+
+  def get_project_by_url!(url) do
+    slug_or_id = url
+    |> String.split("/")
+    |> List.last()
+
+    if :error == Ecto.UUID.dump(slug_or_id) do
+      get_project_by_slug!(slug_or_id)
+    else
+      get_project!(slug_or_id)
+    end
+  end
 
   @doc """
   Creates a project.

@@ -61,7 +61,9 @@ defmodule DigitalPublicWorksWeb.OrganizationControllerTest do
     test "organization member can add project", %{conn: conn, user: user, organization: organization, project: project} do
       Organizations.add_user(organization, user)
 
-      conn = post(conn, Routes.organization_path(conn, :add_project, organization, %{project_id: project.id}))
+      project_url = Routes.project_url(DigitalPublicWorksWeb.Endpoint, :show, project)
+
+      conn = post(conn, Routes.organization_path(conn, :add_project, organization, [project_url: project_url]))
 
       assert redirected_to(conn) == Routes.organization_path(conn, :show, organization)
       assert get_flash(conn, :info) =~ "Project added to organization"
@@ -69,13 +71,17 @@ defmodule DigitalPublicWorksWeb.OrganizationControllerTest do
 
     @tag :as_user
     test "non organization member can't add project", %{conn: conn, organization: organization, project: project} do
-      conn = post(conn, Routes.organization_path(conn, :add_project, organization, %{project_id: project.id}))
+      project_url = Routes.project_url(DigitalPublicWorksWeb.Endpoint, :show, project)
+
+      conn = post(conn, Routes.organization_path(conn, :add_project, organization, [project_url: project_url]))
 
       assert_no_access conn
     end
 
     test "anonymous user can't add project", %{conn: conn, organization: organization, project: project} do
-      conn = post(conn, Routes.organization_path(conn, :add_project, organization, %{project_id: project.id}))
+      project_url = Routes.project_url(DigitalPublicWorksWeb.Endpoint, :show, project)
+
+      conn = post(conn, Routes.organization_path(conn, :add_project, organization, [project_url: project_url]))
 
       assert_needs_login conn
     end

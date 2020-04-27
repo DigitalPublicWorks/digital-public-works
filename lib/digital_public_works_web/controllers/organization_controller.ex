@@ -4,7 +4,6 @@ defmodule DigitalPublicWorksWeb.OrganizationController do
   alias DigitalPublicWorks.{Organizations, Projects}
 
   plug DigitalPublicWorksWeb.Plugs.GetOrganization
-  plug DigitalPublicWorksWeb.Plugs.GetProject, "project_id" when action in [:add_project, :remove_project]
   plug DigitalPublicWorksWeb.Plugs.Authorize, :organization
 
   def show(%{assigns: %{organization: organization}} = conn, _params) do
@@ -24,7 +23,9 @@ defmodule DigitalPublicWorksWeb.OrganizationController do
     |> render("show.html")
   end
 
-  def add_project(%{assigns: %{organization: organization, project: project}} = conn, _params) do
+  def add_project(%{assigns: %{organization: organization}} = conn, _params) do
+    project = Projects.get_project_by_url!(conn.params["project_url"])
+
     Organizations.add_project(organization, project)
 
     conn
@@ -32,7 +33,9 @@ defmodule DigitalPublicWorksWeb.OrganizationController do
     |> redirect(to: Routes.organization_path(conn, :show, organization))
   end
 
-  def remove_project(%{assigns: %{organization: organization, project: project}} = conn, _params) do
+  def remove_project(%{assigns: %{organization: organization}} = conn, _params) do
+    project = Projects.get_project!(conn.params["project_id"])
+
     Organizations.remove_project(organization, project)
 
     conn
