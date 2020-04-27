@@ -4,6 +4,7 @@ defmodule DigitalPublicWorksWeb.Plugs.GetProject do
 
   alias DigitalPublicWorks.Projects
 
+  def init([]), do: init(nil)
   def init(slug_key), do: slug_key || "slug"
 
   def call(conn, slug_key) do
@@ -32,7 +33,9 @@ defmodule DigitalPublicWorksWeb.Plugs.GetProject do
       |> Enum.at(0)
       |> URI.parse()
 
-    "#{url.path}?#{url.query}"
+    [url.path, url.query]
+    |> Enum.reject(&is_nil/1)
+    |> Enum.join("?")
   rescue
     _ -> "/"
   end
